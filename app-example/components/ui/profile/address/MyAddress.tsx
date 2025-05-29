@@ -1,21 +1,23 @@
-import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-
+// import { Image } from 'phosphor-react-native';
+import React, { useState } from 'react';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import AddressCard from './AddressCard';
+// import { AddressCard } from './AddressCard'
 // import AddressCard from '@/components/ui/profile/address/AddressCard';
-// import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
 
 export default function MyAddress() {
-  // const [activeSwitchIndex, setActiveSwitchIndex] = useState<number | null>(null);
+  const [activeSwitchIndex, setActiveSwitchIndex] = useState<number | null>(null);
 
-  // const handleSwitchToggle = (index: number) => {
-  //   setActiveSwitchIndex(prev => (prev === index ? null : index));
-  // };
+  const handleSwitchToggle = (index: number) => {
+    setActiveSwitchIndex(prev => (prev === index ? null : index));
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView contentContainerStyle={styles.container}>
 
-        {/* <AddressCard
+        <AddressCard
           title="Відділення Нова Пошта"
           address="Нова Пошта №131: проспект академіка Палладіна, б. 36, Київ, 03131"
           logo={<Image source={logoNovaPoshta} style={{ width: 26, height: 26 }} />}
@@ -33,7 +35,7 @@ export default function MyAddress() {
           onPress={() => handleSwitchToggle(1)}
           isSwitchEnabled={activeSwitchIndex === 1}
           onToggleSwitch={() => handleSwitchToggle(1)}
-        /> */}
+        />
 
         <TouchableOpacity style={styles.saveButton}>
           <Text style={styles.saveButtonText}>Додати нову адресу</Text>
