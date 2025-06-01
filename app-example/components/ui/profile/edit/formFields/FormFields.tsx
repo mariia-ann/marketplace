@@ -37,11 +37,10 @@ export default function FormFields() {
                         options={{
                             mask: '+99999-999-9999'
                         }}
-                        value={phone}
+                        value="+380991234567"
                         onChangeText={text => setPhone(text)}
                         style={styles.input}
                         keyboardType="phone-pad"
-                        placeholder="+38099-123-4567"
                     />
                 </View>
 
