@@ -1,10 +1,10 @@
 import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function HomeScreen() {
+export default function FavoriteScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
+      <Text style={styles.text}>Favorite screen</Text>
       <Link href="/profile" style={styles.button}>
         Go to Profile screen
       </Link>
