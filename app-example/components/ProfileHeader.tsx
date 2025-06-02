@@ -26,13 +26,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ route, options }) 
 const styles = StyleSheet.create({
   header: {
     paddingTop: StatusBar.currentHeight || 54,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",
     paddingBottom: 18,
     backgroundColor: "#fff",
     // position: "relative",
-    gap: 20,
   },
   headerLeft: {
     width: 80,
