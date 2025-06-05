@@ -14,7 +14,7 @@ export default function DeliveryMethodPost() {
     const [selectedId, setSelectedId] = useState(1);
 
     return (
-        <SafeAreaView  style={{ flex: 1, backgroundColor: "#fff" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
             <ScrollView contentContainerStyle={styles.container}>
                 {deliveryOptions.map((option, index) => (
                     <TouchableOpacity
@@ -30,7 +30,7 @@ export default function DeliveryMethodPost() {
                                 ]}
                             />
                         </View>
-                        
+
                         <View style={styles.textContainer}>
                             <Text style={styles.title}>{option.title}</Text>
                             <Text style={styles.subtitle}>{option.price}</Text>

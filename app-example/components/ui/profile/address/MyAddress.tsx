@@ -1,10 +1,7 @@
-// import { Image } from 'phosphor-react-native';
+import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
 import React, { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AddressCard from './AddressCard';
-// import { AddressCard } from './AddressCard'
-// import AddressCard from '@/components/ui/profile/address/AddressCard';
-import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
 
 export default function MyAddress() {
   const [activeSwitchIndex, setActiveSwitchIndex] = useState<number | null>(null);

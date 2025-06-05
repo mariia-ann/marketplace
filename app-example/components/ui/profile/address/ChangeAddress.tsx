@@ -1,17 +1,17 @@
 import CustomSwitch from '@/app-example/components/CustomSwitch';
 import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { CaretRight } from "phosphor-react-native";
 import React, { useState } from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-const { width } = Dimensions.get('window');
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const ChangeAddress = () => {
     const [isDefault, setIsDefault] = useState(true);
+    const router = useRouter();
 
     return (
         <ScrollView contentContainerStyle={{ paddingBottom: 62 }} style={styles.container}>
+
             <View style={styles.block}>
                 <Text style={styles.labelCity}>Місто</Text>
                 <TouchableOpacity
@@ -23,20 +23,21 @@ const ChangeAddress = () => {
                 </TouchableOpacity>
             </View>
 
-            <Link href="/(tabs)/profile/addresses/changeAddress/deliveryMethod" asChild>
-                <View style={styles.block}>
-                    <Text style={styles.label}>Спосіб доставки</Text>
-                    <TouchableOpacity
-                        style={styles.input}
-                    >
-                        <View style={styles.deliveryRow}>
-                            <Image source={logoNovaPoshta} style={styles.logo} resizeMode="contain" />
-                            <Text style={styles.inputText}>Відділення Нова Пошта</Text>
-                        </View>
-                        <CaretRight size={18} weight="bold" />
-                    </TouchableOpacity>
-                </View>
-            </Link>
+
+            <View style={styles.block}>
+                <Text style={styles.label}>Спосіб доставки</Text>
+                <TouchableOpacity
+                    style={styles.input}
+                    onPress={() => router.push("/(tabs)/profile/addresses/changeAddress/deliveryMethod")}
+                >
+                    <View style={styles.deliveryRow}>
+                        <Image source={logoNovaPoshta} style={styles.logo} resizeMode="contain" />
+                        <Text style={styles.inputText}>Відділення Нова Пошта</Text>
+                    </View>
+                    <CaretRight size={18} weight="bold" />
+
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.block}>
                 <Text style={styles.label}>Відділення</Text>
@@ -67,6 +68,7 @@ const ChangeAddress = () => {
                 <TouchableOpacity style={styles.deleteButton}>
                     <Text style={styles.deleteText}>Видалити</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.saveButton}>
                     <Text style={styles.saveText}>Зберегти</Text>
                 </TouchableOpacity>
@@ -114,9 +116,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingRight: 5,
     },
-    arrow: {
-        marginLeft: 10,
-    },
     deliveryRow: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 24,
-        marginBottom: 32,
+        marginBottom: 114,
     },
     switchLabel: {
         fontFamily: 'Manrope',
