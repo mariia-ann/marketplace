@@ -29,7 +29,7 @@ export default function AddressCard({ title, address, logo, active, onPress, isS
 
             <View style={styles.address}>
                 <Text numberOfLines={3} style={styles.addressText}>{address}</Text>
-                <Link href="/(tabs)/profile/addresses/ChangeAddress" asChild>
+                <Link href="/(tabs)/profile/addresses/changeAddress" asChild>
                     <Pressable>
                         <PencilSimple size={24} color="#170F2B" style={styles.pencilIcon} />
                     </Pressable>

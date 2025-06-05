@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Keyboard, Platform, SafeAreaView, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface Props {
@@ -9,17 +9,15 @@ interface Props {
 export default function KeyboardAwareLayout({ children }: Props) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAwareScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
-          enableOnAndroid={true}
-          extraScrollHeight={Platform.OS === 'ios' ? 20 : 100}
-        >
-          {children}
-        </KeyboardAwareScrollView>
-      </TouchableWithoutFeedback>
+      <KeyboardAwareScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={Platform.OS === 'ios' ? 20 : 100}
+      >
+        {children}
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
