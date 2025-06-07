@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   blockList: {
     width: "100%",
     gap: 8,
+    backgroundColor: "#fff",
     borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 12,

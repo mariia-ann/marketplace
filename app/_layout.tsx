@@ -7,8 +7,9 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     Manrope: require("../assets/fonts/Manrope-Regular.ttf"),
     ManropeBold: require("../assets/fonts/Manrope-Bold.ttf"),
-    Outfit: require("../assets/fonts/Outfit-Regular.ttf"),
-    OutfitBold: require("../assets/fonts/Outfit-Bold.ttf"),
+    ManropeSemiBold: require("../assets/fonts/Manrope-SemiBold.ttf"),
+    // Outfit: require("../assets/fonts/Outfit-Regular.ttf"),
+    // OutfitBold: require("../assets/fonts/Outfit-Bold.ttf"),
   });
 
 useEffect(() => {

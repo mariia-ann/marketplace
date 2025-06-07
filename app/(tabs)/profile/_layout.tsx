@@ -10,7 +10,7 @@ export default function ProfileStackLayout() {
     { name: "addresses/ChangeAddress", title: "Редагування адреси" },
     { name: "offersNotifications", title: "Пропозиції та сповіщення" },
     { name: "orderHistory", title: "Історія замовлень" },
-    { name: "reviews", title: "Мої відгуки" },
+    { name: "reviews/index", title: "Мої відгуки" },
     { name: "sellerMessages", title: "Переписки з продавцями" },
     { name: "settings/index", title: "Налаштування" },
     { name: "settings/notificationSettings", title: "Налаштування сповіщень" },
