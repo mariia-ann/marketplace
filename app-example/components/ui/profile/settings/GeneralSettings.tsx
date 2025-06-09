@@ -46,10 +46,12 @@ export default function GeneralSettings() {
 const styles = StyleSheet.create({
   block: {
     gap: 16,
+    
   },
   link: {
     width: "100%",
     borderRadius: 12,
+    backgroundColor: "#fff",
     paddingHorizontal: 10,
     paddingVertical: 12,
     shadowColor: "#000",
@@ -57,9 +59,9 @@ const styles = StyleSheet.create({
       width: 0,
       height: 0,
     },
-    shadowOpacity: 0.15, // приблизно відповідає #00000026
+    shadowOpacity: 0.1,
     shadowRadius: 15,
-    elevation: 5,
+    elevation: 4,
 
     flexDirection: "row",
     justifyContent: "space-between",
