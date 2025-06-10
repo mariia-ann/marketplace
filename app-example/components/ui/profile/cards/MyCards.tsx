@@ -65,14 +65,14 @@ export default function MyCards() {
           </TouchableOpacity>
         ))}
         <View style={{ flex: 1 }} />
-        <TouchableOpacity style={styles.addButton}>
-          <Link
-            style={styles.addButtonText}
-            href='/(tabs)/profile/cards/addCards'
-          >
-            <Text>Додати нову картку</Text>
-          </Link>
-        </TouchableOpacity>
+        <Link
+          href='/(tabs)/profile/cards/addCards'
+          asChild
+        >
+          <TouchableOpacity style={styles.addButton}>
+            <Text style={styles.addButtonText}>Додати нову картку</Text>
+          </TouchableOpacity>
+        </Link>
       </ScrollView>
     </SafeAreaView>
   );

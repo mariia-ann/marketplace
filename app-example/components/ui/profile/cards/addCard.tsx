@@ -1,4 +1,7 @@
+import { useState } from "react";
 import {
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -7,74 +10,131 @@ import {
 } from "react-native";
 
 export default function AddCard() {
-  return (
-    <View style={styles.container}>
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Номер картки</Text>
-        <TextInput
-          style={styles.input}
-          placeholder='Введіть номер картки'
-          keyboardType='numeric'
-        />
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.label}>Термін дії</Text>
-          <TextInput
-            style={styles.input}
-            placeholder='mm/yy'
-            keyboardType='numeric'
-          />
-          <Text style={styles.label}>CVV</Text>
-          <TextInput
-            style={styles.input}
-            placeholder='***'
-            keyboardType='numeric'
-          />
-        </View>
-      </View>
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
 
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Додати картку</Text>
-      </TouchableOpacity>
-    </View>
+  const handleCardNumberChange = (text: string) => {
+    // 1) remove non-digits
+    let digits = text.replace(/\D/g, "");
+    // 2) limit to 16 digits
+    if (digits.length > 16) digits = digits.slice(0, 16);
+    // 3) insert a space every 4 digits
+    const groups = digits.match(/.{1,4}/g) || [];
+    const formatted = groups.join(" ");
+    setCardNumber(formatted);
+  };
+
+  // Function to handle changes in the expiry date input
+  // It formats the input to mm/yy format and limits the length to 4 digits
+  const handleExpiryDateChange = (text: string) => {
+    let digits = text.replace(/\D/g, "");
+    if (digits.length > 4) digits = digits.slice(0, 4);
+    if (digits.length > 2) {
+      digits = digits.slice(0, 2) + "/" + digits.slice(2);
+    }
+    setExpiry(digits);
+  };
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.cardContainer}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Номер картки</Text>
+            <TextInput
+              style={styles.input}
+              placeholder='0000 0000 0000 0000'
+              placeholderTextColor='#999999'
+              keyboardType='number-pad'
+              value={cardNumber}
+              onChangeText={handleCardNumberChange}
+              maxLength={19}
+            />
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View style={styles.field}>
+                <Text style={styles.label}>Термін дії</Text>
+                <TextInput
+                  style={[styles.input, styles.expiryDate]}
+                  value={expiry}
+                  onChangeText={handleExpiryDateChange}
+                  placeholder='mm/yy'
+                  keyboardType='number-pad'
+                  placeholderTextColor='#999999'
+                  maxLength={5}
+                />
+              </View>
+              <View style={styles.field}>
+                <Text style={styles.label}>CVV</Text>
+                <TextInput
+                  style={[styles.input, styles.cvv]}
+                  placeholder='***'
+                  keyboardType='number-pad'
+                  maxLength={3}
+                  placeholderTextColor='#999999'
+                />
+              </View>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.addButton}>
+            <Text style={styles.addButtonText}>Додати картку</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
+    display: "flex",
+  },
+  cardContainer: {
     flex: 1,
     borderRadius: 10,
     backgroundColor: "#FFFFFF",
+    marginHorizontal: 20,
+    marginTop: 32,
     paddingHorizontal: 10,
-    paddingTop: 14,
-    paddingBottom: 14,
+    paddingTop: 10,
+    paddingBottom: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 15,
     elevation: 4,
     display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   inputGroup: {
-    marginTop: 16,
-    marginHorizontal: 20,
+    marginBottom: 8,
+  },
+  field: {
+    display: "flex",
+    flexDirection: "column",
   },
   label: {
-    fontSize: 12,
-    color: "#999999",
-    fontFamily: "Manrope-Regular",
+    fontSize: 16,
+    color: "#170F2B",
     marginBottom: 6,
   },
   input: {
     borderWidth: 1,
     borderColor: "#999999",
     borderRadius: 10,
-    paddingVertical: 12,
+    paddingVertical: 11.5,
     paddingHorizontal: 10,
+    marginBottom: 16,
     fontSize: 16,
-    fontFamily: "Manrope-Regular",
-    color: "#170F2B",
+  },
+  expiryDate: {
+    textAlign: "center",
+    width: 93,
+  },
+  cvv: {
+    width: 71,
   },
   addButton: {
     backgroundColor: "#8E6CEF",

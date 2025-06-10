@@ -5,10 +5,14 @@ import React from "react";
 export default function ProfileStackLayout() {
   const profileScreens = [
     { name: "edit", title: "Мої дані" },
-    { name: "cards", title: "Мої картки" },
+    { name: "cards/index", title: "Мої картки" },
+    { name: "cards/addCards", title: "Додати картку" },
     { name: "addresses/index", title: "Мої адреси" },
     { name: "addresses/changeAddress", title: "Редагування адреси" },
-    { name: "addresses/changeAddress/deliveryMethod", title: "Спосіб доставки" },
+    {
+      name: "addresses/changeAddress/deliveryMethod",
+      title: "Спосіб доставки",
+    },
     { name: "offersNotifications", title: "Пропозиції та сповіщення" },
     { name: "orderHistory", title: "Історія замовлень" },
     { name: "reviews", title: "Мої відгуки" },
