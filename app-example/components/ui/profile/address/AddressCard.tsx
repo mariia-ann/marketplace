@@ -1,9 +1,9 @@
 import CustomSwitch from "@/app-example/components/CustomSwitch";
+import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 import { PencilSimple } from 'phosphor-react-native';
 import React, { ReactElement } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 interface AddressCardProps {
     title: string;
     address: string;
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     container: {
         height: 135,
         borderRadius: 10,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: Colors.white,
         marginHorizontal: 20,
         marginTop: 24,
         marginBottom: 16,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     activeBorder: {
         borderWidth: 1,
-        borderColor: '#8E6CEF',
+        borderColor: Colors.softPurple,
     },
     header: {
         flexDirection: 'row',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 700,
         fontSize: 16,
-        color: '#170F2B',
+        color: Colors.blackMain,
         marginLeft: 18,
     },
     address: {
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     addressText: {
         fontFamily: 'Manrope',
         fontSize: 16,
-        color: '#170F2B',
+        color: Colors.blackMain,
         width: '75%',
     },
     pencilIcon: {

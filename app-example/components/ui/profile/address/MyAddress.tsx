@@ -1,8 +1,8 @@
 import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import Colors from "@/constants/Colors";
 import React, { useState } from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AddressCard from './AddressCard';
-
 export default function MyAddress() {
   const [activeSwitchIndex, setActiveSwitchIndex] = useState<number | null>(null);
 
@@ -12,7 +12,7 @@ export default function MyAddress() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView style={{ flex: 1 }}contentContainerStyle={styles.container}>
 
         <AddressCard
           title="Відділення Нова Пошта"
@@ -45,21 +45,21 @@ export default function MyAddress() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    flex: 1,
+    backgroundColor: Colors.white,
   },
 
   saveButton: {
-    backgroundColor: '#8E6CEF',
+    backgroundColor: Colors.softPurple,
     height: 52,
     borderRadius: 10,
     marginHorizontal: 20,
-    marginTop: 22,
+    marginTop: 220,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 40,
   },
   saveButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
     //fontFamily: 'OutfitBold',
     fontWeight: 700,
