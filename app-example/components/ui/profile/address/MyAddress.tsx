@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   saveButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
     //fontFamily: 'OutfitBold',
     fontWeight: 700,
