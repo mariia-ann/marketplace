@@ -1,10 +1,10 @@
 import CustomSwitch from '@/app-example/components/CustomSwitch';
 import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import Colors from '@/constants/Colors';
 import { useRouter } from "expo-router";
 import { CaretRight } from "phosphor-react-native";
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 const ChangeAddress = () => {
     const [isDefault, setIsDefault] = useState(true);
     const router = useRouter();
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         paddingTop: 24,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.white,
         flex: 1,
     },
     block: {
@@ -90,19 +90,19 @@ const styles = StyleSheet.create({
     labelCity: {
         fontFamily: 'Manrope',
         fontSize: 18,
-        color: '#170F2B',
+        color: Colors.blackMain,
         marginBottom: 12,
     },
     label: {
         fontFamily: 'Manrope',
         fontSize: 16,
-        color: '#170F2B',
+        color: Colors.blackMain,
         marginBottom: 12,
     },
     input: {
         height: 48,
         borderRadius: 10,
-        borderColor: '#999999',
+        borderColor: Colors.grey400,
         borderWidth: 1,
         paddingHorizontal: 10,
         flexDirection: 'row',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     inputText: {
         fontFamily: 'Manrope',
         fontSize: 16,
-        color: '#170F2B',
+        color: Colors.blackMain,
         flex: 1,
         paddingRight: 5,
     },
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     switchLabel: {
         fontFamily: 'Manrope',
         fontSize: 14,
-        color: '#170F2B',
+        color: Colors.blackMain,
         flex: 1,
         paddingRight: 10,
     },
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
         height: 52,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#8E6CEF',
-        backgroundColor: '#FFFFFF',
+        borderColor: Colors.softPurple,
+        backgroundColor: Colors.white,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -157,12 +157,12 @@ const styles = StyleSheet.create({
         //fontFamily: 'Outfit-Bold',
         fontWeight: 700,
         fontSize: 16,
-        color: '#170F2B',
+        color: Colors.blackMain,
     },
     saveButton: {
         height: 52,
         borderRadius: 10,
-        backgroundColor: '#8E6CEF',
+        backgroundColor: Colors.softPurple,
         justifyContent: 'center',
         alignItems: 'center',
     },

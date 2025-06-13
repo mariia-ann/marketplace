@@ -1,9 +1,9 @@
+import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 import { MagnifyingGlass } from 'phosphor-react-native';
 import React, { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import messagesData from "./SellerMessagesConst";
-
 export default function sellerMessages() {
     const [query, setQuery] = useState('');
 
@@ -61,14 +61,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 24,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.white,
     },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#999999',
+        borderColor: Colors.grey400,
         paddingLeft: 10,
         height: 48,
         marginHorizontal: 20,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontFamily: 'Outfit',
         fontSize: 16,
-        color: '#170f2b',
+        color: Colors.blackMain,
         height: 48,
         outlineWidth: 0,
     },
@@ -103,13 +103,13 @@ const styles = StyleSheet.create({
     seller: {
         fontFamily: 'Outfit',
         fontSize: 14,
-        color: '#170f2b',
+        color: Colors.blackMain,
     },
     order: {
         marginTop: 8,
         fontFamily: 'Outfit',
         fontSize: 14,
-        color: '#666666',
+        color: Colors.grey500,
     },
     dateContainer: {
         marginLeft: 'auto',
@@ -120,14 +120,14 @@ const styles = StyleSheet.create({
     date: {
         fontFamily: 'Manrope',
         fontSize: 14,
-        color: '#666666',
+        color: Colors.grey500,
         marginBottom: 8,
     },
     notFoundText: {
         textAlign: 'center',
         fontFamily: 'Outfit',
         fontSize: 16,
-        color: '#666666',
+        color: Colors.grey500,
         marginTop: 40,
     },
 });
