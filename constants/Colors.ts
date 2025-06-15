@@ -7,6 +7,7 @@ const Colors = {
     red: "D30004",            //sale prices
     yellow: "FFA500",         //star
     white: "FFFFFF",          // main background
+    grey200: "#D9D9D9",      // background secondary elements
     purple400: "AC94E8",      //back arrow
     purple200: "E3DBF7",      //my messages
     grey50: "F4F4F4",

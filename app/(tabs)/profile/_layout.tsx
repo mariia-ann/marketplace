@@ -13,7 +13,10 @@ export default function ProfileStackLayout() {
       name: "addresses/changeAddress/deliveryMethod",
       title: "Спосіб доставки",
     },
-    { name: "offersNotifications", title: "Пропозиції та сповіщення" },
+    {
+      name: "notification/offersNotifications",
+      title: "Пропозиції та сповіщення",
+    },
     { name: "orderHistory", title: "Історія замовлень" },
     { name: "sellerMessages/index", title: "Переписки з продавцями" },
     { name: "sellerMessages/chatMessages", title: "Переписки з продавцями" },
