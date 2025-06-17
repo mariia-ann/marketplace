@@ -1,3 +1,4 @@
+import Colors from "@/constants/Colors";
 import React, { useEffect, useRef } from "react";
 import {
   Animated,
@@ -45,13 +46,13 @@ const TwoTabsSwitch = ({
   const bgColor = (anim: Animated.Value) =>
     anim.interpolate({
       inputRange: [0, 1],
-      outputRange: ["#ffffff", "#8E6CEF"],
+      outputRange: [Colors.white, Colors.softPurple],
     });
 
   const textColor = (anim: Animated.Value) =>
     anim.interpolate({
       inputRange: [0, 1],
-      outputRange: ["#170F2B", "#FFFFFF"],
+      outputRange: [Colors.blackMain, Colors.white],
     });
 
   return (
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     borderWidth: 1,
-    borderColor: "#999999",
+    borderColor: Colors.grey400,
     alignItems: "center",
   },
   tabRight: {
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
     borderWidth: 1,
-    borderColor: "#999999",
+    borderColor: Colors.grey400,
     alignItems: "center",
   },
   text: {
