@@ -1,12 +1,13 @@
+import { Link } from "expo-router";
 import {
   Chat,
   Star,
   Storefront,
   ThumbsDown,
-  ThumbsUp
+  ThumbsUp,
 } from "phosphor-react-native";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ConfirmedPurchase from "./ConfirmedPurchase";
 import { mockReview as review } from "./review";
 
@@ -63,11 +64,16 @@ export default function ReviewProductCard() {
           </View>
         </View>
         <View style={styles.commentsBlock}>
-          <View style={styles.btnComment}>
-            <Chat size={32} weight="thin" />
-            <Text style={styles.text}>3</Text>
-          </View>
-          <Text style={styles.comments}>Коментарі</Text>
+          <Link href='/profile/reviews/addComment'
+            asChild>
+            <Pressable style={styles.btnComment}>
+              <Chat size={32} weight="thin" />
+              <Text style={styles.text}>3</Text>
+            </Pressable>
+          </Link>
+          <TouchableOpacity>
+            <Text style={styles.comments}>Коментарі (2)</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
