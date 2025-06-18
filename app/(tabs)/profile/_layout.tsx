@@ -21,6 +21,8 @@ export default function ProfileStackLayout() {
     { name: "sellerMessages/index", title: "Переписки з продавцями" },
     { name: "sellerMessages/chatMessages", title: "Переписки з продавцями" },
     { name: "reviews/index", title: "Мої відгуки" },
+    { name: "reviews/addComment", title: "Додати коментар" },
+    { name: "reviews/addReply", title: "Додати відповідь" },
     { name: "sellerMessages", title: "Переписки з продавцями" },
     { name: "settings/index", title: "Налаштування" },
     { name: "settings/notificationSettings", title: "Налаштування сповіщень" },
