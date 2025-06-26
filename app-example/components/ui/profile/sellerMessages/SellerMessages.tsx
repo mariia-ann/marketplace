@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        fontFamily: 'Outfit',
+        fontFamily: 'Manrope',
         fontSize: 16,
         color: Colors.blackMain,
         height: 48,
@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     seller: {
-        fontFamily: 'Outfit',
+        fontFamily: 'ManropeBold',
         fontSize: 14,
         color: Colors.blackMain,
     },
     order: {
         marginTop: 8,
-        fontFamily: 'Outfit',
+        fontFamily: 'Manrope',
         fontSize: 14,
         color: Colors.grey500,
     },
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     },
     notFoundText: {
         textAlign: 'center',
-        fontFamily: 'Outfit',
+        fontFamily: 'Manrope',
         fontSize: 16,
         color: Colors.grey500,
         marginTop: 40,

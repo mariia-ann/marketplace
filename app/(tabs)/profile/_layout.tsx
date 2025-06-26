@@ -27,7 +27,8 @@ export default function ProfileStackLayout() {
     { name: "settings/index", title: "Налаштування" },
     { name: "settings/notificationSettings", title: "Налаштування сповіщень" },
     { name: "settings/changePassword", title: "Змінити пароль" },
-    { name: "support", title: "Служба підтримки" },
+    { name: "support/index", title: "Служба підтримки" },
+    { name: "support/chat", title: "Чат-підтримки" },
   ];
 
   return (
