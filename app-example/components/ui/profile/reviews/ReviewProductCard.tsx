@@ -1,3 +1,4 @@
+import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 import {
   Chat,
@@ -6,14 +7,20 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from "phosphor-react-native";
-import React from "react";
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Comments from "./Comments";
 import ConfirmedPurchase from "./ConfirmedPurchase";
 import { mockReview as review } from "./review";
 
 export default function ReviewProductCard() {
+  const [isCommentsVisible, setIsCommentsVisible] = useState(false);
+
+  const handleToggleComments = () => {
+    setIsCommentsVisible(prev => !prev);
+  }
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.card}>
         <View style={styles.infoBlock}>
           <Image style={styles.image} source={review.image} />
@@ -68,25 +75,27 @@ export default function ReviewProductCard() {
             asChild>
             <Pressable style={styles.btnComment}>
               <Chat size={32} weight="thin" />
-              <Text style={styles.text}>3</Text>
             </Pressable>
           </Link>
-          <TouchableOpacity>
-            <Text style={styles.comments}>Коментарі (2)</Text>
+          <TouchableOpacity onPress={handleToggleComments}>
+            <Text style={styles.comments}>Коментарі ({review.comments?.length || 0})</Text>
           </TouchableOpacity>
         </View>
+        {isCommentsVisible && review.comments && <Comments comments={review.comments} />}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 56,
   },
   card: {
     borderRadius: 10,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     paddingHorizontal: 10,
     paddingVertical: 14,
     shadowColor: "#000",
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
   sellerName: {
     fontFamily: "ManropeSemiBold",
     fontSize: 14,
-    color: "#8E6CEF",
+    color: Colors.softPurple,
   },
   paramBlock: {
     flexDirection: "row",
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
   },
   paramInfo: {
     fontFamily: "ManropeBold",
-    color: "#666666",
+    color: Colors.grey500,
   },
   price: {
     fontFamily: "ManropeBold",
@@ -166,11 +175,11 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: "Manrope",
     fontSize: 16,
-    color: "#666666",
+    color: Colors.grey500,
   },
   date: {
     fontFamily: "Manrope",
-    color: "#666666",
+    color: Colors.grey500,
   },
   rating: {
     flexDirection: "row",
@@ -202,6 +211,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 16,
   },
   btnComment: {
     flexDirection: "row",
@@ -209,7 +219,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   comments: {
-    color: "#8E6CEF",
+    color: Colors.softPurple,
     fontFamily: "ManropeBold",
     fontSize: 16,
   },
