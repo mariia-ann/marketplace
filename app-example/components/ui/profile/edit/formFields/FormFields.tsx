@@ -1,3 +1,4 @@
+import Colors from '@/constants/Colors';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View, } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
@@ -66,24 +67,24 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 12,
-        color: '#999999',
-        fontFamily: 'Manrope-Regular',
+        color: Colors.grey400,
+        fontFamily: 'Manrope',
         marginBottom: 6,
     },
     input: {
         borderWidth: 1,
-        borderColor: '#999999',
+        borderColor: Colors.grey400,
         borderRadius: 10,
         paddingVertical: 12,
         paddingHorizontal: 10,
         fontSize: 16,
-        fontFamily: 'Manrope-Regular',
-        color: '#170F2B',
+        fontFamily: 'Manrope',
+        color: Colors.blackMain,
     },
     contactsHeader: {
         fontSize: 18,
-        color: '#170F2B',
-        fontFamily: 'Manrope-Regular',
+        color: Colors.blackMain,
+        fontFamily: 'Manrope',
         marginTop: 22,
         marginLeft: 20,
     },

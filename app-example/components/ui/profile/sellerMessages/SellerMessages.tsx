@@ -1,9 +1,10 @@
+import search from "@/assets/images/profile/search/search.png";
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
-import { MagnifyingGlass } from 'phosphor-react-native';
 import React, { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import messagesData from "./SellerMessagesConst";
+
 export default function sellerMessages() {
     const [query, setQuery] = useState('');
 
@@ -17,7 +18,7 @@ export default function sellerMessages() {
         <View style={styles.container}>
 
             <View style={styles.searchContainer}>
-                <MagnifyingGlass size={24} color="#170f2b" weight="thin" style={styles.icon} />
+                <Image source={search} style={styles.icon}  resizeMode="contain"/>
                 <TextInput
                     style={styles.input}
                     placeholder="Пошук..."
@@ -75,6 +76,8 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginRight: 10,
+        height:24,
+        width:24,
     },
     input: {
         flex: 1,
