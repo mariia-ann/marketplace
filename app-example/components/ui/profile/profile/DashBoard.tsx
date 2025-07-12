@@ -18,7 +18,7 @@ export default function DashBoard() {
       <View style={styles.dashboardBlock}>
         <View style={styles.dashboardList}>
           <Link
-            href='/profile/cards'
+            href='/auth/login'
             asChild
           >
             <Pressable style={styles.dashboard}>
