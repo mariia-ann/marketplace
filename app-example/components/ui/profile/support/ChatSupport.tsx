@@ -1,6 +1,7 @@
 import Colors from '@/constants/Colors';
 import dayjs from 'dayjs';
 import 'dayjs/locale/uk';
+import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -10,6 +11,7 @@ const screenWidth = Dimensions.get('window').width;
 export default function ChatSupport() {
   const [currentDate, setCurrentDate] = useState('');
   const [openTime, setOpenTime] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     dayjs.locale('uk');
@@ -46,7 +48,9 @@ export default function ChatSupport() {
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]}>
-            <Text style={styles.buttonText}>Питання щодо товару або посилки</Text>
+            <Text style={styles.buttonText} 
+            onPress={() => router.push("/(tabs)/profile/support/chat/selectOrder")}>
+              Питання щодо товару або посилки</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.button, { height: 38, marginTop: 12 }]}>
