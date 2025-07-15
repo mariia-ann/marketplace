@@ -93,24 +93,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     sectionTitle: {
-        fontFamily: 'ManropeBold',
+        fontFamily: 'ManropeSemiBold',
         fontSize: 16,
         color: Colors.blackMain,
     },
     statusRow: {
-        marginTop: 8,
+        marginTop: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    detailsLabel: {
+        fontFamily: 'Manrope',
+        fontSize: 16,
+        color: Colors.blackMain,
     },
     statusText: {
         fontFamily: 'ManropeSemiBold',
         fontSize: 16,
         color: Colors.softPurple,
-    },
-    detailsLabel: {
-        fontFamily: 'Manrope',
-        fontSize: 14,
-        color: Colors.blackMain,
     },
     paymentRow: {
         flexDirection: 'row',

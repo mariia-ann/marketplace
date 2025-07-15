@@ -69,17 +69,17 @@ const OrderStatus: React.FC<Props> = ({ status, statusDate, tracking }) => {
                                     <View
                                         style={[
                                             styles.circle,
-                                            { backgroundColor: item.isLast ? '#B0B0B0' : '#A174FF' },
+                                            { backgroundColor: item.isLast ? '#999999' : '#8E6CEF' },
                                         ]}
                                     />
                                     <View style={styles.trackingDateContainer}>
                                         <Text style={styles.trackingDate}>{item.dateTracking}</Text>
-                                        <Text style={styles.trackingTime}>{item.timeTracking}</Text>
+                                        <Text style={styles.trackingDate}>{item.timeTracking}</Text>
                                     </View>
                                     <Text
                                         numberOfLines={2}
                                         ellipsizeMode="tail"
-                                        style={[styles.trackingLabel, item.isLast && { color: '#B0B0B0' }]}
+                                        style={[styles.trackingLabel, item.isLast && { color: '#666666' }]}
                                     >
                                         {item.nameTracking}
                                     </Text>
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     sectionTitle: {
-        fontFamily: 'ManropeBold',
+        fontFamily: 'ManropeSemiBold',
         fontSize: 16,
         color: Colors.blackMain,
     },
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     statusDate: {
         fontFamily: 'Manrope',
         fontSize: 16,
-        color: Colors.grey400,
+        color: Colors.grey500,
     },
     trackingTitle: {
         fontFamily: 'Manrope',
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     trackingItem: {
         flexDirection: 'row',
         alignItems: 'flex-start',
-        marginBottom: 12,
+        marginBottom: 6,
     },
     circle: {
         width: 20,
@@ -142,13 +142,7 @@ const styles = StyleSheet.create({
     trackingDate: {
         fontFamily: 'Manrope',
         fontSize: 14,
-        color: Colors.grey400,
-    },
-    trackingTime: {
-        fontFamily: 'Manrope',
-        fontSize: 14,
-        color: Colors.grey400,
-        marginTop: 3,
+        color: Colors.grey500,
     },
     trackingLabel: {
         fontFamily: 'Manrope',

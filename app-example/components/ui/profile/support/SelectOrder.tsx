@@ -1,8 +1,8 @@
-import CardOrderSupport from '@/app-example/components/ui/profile/support/CardOrderSupport';
+import CardOrderSupport from '@/app-example/components/ui/profile/support/supportScreenThree/CardOrderSupport';
 import Colors from '@/constants/Colors';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import orders from './ordersExample';
+import orders from './supportScreenThree/ordersExample';
 
 const SelectOrder = () => {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -51,8 +51,8 @@ const SelectOrder = () => {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
-        marginTop: 20,
-        paddingBottom: 37,
+        marginTop: 12,
+        marginBottom: 37,
     },
     orderRow: {
         flexDirection: 'row',
@@ -63,21 +63,20 @@ const styles = StyleSheet.create({
         height: 20,
         borderRadius: 10,
         marginRight: 7,
-        marginTop: 0,
+        marginTop: 10,
     },
     filledButton: {
         height: 52,
-        borderRadius: 8,
-        backgroundColor: '#A174FF',
+        borderRadius: 10,
+        backgroundColor: Colors.softPurple,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
-        marginBottom: 37,
+        marginTop: 36,
     },
     filledButtonText: {
         fontFamily: 'ManropeBold',
         fontSize: 16,
-        color: '#FFFCF5',
+        color: Colors.white,
     },
 });
 

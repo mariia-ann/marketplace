@@ -65,9 +65,8 @@ const OrderDetail: React.FC<Props> = ({ numberTTN, recipient, phone, deliveryMet
                     />
 
                     {expandedSections.details && (
-                        <View style={{ marginTop: 8 }}>
+                        <View style={{ marginTop: 16 }}>
                             <View >
-                                
                                 <View style={styles.detailsBlock}>
                                     <Text style={styles.detailsLabel}>Номер ТТН</Text>
                                     <View style={styles.detailsRow}>
@@ -93,7 +92,7 @@ const OrderDetail: React.FC<Props> = ({ numberTTN, recipient, phone, deliveryMet
                                     </View>
                                 </View>
 
-                                <View style={styles.detailsBlock}>
+                                <View>
                                     <Text style={styles.detailsLabel}>Адреса доставки</Text>
                                     <View style={styles.detailsRow}>
                                         <Text style={styles.detailsValue}>{addressDelivery}</Text>
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     sectionTitle: {
-        fontFamily: 'ManropeBold',
+        fontFamily: 'ManropeSemiBold',
         fontSize: 16,
         color: Colors.blackMain,
     },

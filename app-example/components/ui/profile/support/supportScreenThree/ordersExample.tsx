@@ -49,15 +49,49 @@ const orders = [
         },
 
         orderList: {
-            count: 2,
-            image: require("@/assets/images/reviews/product-review.png"),
-            title: "Брюки жіночі 9873 Сірі",
-            articul: 9000000018541,
-            seller: "Назва Продавця",
-            color: "#676A76",
-            size: "M",
-            quantity: 1,
-            price: 1500,
+            items: [
+                {
+                    image: require("@/assets/images/reviews/product-review.png"),
+                    title: "Брюки жіночі 9873 Сірі",
+                    articul: 9000000018541,
+                    seller: "Назва Продавця",
+                    color: "black",
+                    size: "M",
+                    quantity: 1,
+                    price: 1500,
+                },
+                {
+                    image: require("@/assets/images/reviews/product-review.png"),
+                    title: 'Кросівки',
+                    articul: 789012,
+                    seller: 'Adidas',
+                    color: 'white',
+                    size: '42',
+                    quantity: 1,
+                    price: 2499,
+                },
+                {
+                    image: require("@/assets/images/reviews/product-review.png"),
+                    title: 'Кросівки',
+                    articul: 789012,
+                    seller: 'Adidas',
+                    color: 'white',
+                    size: '42',
+                    quantity: 1,
+                    price: 2499,
+                },
+
+                {
+                    image: require("@/assets/images/reviews/product-review.png"),
+                    title: 'Кросівки',
+                    articul: 789012,
+                    seller: 'Adidas',
+                    color: 'white',
+                    size: '42',
+                    quantity: 1,
+                    price: 2499,
+                },
+            ]
         },
 
         orderDetail: {
@@ -128,16 +162,30 @@ const orders = [
         },
 
         orderList: {
-            count: 2,
-            image: require("@/assets/images/reviews/product-review.png"),
-            title: "Брюки жіночі 9873 Сірі",
-            articul: 9000000018541,
-            seller: "Назва Продавця",
-            color: "black",
-            size: "M",
-            quantity: 1,
-            price: 1500,
+            items: [
+                {
+                    image: require("@/assets/images/reviews/product-review.png"),
+                    title: "Брюки жіночі 9873 Сірі",
+                    articul: 9000000018541,
+                    seller: "Назва Продавця",
+                    color: "black",
+                    size: "M",
+                    quantity: 1,
+                    price: 1500,
+                },
+                {
+                    image: require("@/assets/images/reviews/product-review.png"),
+                    title: 'Кросівки',
+                    articul: 789012,
+                    seller: 'Adidas',
+                    color: '#000000',
+                    size: '42',
+                    quantity: 1,
+                    price: 2499,
+                }
+            ]
         },
+
 
         orderDetail: {
             numberTTN: "204503234523",
