@@ -4,10 +4,11 @@ import { Pressable, StyleSheet, Text } from "react-native";
 type CustomButtonProps = {
   title: string;
   onPress: () => void;
+  customStyles?: any;
 };
-const CustomButton: FC<CustomButtonProps> = ({ title, onPress }) => {
+const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles }) => {
   return (
-    <Pressable style={styles.addButton} onPress={onPress}>
+    <Pressable style={{...styles.addButton, ...customStyles}} onPress={onPress}>
       <Text style={styles.addButtonText}>{title}</Text>
     </Pressable>
   );
