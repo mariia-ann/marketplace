@@ -35,10 +35,10 @@ const Login = () => {
     <View style={styles.container}>
       <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
         <BackArrow style={style} />
-        <Text style={{width: "75%", textAlign: "center", fontSize: 22}}>З поверненням!</Text>
+        <Text style={{width: "80%", textAlign: "center", fontSize: 22, ...styles.fontTheme}}>З поверненням!</Text>
       </View>
       <View style={{display: "flex", flexDirection: "row", justifyContent: "center", paddingTop: 30, paddingBottom: 20}}>
-        <Text style={{fontSize: 15, paddingRight: 30}}>Вітаємо у нашому Маркетплейсі!</Text>
+        <Text style={{fontSize: 15, ...styles.fontTheme}}>Вітаємо у нашому Маркетплейсі!</Text>
       </View>
       <CustomInput
         textStyle={styles.label}
@@ -47,7 +47,7 @@ const Login = () => {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        customStyle={styles.input}
+        customStyle={{...styles.input, ...styles.fontTheme}}
       />
       <CustomInput
         label='Введіть пароль'
@@ -59,7 +59,7 @@ const Login = () => {
         othertextprops={{
             secureTextEntry: true
         }}
-        errors={{isError: true, errorMessage: "Password in incorrect"}}
+        errors={{isError: true, errorMessage: "Пароль не співпадає!"}}
         passwordInput
         passwordIconBaseStyle={{width: 25}}
         customStyle={styles.input}
@@ -71,7 +71,7 @@ const Login = () => {
 
       <Text style={styles.socialmediatextloginstyle}>або увійдіть за допомогою</Text>
 
-      <View style={{display: "flex", flexDirection: "row", justifyContent: "center", gap: 20, paddingTop: 50}}>
+      <View style={{display: "flex", flexDirection: "row", justifyContent: "center", gap: 40, paddingTop: 50}}>
         <SvgIcons name={CUSTOM_ICON_REF.Google} baseStyle={styles.socialMediaiconStyle} />
         <SvgIcons name={CUSTOM_ICON_REF.Facebook} baseStyle={styles.socialMediaiconStyle} />
         <SvgIcons name={CUSTOM_ICON_REF.Apple} baseStyle={styles.socialMediaiconStyle} />
@@ -79,7 +79,7 @@ const Login = () => {
 
       <View style={{display: "flex", flexDirection: "row", justifyContent: "center", paddingTop: 30 }}>
         <Text style={styles.ifsignedin}>Ще не маєте акаунт?</Text>
-        <Text style={{ color: "#8E6CEF", paddingLeft: 10 }}>Зареєструйтесь!</Text>
+        <Text style={{ color: "#8E6CEF", paddingLeft: 10, fontFamily: "Manrope" }}>Зареєструйтесь!</Text>
       </View>
 
     </View>
@@ -90,8 +90,9 @@ export default Login;
 
 const styles = StyleSheet.create({
   container: { display: "flex", flexDirection: "column", padding: 20 },
+  fontTheme: { color: "#170F2B", fontFamily: "Manrope" },
   heading: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
-  label: {color: "#999999", paddingBottom: 10},
+  label: {color: "#999999", paddingBottom: 10, fontFamily: "Manrope"},
   input: {
     borderWidth: 1,
     borderRadius: 8,
@@ -101,15 +102,17 @@ const styles = StyleSheet.create({
   },
   socialmediatextloginstyle: {
     fontSize: 14, 
-    textAlign: "center", 
+    textAlign: "center",
+    fontFamily: "Manrope",
     paddingTop: 30,
     color: "#999999"
   },
   ifsignedin: {
-    color: "#999999"
+    color: "#999999",
+    fontFamily: "Manrope",
   },
   socialMediaiconStyle: {
-    width: 35, 
-    height: 35
+    width: 45, 
+    height: 45
   }
 });

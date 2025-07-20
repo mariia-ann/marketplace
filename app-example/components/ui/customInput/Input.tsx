@@ -37,7 +37,7 @@ function CustomInput(props: Props) {
 					{...othertextprops}
 				/>
 				{/**If want to apply custom color, just add your color with !important */}
-				{errors?.isError && <Text style={{ color: "#D30004", ...errors.errorMessageCustomStyling}}>{errors.errorMessage}</Text>}
+				{errors?.isError && <Text style={{ color: "#D30004", fontFamily: "Manrope", ...errors.errorMessageCustomStyling}}>{errors.errorMessage}</Text>}
 				{errors?.isError ? <SvgIcons name={CUSTOM_ICON_REF.Info} baseStyle={styles.inputErrorText} /> : passwordInput && <SvgIcons name={CUSTOM_ICON_REF.EyeIcon} baseStyle={{ color: "#999999", position: "absolute", right: 6, top: 8, ...passwordIconBaseStyle }} />}
 			</View>
 		</View>
@@ -49,5 +49,5 @@ export default CustomInput;
 const styles = StyleSheet.create({
 	baseContainer: { display: "flex", flexDirection: "column" },
 	inputContainer: { position: "relative" },
-	inputErrorText: {color: "#D30004", position: "absolute", right: 6, top: 8, width: 25}
+	inputErrorText: {color: "#D30004", position: "absolute", right: 6, top: 8, width: 25, fontFamily: "Manrope"}
 })
