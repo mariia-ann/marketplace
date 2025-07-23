@@ -8,20 +8,21 @@ export default function RootLayout() {
     Manrope: require("../assets/fonts/Manrope-Regular.ttf"),
     ManropeBold: require("../assets/fonts/Manrope-Bold.ttf"),
     ManropeSemiBold: require("../assets/fonts/Manrope-SemiBold.ttf"),
+    Namu: require("../assets/fonts/NAMU-1400.ttf"),
     // Outfit: require("../assets/fonts/Outfit-Regular.ttf"),
     // OutfitBold: require("../assets/fonts/Outfit-Bold.ttf"),
   });
 
-useEffect(() => {
-  const prepare = async () => {
-    try {
-      await SplashScreen.preventAutoHideAsync();
-    } catch (e) {
-      console.warn('Помилка при виклику preventAutoHideAsync:', e);
-    }
-  };
-  prepare();
-}, []);
+  useEffect(() => {
+    const prepare = async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {
+        console.warn("Помилка при виклику preventAutoHideAsync:", e);
+      }
+    };
+    prepare();
+  }, []);
 
   useEffect(() => {
     if (loaded) {
@@ -34,9 +35,41 @@ useEffect(() => {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" options={{}} />
+    <Stack initialRouteName='(main)/index'>
+      {/* Welcome page screens */}
+      <Stack.Screen
+        name='(main)/index'
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='(main)/choose-language'
+        options={{ title: "Choose Language" }}
+      />
+      <Stack.Screen
+        name='(main)/choose-country'
+        options={{ title: "Choose Country" }}
+      />
+
+      {/* Auth screens 
+      <Stack.Screen
+        name='auth/login'
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='auth/register'
+        options={{ headerShown: false }}
+      />
+      */}
+      {/* Main app after login */}
+      <Stack.Screen
+        name='(tabs)'
+        options={{ headerShown: false }}
+      />
+      {/* 404 page */}
+      <Stack.Screen
+        name='+not-found'
+        options={{}}
+      />
     </Stack>
   );
 }
