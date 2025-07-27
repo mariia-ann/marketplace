@@ -1,12 +1,30 @@
+import Colors from "@/constants/Colors";
+import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Animated, StyleSheet, View } from "react-native";
-import Colors from "../../constants/Colors";
+import {
+  ActivityIndicator,
+  Animated,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import CustomButton from "../../app-example/components/CustomButton";
 
 export default function LoadingScreen() {
+  type AnimationData = {
+    source: any;
+    targetX: number;
+    targetY: number;
+    translateX: Animated.Value;
+  };
+
   const [imageContainerSize, setImageContainerSize] = useState({
     width: 0,
     height: 0,
   });
+
+  const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
+
   const IMAGE_SIZE = 100; // Size of each image in the circular layout
 
   // This sets the initial font size for the animated text
@@ -24,51 +42,59 @@ export default function LoadingScreen() {
     require("@/assets/images/welcome_page/img7.png"),
   ];
 
-  type AnimationData = {
-    source: any;
-    targetX: number;
-    targetY: number;
-    translateX: Animated.Value;
-    translateY: Animated.Value;
-  };
-
   const imageAnimations = useRef<AnimationData[]>([]);
 
+  // To calculate the positions of the images in a ellipsis layout
   useEffect(() => {
-    console.log("Container size:", imageContainerSize);
     if (imageContainerSize.width === 0 || imageContainerSize.height === 0)
       return;
+    // Calculate the center of the image container and the radius for the ellipsis layout
+    const centerX = imageContainerSize.width / 2;
+    const centerY = imageContainerSize.height / 2;
+    const radiusX = centerX - IMAGE_SIZE / 2;
+    const radiusY = centerY - IMAGE_SIZE / 2;
 
-    const RADIUS_X = imageContainerSize.width / 2 - IMAGE_SIZE;
-    const RADIUS_Y = imageContainerSize.height / 2 - IMAGE_SIZE;
-    console.log("Image container size:", imageContainerSize);
-    console.log("Generated imageAnimations:", imageAnimations.current);
-    imageAnimations.current = images.map((img, index) => {
+    const animations: AnimationData[] = images.map((img, index) => {
+      // Calculate the target position for each image based on its index
+      // The angleOffset is used to adjust the starting angle of the first image to be on the top
       const angleOffset = -Math.PI / 2 + (20 * Math.PI) / 180;
       const angle = (2 * Math.PI * index) / images.length + angleOffset;
-      const targetX = RADIUS_X * Math.cos(angle) - IMAGE_SIZE / 2;
-      const targetY = RADIUS_Y * Math.sin(angle) - IMAGE_SIZE / 2;
+      // (by Demidas)Really i could not understand why i need to minus the radiusX from the targetX but it works
+      const targetX =
+        centerX - radiusX + radiusX * Math.cos(angle) - IMAGE_SIZE / 2;
+      const targetY = centerY + radiusY * Math.sin(angle) - IMAGE_SIZE / 2;
+
       const startX =
-        index < 4 ? imageContainerSize.width + IMAGE_SIZE : -IMAGE_SIZE;
+        index < images.length / 2 ? targetX + centerX : targetX - centerX;
+
+      const translateX = new Animated.Value(startX);
+
+      // Animate each image's translateX to its final position
+      Animated.timing(translateX, {
+        toValue: targetX,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
 
       return {
         source: img,
         targetX,
         targetY,
-        translateX: new Animated.Value(startX),
-        translateY: new Animated.Value(targetY),
+        translateX,
       };
     });
 
-    imageAnimations.current.forEach((anim, index) => {
-      Animated.timing(anim.translateX, {
-        toValue: anim.targetX,
-        duration: 1000,
-        delay: index * 100,
-        useNativeDriver: true,
-      }).start();
-    });
+    imageAnimations.current = animations;
   }, [imageContainerSize]);
+
+  // Animate the font size of the text
+  useEffect(() => {
+    Animated.timing(animatedFontSize, {
+      toValue: 72,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -85,35 +111,52 @@ export default function LoadingScreen() {
         {/* TODO: Delete this red dot once the animations are working as expected /Demidas/ */}
         {imageContainerSize.width > 0 && imageContainerSize.height > 0 ? (
           <>
+            <View
+              style={{
+                position: "absolute",
+                width: 20,
+                height: 20,
+                left: 100,
+                top: 1,
+                backgroundColor: "purple",
+                borderRadius: 10,
+                zIndex: 9999,
+              }}
+            />
             {/* Red dot (debug center) */}
             <View
+              onLayout={(event) => {
+                const { width, height } = event.nativeEvent.layout;
+                setParentSize({ width, height });
+                console.log("Parent size:", width, height);
+              }}
               style={{
                 position: "absolute",
                 width: 10,
                 height: 10,
                 backgroundColor: "red",
-                left: imageContainerSize.width / 2 - 5,
-                top: imageContainerSize.height / 2 - 5,
                 borderRadius: 5,
                 zIndex: 9999,
               }}
-            />
+            >
+              <Text>Parent Width: {parentSize.width}</Text>
+              <Text>Parent Height: {parentSize.height}</Text>
+            </View>
             {/* Animated images */}
-            {imageAnimations.current.map((anim, i) => (
-              <Animated.Image
-                key={i}
-                source={anim.source}
-                style={{
-                  position: "absolute",
-                  width: IMAGE_SIZE,
-                  height: IMAGE_SIZE,
-                  transform: [
-                    { translateX: anim.translateX },
-                    { translateY: anim.translateY },
-                  ],
-                }}
-              />
-            ))}
+            {imageAnimations.current.length === images.length &&
+              imageAnimations.current.map((anim, i) => (
+                <Animated.Image
+                  key={i}
+                  source={anim.source}
+                  style={{
+                    position: "absolute",
+                    width: IMAGE_SIZE,
+                    height: IMAGE_SIZE,
+                    top: anim.targetY,
+                    transform: [{ translateX: anim.translateX }],
+                  }}
+                />
+              ))}
             <Animated.Text
               style={[styles.text, { fontSize: animatedFontSize }]}
             >
@@ -133,6 +176,10 @@ export default function LoadingScreen() {
           />
         )}
       </View>
+      <CustomButton
+        title={"Enter"}
+        onPress={() => router.push("/profile/cards")}
+      />
     </View>
   );
 }
