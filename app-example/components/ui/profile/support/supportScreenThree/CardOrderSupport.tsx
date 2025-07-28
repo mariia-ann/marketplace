@@ -76,11 +76,13 @@ const CardOrderSupport: React.FC<Props> = ({ orderNumber, date, time, orderStatu
                     <VerticalLine />
 
                     {/* Статус замовлення */}
-                    {orderStatus && (<OrderStatus
-                        status={orderStatus.status}
-                        statusDate={orderStatus.statusDate}
-                        tracking={orderStatus.tracking}
-                    />)}
+                    <View style={styles.headerRow}>
+                        {orderStatus && (<OrderStatus
+                            status={orderStatus.status}
+                            statusDate={orderStatus.statusDate}
+                            tracking={orderStatus.tracking}
+                        />)}
+                    </View>
                     <VerticalLine />
 
                     {/* Список товарів */}
@@ -105,25 +107,29 @@ const CardOrderSupport: React.FC<Props> = ({ orderNumber, date, time, orderStatu
 
 
                     {/* Деталі замовлення */}
-                    {orderDetail && (<OrderDetail
-                        numberTTN={orderDetail.numberTTN}
-                        recipient={orderDetail.recipient}
-                        phone={orderDetail.phone}
-                        deliveryMethod={orderDetail.deliveryMethod}
-                        addressDelivery={orderDetail.addressDelivery}
-                    />)}
+                    <View style={styles.headerRow}>
+                        {orderDetail && (<OrderDetail
+                            numberTTN={orderDetail.numberTTN}
+                            recipient={orderDetail.recipient}
+                            phone={orderDetail.phone}
+                            deliveryMethod={orderDetail.deliveryMethod}
+                            addressDelivery={orderDetail.addressDelivery}
+                        />)}
+                    </View>
                     <VerticalLine />
 
                     {/* Деталі оплати */}
-                    {paymentDetail && (
-                        <OrderPaymentDetail
-                            status={paymentDetail.status}
-                            paymentMethod={paymentDetail.paymentMethod}
-                            paymentOrder={paymentDetail.paymentOrder}
-                            paymentDelivery={paymentDetail.paymentDelivery}
-                            amount={paymentDetail.amount}
-                        />
-                    )}
+                    <View style={styles.headerRow}>
+                        {paymentDetail && (
+                            <OrderPaymentDetail
+                                status={paymentDetail.status}
+                                paymentMethod={paymentDetail.paymentMethod}
+                                paymentOrder={paymentDetail.paymentOrder}
+                                paymentDelivery={paymentDetail.paymentDelivery}
+                                amount={paymentDetail.amount}
+                            />
+                        )}
+                    </View>
 
                 </View>
 
@@ -139,7 +145,6 @@ const styles = StyleSheet.create({
     innerContainer: {
         marginHorizontal: 10,
         borderRadius: 12,
-        paddingHorizontal: 10,
         paddingVertical: 14,
         backgroundColor: '#FFF',
         shadowColor: '#000',
@@ -149,6 +154,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     headerRow: {
+        paddingHorizontal: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },

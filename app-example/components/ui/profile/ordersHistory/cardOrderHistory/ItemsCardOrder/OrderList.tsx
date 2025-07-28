@@ -45,16 +45,17 @@ const OrderList: React.FC<Props> = ({ children }) => {
 
                 {/* Список товарів */}
                 <View style={{ marginTop: 16 }}>
-                    <SectionHeader
-                        title="Список товарів"
-                        expanded={expandedSections.items}
-                        onPress={() => toggleSection('items')}
-                    />
-                    <Text style={styles.itemsCount}>Усього {itemCount} шт.</Text>
+                    <View style={styles.headerRow}>
+                        <SectionHeader
+                            title="Список товарів"
+                            expanded={expandedSections.items}
+                            onPress={() => toggleSection('items')}
+                        />
+                        <Text style={styles.itemsCount}>Усього {itemCount} шт.</Text>
 
-
+                    </View>
                     {expandedSections.items && (
-                        <View style={{ marginHorizontal: 7 }}>
+                        <View>
                             {children}
                         </View>
                     )}
@@ -70,6 +71,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },
+    headerRow: {
+        paddingHorizontal: 10,
     },
     sectionTitle: {
         fontFamily: 'ManropeSemiBold',

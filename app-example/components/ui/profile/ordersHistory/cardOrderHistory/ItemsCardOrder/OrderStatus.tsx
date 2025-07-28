@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     trackingDateContainer: {
+        width: 81,
         marginLeft: 16,
         marginRight: 20,
     },

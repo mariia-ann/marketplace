@@ -33,7 +33,7 @@ const ItemOrderList: React.FC<Props> = ({ image, title, articul, seller, color, 
             <ScrollView style={{ paddingBottom: 16 }}>
 
                 {/* Список товарів */}
-                <View style={{ marginHorizontal: 7 }}>
+                <View style={{ marginHorizontal: 10 }}>
                     <View style={styles.innerContainer}>
                         <View style={styles.infoBlock}>
                             <Image style={styles.image} source={image} />
