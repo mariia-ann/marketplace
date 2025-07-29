@@ -30,6 +30,7 @@ export default function ProfileStackLayout() {
     { name: "settings/changePassword", title: "Змінити пароль" },
     { name: "support/index", title: "Служба підтримки" },
     { name: "support/chat", title: "Чат-підтримки" },
+    { name: "support/chat/selectOrder", title: "Оберіть замовлення"},
   ];
 
   return (
