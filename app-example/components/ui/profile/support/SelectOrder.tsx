@@ -1,11 +1,23 @@
 import CardOrderSupport from '@/app-example/components/ui/profile/support/supportScreenThree/CardOrderSupport';
 import Colors from '@/constants/Colors';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import orders from './supportScreenThree/ordersExample';
 
 const SelectOrder = () => {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const router = useRouter();
+
+    const handleConfirmOrder = () => {
+        if (selectedIndex !== null) {
+            const selectedOrder = orders[selectedIndex];
+            if ((global as any).addOrderMessage) {
+                (global as any).addOrderMessage(selectedOrder.orderNumber);
+            }
+            router.back();
+        }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -39,10 +51,14 @@ const SelectOrder = () => {
                 ))}
 
                 {selectedIndex !== null && (
-                    <TouchableOpacity style={styles.filledButton}>
+                    <TouchableOpacity
+                        style={styles.filledButton}
+                        onPress={handleConfirmOrder}
+                    >
                         <Text style={styles.filledButtonText}>Підтвердити</Text>
                     </TouchableOpacity>
                 )}
+                <View style={{ height: 58 }} />
             </ScrollView>
         </SafeAreaView>
     );
