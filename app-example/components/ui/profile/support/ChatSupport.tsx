@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { v4 as uuidv4 } from 'uuid';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -34,7 +35,7 @@ export default function ChatSupport() {
 
   const addOrderMessage = (orderNumber: number) => {
     const newMessage: Message = {
-      id: Date.now().toString(),
+      id: uuidv4(),
       text: `№ ${orderNumber}`,
       time: dayjs().format('HH:mm'),
       isUser: true,
@@ -86,7 +87,7 @@ export default function ChatSupport() {
         {messages.map((message) => (
           <View key={message.id} style={[styles.chatBubble, styles.userMessage]}>
             <Text style={[styles.chatText, styles.userMessageText]}>{message.text}</Text>
-            <Text style={[styles.time, styles.time]}>{message.time}</Text>
+            <Text style={[styles.time]}>{message.time}</Text>
           </View>
         ))}
 
@@ -109,18 +110,32 @@ export default function ChatSupport() {
 
         {!hasSelectedOrder && (
           <View style={styles.buttonWrapper}>
-            <TouchableOpacity style={[styles.button, { height: 56 }]}>
-              <Text style={styles.buttonText}>Замовлення не відображаються у профілі</Text>
+            <TouchableOpacity
+              style={[styles.button, { height: 56 }]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.buttonText}>
+                Замовлення не відображаються у профілі
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]}>
-              <Text style={styles.buttonText}
-                onPress={() => router.push("/(tabs)/profile/support/chat/selectOrder")}>
-                Питання щодо товару або посилки</Text>
+            <TouchableOpacity
+              style={[styles.button, { height: 56, marginTop: 12 }]}
+              accessibilityRole="button"
+              onPress={() => router.push("/(tabs)/profile/support/chat/selectOrder")}
+            >
+              <Text style={styles.buttonText}>
+                Питання щодо товару або посилки
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 38, marginTop: 12 }]}>
-              <Text style={styles.buttonText}>Інші питання</Text>
+            <TouchableOpacity
+              style={[styles.button, { height: 38, marginTop: 12 }]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.buttonText}>
+                Інші питання
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -128,19 +143,19 @@ export default function ChatSupport() {
 
         {showAdditionalButtons && (
           <View style={[styles.buttonWrapper, { marginTop: 24 }]}>
-            <TouchableOpacity style={[styles.button, { height: 56 }]}>
+            <TouchableOpacity style={[styles.button, { height: 56 }]} accessibilityRole="button">
               <Text style={styles.buttonText}>Питання щодо доставки або відправки</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]}>
+            <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]} accessibilityRole="button">
               <Text style={styles.buttonText}>Питання щодо якості та комплектації товару</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]}>
+            <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]} accessibilityRole="button">
               <Text style={styles.buttonText}>Зміна адреси доставки замовлення до відправки</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 38, marginTop: 12 }]}>
+            <TouchableOpacity style={[styles.button, { height: 38, marginTop: 12 }]} accessibilityRole="button">
               <Text style={styles.buttonText}>Інше питання</Text>
             </TouchableOpacity>
           </View>
