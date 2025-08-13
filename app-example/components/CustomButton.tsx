@@ -1,14 +1,32 @@
 import React, { FC } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 
 type CustomButtonProps = {
   title: string;
   onPress: () => void;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 };
-const CustomButton: FC<CustomButtonProps> = ({ title, onPress }) => {
+
+const CustomButton: FC<CustomButtonProps> = ({
+  title,
+  onPress,
+  style,
+  textStyle,
+}) => {
   return (
-    <Pressable style={styles.addButton} onPress={onPress}>
-      <Text style={styles.addButtonText}>{title}</Text>
+    <Pressable
+      style={[styles.addButton, style]}
+      onPress={onPress}
+    >
+      <Text style={[styles.addButtonText, textStyle]}>{title}</Text>
     </Pressable>
   );
 };
@@ -24,7 +42,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "white",
     fontSize: 16,
-    fontFamily: 'ManropeSemiBold'
+    fontFamily: "ManropeSemiBold",
   },
 });
 
