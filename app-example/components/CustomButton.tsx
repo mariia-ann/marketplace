@@ -5,11 +5,14 @@ type CustomButtonProps = {
   title: string;
   onPress: () => void;
   customStyles?: any;
+  customTextStyles?: any;
+  whiteTheme?: boolean;
 };
-const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles }) => {
+const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles, whiteTheme, customTextStyles }) => {
+  const isWhiteTheme = whiteTheme ? { color: "" } : {};
   return (
     <Pressable style={{...styles.addButton, ...customStyles}} onPress={onPress}>
-      <Text style={styles.addButtonText}>{title}</Text>
+      <Text style={{...styles.addButtonText, ...customTextStyles}}>{title}</Text>
     </Pressable>
   );
 };
