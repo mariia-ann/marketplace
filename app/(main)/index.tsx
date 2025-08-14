@@ -1,4 +1,3 @@
-import CustomButton from "@/app-example/components/CustomButton";
 import CrossfadeTexts, {
   CrossfadeTextsHandle,
 } from "@/app-example/components/ui/welcome_page/ChangingText";
@@ -27,30 +26,23 @@ export default function LoadingScreen() {
     rotate?: Animated.Value;
     scale?: Animated.Value;
   };
-
+  // This state is used for fade out animation on last stage
+  const screenOpacity = useRef(new Animated.Value(1)).current;
   // This state variable keeps track of the current stage of the animation
-  // It can be 1, 2, 3, 4, or 5, according to design.
-  const [stage, setStage] = useState<1 | 2 | 3 | 4 | 5>(1);
-  const [stage1Ready, setStage1Ready] = useState(false);
+  // It can be 0, 1, 2, 3, 4, or 5, according to design.
+  const [stage, setStage] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
+  const hasRedirected = useRef(false);
   // This ref is used to follow when to trigger the animation in a CrossfadeTexts component
   const crossfadeRef = useRef<CrossfadeTextsHandle>(null);
   // This ref is used to follow when to trigger the animation in a PaginationIndicator component
   const paginationRef = useRef<PaginationIndicatorHandle>(null);
-  // TODO: Remove this state once the animations are working as expected / by Demidas/
   const [animationsReady, setAnimationsReady] = useState(false);
-  // This effect runs when the stage changes to 5 as last stage and should redirect the user to starting page
-  useEffect(() => {
-    if (stage === 5 && lastLoggedStage.current !== 5) {
-      console.log("Stage 5 reached, redirecting to profile/cards");
-      lastLoggedStage.current = 5;
-    }
-  }, [stage]);
-
   const [imageContainerSize, setImageContainerSize] = useState({
     width: 0,
     height: 0,
   });
-  const IMAGE_SIZE = 100; // Size of each image in the circular layout
+  // Size of each image in the circular layout
+  const IMAGE_SIZE = 100;
   // This sets the initial font size for the animated title text to 24px
   const animatedFontSize = useRef(new Animated.Value(24)).current;
   // Create an array of animated values for each image
@@ -229,48 +221,80 @@ export default function LoadingScreen() {
   // Here we store the animated values for each image
   const imageAnimations = useRef<AnimationData[]>([]);
 
+  // For the STAGE 1 only calculate the initial positions for each image
+  function calculateInitialImageAnimations({
+    containerWidth,
+    containerHeight,
+    imageSize,
+    images,
+  }: {
+    containerWidth: number;
+    containerHeight: number;
+    imageSize: number;
+    images: { source: any }[];
+  }): AnimationData[] {
+    // To calculate the positions of the images in a ellipsis layout
+    // Calculate the center of the image container and the radius for the ellipsis layout
+    const centerX = containerWidth / 2;
+    const centerY = containerHeight / 2;
+    const radiusX = centerX - imageSize / 2;
+    const radiusY = centerY - imageSize / 2;
+    // The angleOffset is used to adjust the starting angle of the first
+    // image to be on the top and slightly to the right clockwise
+    const angleOffset = -Math.PI / 2 + (22 * Math.PI) / 180;
+
+    return images.map((img, index) => {
+      // Calculate the target position for each image based on its index
+      const angle = (2 * Math.PI * index) / images.length + angleOffset;
+      // (by Demidas)Really i could not understand why i needed to minus the radiusX and radiusY from
+      // the targetX and targetY but it works
+      const targetX =
+        centerX - radiusX + radiusX * Math.cos(angle) - imageSize / 2;
+      const targetY =
+        centerY - radiusY + radiusY * Math.sin(angle) - imageSize / 2;
+      // Calculate the starting position for the animation for the first 4 images to be outside
+      // of the screen to the right and the last 4 images to be outside of the screen to the left
+      const startX =
+        index < images.length / 2 ? targetX + centerX : targetX - centerX;
+      const startY = targetY;
+
+      return {
+        source: img.source,
+        targetX,
+        targetY,
+        translateX: new Animated.Value(startX),
+        translateY: new Animated.Value(startY),
+        rotate: new Animated.Value(0),
+        scale: new Animated.Value(1),
+      };
+    });
+  }
+  // For STAGE 2 to STAGE 4 calculate the next target positions rotating images clockwise
+  function calculateNextTargetPositions(
+    animations: AnimationData[]
+  ): { x: number; y: number }[] {
+    const currentTargets = animations.map((a) => ({
+      x: a.targetX,
+      y: a.targetY,
+    }));
+    currentTargets.push(currentTargets.shift()!);
+    return currentTargets;
+  }
   // STAGE 1: SPLASH-1 → SPLASH-2
   useEffect(() => {
-    if (!stage1Ready) return;
+    if (
+      stage !== 1 ||
+      imageContainerSize.width === 0 ||
+      imageContainerSize.height === 0
+    )
+      return;
     const timeout = setTimeout(() => {
-      // To calculate the positions of the images in a ellipsis layout
-      // Calculate the center of the image container and the radius for the ellipsis layout
-      const centerX = imageContainerSize.width / 2;
-      const centerY = imageContainerSize.height / 2;
-      const radiusX = centerX - IMAGE_SIZE / 2;
-      const radiusY = centerY - IMAGE_SIZE / 2;
-
-      const animations: AnimationData[] = images.map((img, index) => {
-        // Calculate the target position for each image based on its index
-        // The angleOffset is used to adjust the starting angle of the first image to be on the top and slightly to the right
-        const angleOffset = -Math.PI / 2 + (30 * Math.PI) / 180;
-        const angle = (2 * Math.PI * index) / images.length + angleOffset;
-        // (by Demidas)Really i could not understand why i needed to minus the radiusX and radiusY from
-        // the targetX and targetY but it works
-        const targetX =
-          centerX - radiusX + radiusX * Math.cos(angle) - IMAGE_SIZE / 2;
-        const targetY =
-          centerY - radiusY + radiusY * Math.sin(angle) - IMAGE_SIZE / 2;
-        // Calculate the starting position for the animation for the first 4 images to be outside
-        // of the screen to the right and the last 4 images to be outside of the screen to the left
-        const startX =
-          index < images.length / 2 ? targetX + centerX : targetX - centerX;
-        const startY = targetY;
-        console.log("Image", index, "start:", startX, startY);
-        const translateX = new Animated.Value(startX);
-        const translateY = new Animated.Value(startY);
-
-        return {
-          source: img.source,
-          targetX,
-          targetY,
-          translateX,
-          translateY,
-          rotate: new Animated.Value(0),
-          scale: new Animated.Value(1),
-        };
+      const animations = calculateInitialImageAnimations({
+        containerWidth: imageContainerSize.width,
+        containerHeight: imageContainerSize.height,
+        imageSize: IMAGE_SIZE,
+        images,
       });
-
       imageAnimations.current = animations;
       // Animate the images to their target positions
       const moveAnims = animations.map((anim) =>
@@ -303,25 +327,21 @@ export default function LoadingScreen() {
         });
       });
     }, 200);
+
     return () => clearTimeout(timeout);
-  }, [stage1Ready]);
+  }, [stage, imageContainerSize]);
 
   // STAGE 2: SPLASH-2 → SPLASH-3
   useEffect(() => {
     if (stage !== 2 || imageAnimations.current.length !== images.length) return;
     const timeout = setTimeout(() => {
-      // This triggers animation in CrossfadeTexts
+      // Trigger child animations
       crossfadeRef.current?.trigger(0);
-      // This triggers animation in PaginationIndicator
       paginationRef.current?.trigger(2);
-      // Copy the current animations with their current target positions
-      const currentAnims = [...imageAnimations.current];
-      // Shift image positions clockwise (coordinates of img0 goes to last img, img1 goes to img0's place, etc.)
-      const shiftedTargets = currentAnims.map((a) => ({
-        x: a.targetX,
-        y: a.targetY,
-      }));
-      shiftedTargets.push(shiftedTargets.shift()!);
+      // get new positions of images on which they'll move in animation
+      const shiftedTargets = calculateNextTargetPositions(
+        imageAnimations.current
+      );
       // Animate text shrinking to preset size
       // This will animate the text from 72px to 32px
       const textShrink = Animated.timing(animatedFontSize, {
@@ -329,34 +349,37 @@ export default function LoadingScreen() {
         duration: 500,
         useNativeDriver: false,
       });
+
       const imageAnims = imageAnimations.current.map((anim, i) => {
         const imgDef = images[i];
-        const moveX = Animated.timing(anim.translateX, {
-          toValue: shiftedTargets[i].x,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const moveY = Animated.timing(anim.translateY, {
-          toValue: shiftedTargets[i].y,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const rotateAnim = Animated.timing(anim.rotate!, {
-          toValue: imgDef.animations.stage2.rotate / 360,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const scaleAnim = Animated.timing(anim.scale!, {
-          toValue: imgDef.animations.stage2.scale,
-          duration: 500,
-          useNativeDriver: true,
-        });
         // Update the stored target values for the next stage
         anim.targetX = shiftedTargets[i].x;
         anim.targetY = shiftedTargets[i].y;
 
-        return Animated.parallel([moveX, moveY, rotateAnim, scaleAnim]);
+        return Animated.parallel([
+          Animated.timing(anim.translateX, {
+            toValue: anim.targetX,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.translateY, {
+            toValue: anim.targetY,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.rotate!, {
+            toValue: imgDef.animations.stage2.rotate / 360,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.scale!, {
+            toValue: imgDef.animations.stage2.scale,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+        ]);
       });
+      // Start planned animation in parallel
       Animated.parallel([textShrink, ...imageAnims]).start(() => {
         requestAnimationFrame(() => setStage(3));
       });
@@ -369,43 +392,43 @@ export default function LoadingScreen() {
   useEffect(() => {
     if (stage !== 3 || imageAnimations.current.length !== images.length) return;
     const timeout = setTimeout(() => {
-      // This triggers animation in CrossfadeTexts
+      // Trigger child animations
       crossfadeRef.current?.trigger(1);
-      // This triggers animation in PaginationIndicator
       paginationRef.current?.trigger(3);
-      const currentAnims = [...imageAnimations.current];
-      // Shift image positions again (clockwise)
-      const shiftedTargets = currentAnims.map((a) => ({
-        x: a.targetX,
-        y: a.targetY,
-      }));
-      shiftedTargets.push(shiftedTargets.shift()!); // circular clockwise shift
+      // get new positions of images on which they'll move in animation
+      const shiftedTargets = calculateNextTargetPositions(
+        imageAnimations.current
+      );
       const imageAnims = imageAnimations.current.map((anim, i) => {
         const imgDef = images[i];
-        const moveX = Animated.timing(anim.translateX, {
-          toValue: shiftedTargets[i].x,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const moveY = Animated.timing(anim.translateY, {
-          toValue: shiftedTargets[i].y,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const rotateAnim = Animated.timing(anim.rotate!, {
-          toValue: imgDef.animations.stage3.rotate / 360,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const scaleAnim = Animated.timing(anim.scale!, {
-          toValue: imgDef.animations.stage3.scale,
-          duration: 500,
-          useNativeDriver: true,
-        });
+        // Update the stored target values for the next stage
         anim.targetX = shiftedTargets[i].x;
         anim.targetY = shiftedTargets[i].y;
-        return Animated.parallel([moveX, moveY, rotateAnim, scaleAnim]);
+
+        return Animated.parallel([
+          Animated.timing(anim.translateX, {
+            toValue: anim.targetX,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.translateY, {
+            toValue: anim.targetY,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.rotate!, {
+            toValue: imgDef.animations.stage3.rotate / 360,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.scale!, {
+            toValue: imgDef.animations.stage3.scale,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+        ]);
       });
+      // Start planned animation in parallel
       Animated.parallel(imageAnims).start(() => {
         requestAnimationFrame(() => setStage(4));
       });
@@ -418,45 +441,43 @@ export default function LoadingScreen() {
   useEffect(() => {
     if (stage !== 4 || imageAnimations.current.length !== images.length) return;
     const timeout = setTimeout(() => {
-      // This triggers animation in CrossfadeTexts
+      // Trigger child animations
       crossfadeRef.current?.trigger(2);
-      // This triggers animation in PaginationIndicator
       paginationRef.current?.trigger(4);
-      const currentAnims = [...imageAnimations.current];
-      // Shift image positions again (clockwise)
-      const shiftedTargets = currentAnims.map((a) => ({
-        x: a.targetX,
-        y: a.targetY,
-      }));
-      shiftedTargets.push(shiftedTargets.shift()!); // circular clockwise shift
+      // get new positions of images on which they'll move in animation
+      const shiftedTargets = calculateNextTargetPositions(
+        imageAnimations.current
+      );
       const imageAnims = imageAnimations.current.map((anim, i) => {
         const imgDef = images[i];
-        const moveX = Animated.timing(anim.translateX, {
-          toValue: shiftedTargets[i].x,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const moveY = Animated.timing(anim.translateY, {
-          toValue: shiftedTargets[i].y,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const rotateAnim = Animated.timing(anim.rotate!, {
-          toValue: imgDef.animations.stage4.rotate / 360,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        const scaleAnim = Animated.timing(anim.scale!, {
-          toValue: imgDef.animations.stage4.scale,
-          duration: 500,
-          useNativeDriver: true,
-        });
-        // Update target for the next stage
+        // Update the stored target values for the next stage
         anim.targetX = shiftedTargets[i].x;
         anim.targetY = shiftedTargets[i].y;
 
-        return Animated.parallel([moveX, moveY, rotateAnim, scaleAnim]);
+        return Animated.parallel([
+          Animated.timing(anim.translateX, {
+            toValue: anim.targetX,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.translateY, {
+            toValue: anim.targetY,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.rotate!, {
+            toValue: imgDef.animations.stage4.rotate / 360,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.scale!, {
+            toValue: imgDef.animations.stage4.scale,
+            duration: 500,
+            useNativeDriver: true,
+          }),
+        ]);
       });
+      // Start planned animation in parallel
       Animated.parallel(imageAnims).start(() => {
         requestAnimationFrame(() => setStage(5));
       });
@@ -465,17 +486,26 @@ export default function LoadingScreen() {
     return () => clearTimeout(timeout);
   }, [stage]);
 
-  //TODO: Delete this useEffect once the animations are working as expected / by Demidas/
-  const lastLoggedStage = useRef<number | null>(null);
+  // STAGE 5: Redirect to next page
+  //TODO: Insert correct redirect page / by Demidas/
   useEffect(() => {
-    if (lastLoggedStage.current !== stage) {
-      console.log("Stage now:", stage);
-      lastLoggedStage.current = stage;
+    if (stage === 5 && !hasRedirected.current) {
+      hasRedirected.current = true;
+      const timeout = setTimeout(() => {
+        Animated.timing(screenOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }).start(() => {
+          router.push("/profile");
+        });
+      }, 1000);
+      return () => clearTimeout(timeout);
     }
   }, [stage]);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: screenOpacity }]}>
       <View
         style={styles.imageContainer}
         onLayout={(e) => {
@@ -484,9 +514,8 @@ export default function LoadingScreen() {
             imageContainerSize.width === 0 &&
             imageContainerSize.height === 0
           ) {
-            console.log("Layout dimensions:", width, height);
             setImageContainerSize({ width, height });
-            setStage1Ready(true);
+            setStage(1);
           }
         }}
       >
@@ -557,13 +586,7 @@ export default function LoadingScreen() {
           <View style={styles.placeholder} />
         )}
       </View>
-      {/* TODO: Delete this before production / by Demidas/ */}
-      <CustomButton
-        style={styles.button}
-        title={"Enter"}
-        onPress={() => router.push("/profile/cards")}
-      />
-    </View>
+    </Animated.View>
   );
 }
 
@@ -572,13 +595,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: Colors.white,
+    paddingTop: 120,
+    paddingBottom: 40,
   },
   imageContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 120,
-    marginBottom: 30,
+    marginBottom: 40,
     width: "100%",
   },
   title: {
@@ -603,8 +627,5 @@ const styles = StyleSheet.create({
     color: Colors.blackMain,
     letterSpacing: 0,
     textAlign: "center",
-  },
-  button: {
-    backgroundColor: Colors.white,
   },
 });
