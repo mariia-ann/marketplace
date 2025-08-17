@@ -497,7 +497,7 @@ export default function LoadingScreen() {
           duration: 300,
           useNativeDriver: true,
         }).start(() => {
-          router.push("/profile");
+          router.push("/(main)/welcome");
         });
       }, 1000);
       return () => clearTimeout(timeout);

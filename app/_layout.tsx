@@ -35,21 +35,12 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack initialRouteName='(main)/index'>
+    <Stack>
       {/* Welcome page screens */}
       <Stack.Screen
-        name='(main)/index'
+        name='(main)'
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name='(main)/choose-language'
-        options={{ title: "Choose Language" }}
-      />
-      <Stack.Screen
-        name='(main)/choose-country'
-        options={{ title: "Choose Country" }}
-      />
-
       {/* Auth screens 
       <Stack.Screen
         name='auth/login'
