@@ -1,4 +1,4 @@
-import AddCard from "@/app-example/components/ui/profile/cards/addCard";
+import AddCard from "@/src/components/ui/profile/cards/addCard";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function AddCards() {

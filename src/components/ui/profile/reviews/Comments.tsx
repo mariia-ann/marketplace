@@ -1,5 +1,5 @@
-import { Comment } from "@/app-example/types/Comment";
 import Colors from "@/constants/Colors";
+import { Comment } from "@/src/types/Comment";
 import { Link } from "expo-router";
 import { ArrowBendDownRight, Chat } from "phosphor-react-native";
 import { useState } from "react";
@@ -32,7 +32,10 @@ export default function Comments({ comments }: CommentsProps) {
         <View key={index}>
           <View style={styles.blockDataSeller}>
             <View style={styles.arrowSeller}>
-              <ArrowBendDownRight size={32} weight="thin" />
+              <ArrowBendDownRight
+                size={32}
+                weight='thin'
+              />
               <Text style={styles.sellerName}>{comment.author}</Text>
             </View>
             <Text style={styles.dateComment}>{comment.date}</Text>
@@ -41,9 +44,15 @@ export default function Comments({ comments }: CommentsProps) {
           <View style={styles.blockComment}>
             <Text style={styles.textComment}>{comment.comment}</Text>
             <View style={styles.blockAnswers}>
-              <Link href="/profile/reviews/addAnswer" asChild>
+              <Link
+                href='/profile/reviews/addAnswer'
+                asChild
+              >
                 <Pressable>
-                  <Chat size={32} weight="thin" />
+                  <Chat
+                    size={32}
+                    weight='thin'
+                  />
                 </Pressable>
               </Link>
               <TouchableOpacity onPress={() => handleToggleAnswers(index)}>
@@ -52,7 +61,9 @@ export default function Comments({ comments }: CommentsProps) {
                 </Text>
               </TouchableOpacity>
             </View>
-            {isAnswersVisible[index] && comment.answers && <Answers answers={comment.answers} />}
+            {isAnswersVisible[index] && comment.answers && (
+              <Answers answers={comment.answers} />
+            )}
           </View>
         </View>
       ))}
@@ -61,7 +72,7 @@ export default function Comments({ comments }: CommentsProps) {
 }
 
 const styles = StyleSheet.create({
-  comments: { 
+  comments: {
     gap: 16,
   },
   blockDataSeller: {
@@ -103,6 +114,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 16
+    marginBottom: 16,
   },
 });

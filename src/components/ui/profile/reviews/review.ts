@@ -1,7 +1,8 @@
-import { Comment } from "@/app-example/types/Comment";
+import { Comment } from "@/src/types/Comment";
 import { ImageSourcePropType } from "react-native";
 
-interface ProductReview {
+interface ProductReview
+{
   title: string;
   articul: number;
   seller: string;
@@ -19,7 +20,7 @@ export const mockReview: ProductReview = {
   title: "Брюки жіночі 9873 Сірі",
   articul: 9000000018541,
   seller: "Назва Продавця",
-  image: require("@/assets/images/reviews/product-review.png"),
+  image: require( "@/assets/images/reviews/product-review.png" ),
   price: 1500,
   size: "M",
   quantity: 1,

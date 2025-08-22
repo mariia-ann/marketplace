@@ -1,5 +1,5 @@
-import SellerMessages from "@/app-example/components/ui/profile/sellerMessages/SellerMessages";
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import SellerMessages from "@/src/components/ui/profile/sellerMessages/SellerMessages";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function SellerMessage() {
   return (
@@ -12,7 +12,7 @@ export default function SellerMessage() {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     flex: 1,
   },
-})
+});

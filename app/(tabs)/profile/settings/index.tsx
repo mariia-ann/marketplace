@@ -1,4 +1,4 @@
-import GeneralSettings from "@/app-example/components/ui/profile/settings/GeneralSettings";
+import GeneralSettings from "@/src/components/ui/profile/settings/GeneralSettings";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function Settings() {

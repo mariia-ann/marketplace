@@ -1,11 +1,7 @@
-import { Answer } from "@/app-example/types/Answer";
 import Colors from "@/constants/Colors";
+import { Answer } from "@/src/types/Answer";
 import { ArrowBendDownRight } from "phosphor-react-native";
-import {
-    StyleSheet,
-    Text,
-    View
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 interface AnswersProps {
   answers: Answer[];
@@ -18,7 +14,10 @@ export default function Answers({ answers }: AnswersProps) {
         <View key={index}>
           <View style={styles.blockDataSeller}>
             <View style={styles.arrowSeller}>
-              <ArrowBendDownRight size={32} weight="thin" />
+              <ArrowBendDownRight
+                size={32}
+                weight='thin'
+              />
               <Text style={styles.sellerName}>{answer.author}</Text>
             </View>
             <Text style={styles.dateComment}>{answer.date}</Text>
@@ -30,11 +29,10 @@ export default function Answers({ answers }: AnswersProps) {
       ))}
     </View>
   );
-};
-
+}
 
 const styles = StyleSheet.create({
-  answers: { 
+  answers: {
     gap: 16,
   },
   blockDataSeller: {

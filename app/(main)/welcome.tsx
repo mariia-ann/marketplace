@@ -2,10 +2,10 @@ import Colors from "@/constants/Colors";
 import { router } from "expo-router";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
-import SecondaryButton from "@/app-example/components/Buttons and Links/ SecondaryButton.";
-import PrimaryButton from "@/app-example/components/Buttons and Links/PrimaryButton";
-import TextLink from "@/app-example/components/Buttons and Links/TextLink_w_arrow";
-import WelcomeBackground from "@/app-example/components/ui/welcome_page/WelcomeBackground";
+import SecondaryButton from "@/src/components/Buttons and Links/ SecondaryButton.";
+import PrimaryButton from "@/src/components/Buttons and Links/PrimaryButton";
+import TextLink from "@/src/components/Buttons and Links/TextLink_w_arrow";
+import WelcomeBackground from "@/src/components/ui/welcome_page/WelcomeBackground";
 
 export default function WelcomeScreen() {
   return (

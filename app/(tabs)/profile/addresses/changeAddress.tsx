@@ -1,5 +1,5 @@
-import ChangeAddress from '@/app-example/components/ui/profile/address/ChangeAddress';
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import ChangeAddress from "@/src/components/ui/profile/address/ChangeAddress";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function ChangeAddresses() {
   return (
@@ -15,4 +15,4 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
   },
-})  
+});

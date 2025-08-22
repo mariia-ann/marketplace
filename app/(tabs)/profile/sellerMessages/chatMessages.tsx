@@ -1,5 +1,5 @@
-import Messages from '@/app-example/components/ui/profile/sellerMessages/Messages';
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import Messages from "@/src/components/ui/profile/sellerMessages/Messages";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function chatMessages() {
   return (
@@ -15,4 +15,4 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
   },
-})  
+});

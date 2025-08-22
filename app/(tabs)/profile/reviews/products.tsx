@@ -1,11 +1,11 @@
-import ReviewProductCard from "@/app-example/components/ui/profile/reviews/ReviewProductCard";
+import ReviewProductCard from "@/src/components/ui/profile/reviews/ReviewProductCard";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function ProductReviews() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
-            <ReviewProductCard />
+        <ReviewProductCard />
       </ScrollView>
     </SafeAreaView>
   );

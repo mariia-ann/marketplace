@@ -1,6 +1,6 @@
-import TwoTabsSwitch from "@/app-example/components/ui/twoTabsSwitch";
 import dummyImage from "@/assets/images/dummy_image_delete_onprod.png";
 import Colors from "@/constants/Colors";
+import TwoTabsSwitch from "@/src/components/ui/twoTabsSwitch";
 import React, { useState } from "react";
 import {
   FlatList,
