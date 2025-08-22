@@ -1,5 +1,12 @@
 import React, { FC } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 
 type CustomButtonProps = {
   title: string;
@@ -28,7 +35,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "white",
     fontSize: 16,
-    fontFamily: 'ManropeSemiBold'
+    fontFamily: "ManropeSemiBold",
   },
 });
 

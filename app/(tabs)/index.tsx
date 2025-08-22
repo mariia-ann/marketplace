@@ -5,8 +5,11 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home screen</Text>
-      <Link href="/profile" style={styles.button}>
-        Go to Profile screen
+      <Link
+        href='/(main)'
+        style={styles.button}
+      >
+        Go to Onboarding screen
       </Link>
     </View>
   );
