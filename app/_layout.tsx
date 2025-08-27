@@ -41,16 +41,11 @@ export default function RootLayout() {
         name='(main)'
         options={{ headerShown: false }}
       />
-      {/* Auth screens 
+      {/* Auth page screens */}
       <Stack.Screen
-        name='auth/login'
+        name='auth'
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name='auth/register'
-        options={{ headerShown: false }}
-      />
-      */}
       {/* Main app after login */}
       <Stack.Screen
         name='(tabs)'

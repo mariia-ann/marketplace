@@ -2,9 +2,9 @@ import Colors from "@/constants/Colors";
 import { router } from "expo-router";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
-import SecondaryButton from "@/src/components/Buttons and Links/ SecondaryButton.";
-import PrimaryButton from "@/src/components/Buttons and Links/PrimaryButton";
-import TextLink from "@/src/components/Buttons and Links/TextLink_w_arrow";
+import PrimaryButton from "@/src/components/common/PrimaryButton";
+import SecondaryButton from "@/src/components/common/SecondaryButton";
+import TextLink from "@/src/components/common/TextLink_w_arrow";
 import WelcomeBackground from "@/src/components/ui/welcome_page/WelcomeBackground";
 
 export default function WelcomeScreen() {
@@ -24,20 +24,20 @@ export default function WelcomeScreen() {
         <View style={styles.buttonBlock}>
           <PrimaryButton
             title='Увійти'
-            onPress={() => router.push("/(tabs)/profile")}
+            onPress={() => router.push("/auth/login")}
             size='L'
             active={true}
           />
           <SecondaryButton
             title='Зареєструватись'
             size='L'
-            onPress={() => {}}
+            onPress={() => router.push("/auth/signup")}
           />
           <SecondaryButton
             title='Продовжити як гість'
             active={true}
             size='L'
-            onPress={() => {}}
+            onPress={() => router.push("/(tabs)/profile")}
           />
         </View>
         <View style={styles.linkBlock}>

@@ -89,7 +89,6 @@ const TwoTabsSwitch = ({
 const styles = StyleSheet.create({
   tabs: {
     flexDirection: "row",
-    paddingHorizontal: 20,
   },
   tabLeft: {
     width: "50%",

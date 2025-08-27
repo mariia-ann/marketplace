@@ -4,6 +4,24 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type Credentials = { email: string; password: string; };
 
+export function useRegister ()
+{
+    const setSession = useAuth( s => s.setSession );
+    return useMutation( {
+        mutationFn: async ( input: Credentials ) =>
+        {
+            const { data } = await api.post( '/auth/register', input );
+            // expect: { user, accessToken, refreshToken }
+            return data as { user: any; accessToken: string; refreshToken: string; };
+        },
+        onSuccess: ( data ) => setSession( {
+            user: data.user,
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+        } ),
+    } );
+}
+
 export function useLogin ()
 {
     const setSession = useAuth( s => s.setSession );
