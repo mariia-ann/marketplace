@@ -1,8 +1,8 @@
-import CustomButton from "@/app-example/components/CustomButton";
-import CheckBox from "@/app-example/components/ui/customInput/Checkbox";
-import CustomInput from "@/app-example/components/ui/customInput/Input";
-import { CUSTOM_ICON_REF } from "@/app-example/components/ui/SvgIcons/IconRef";
-import SvgIcons from "@/app-example/components/ui/SvgIcons/SvgIcons";
+import CustomButton from "@/src/components/CustomButton";
+import CheckBox from "@/src/components/ui/customInput/Checkbox";
+import CustomInput from "@/src/components/ui/customInput/Input";
+import { CUSTOM_ICON_REF } from "@/src/components/ui/SvgIcons/IconRef";
+import SvgIcons from "@/src/components/ui/SvgIcons/SvgIcons";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
