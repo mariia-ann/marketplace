@@ -11,22 +11,15 @@ import {
 type CustomButtonProps = {
   title: string;
   onPress: () => void;
-  style?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
+  customStyles?: any;
+  customTextStyles?: any;
+  whiteTheme?: boolean;
 };
-
-const CustomButton: FC<CustomButtonProps> = ({
-  title,
-  onPress,
-  style,
-  textStyle,
-}) => {
+const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles, whiteTheme, customTextStyles }) => {
+  const isWhiteTheme = whiteTheme ? { color: "" } : {};
   return (
-    <Pressable
-      style={[styles.addButton, style]}
-      onPress={onPress}
-    >
-      <Text style={[styles.addButtonText, textStyle]}>{title}</Text>
+    <Pressable style={{...styles.addButton, ...customStyles}} onPress={onPress}>
+      <Text style={{...styles.addButtonText, ...customTextStyles}}>{title}</Text>
     </Pressable>
   );
 };
