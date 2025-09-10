@@ -3,10 +3,20 @@ import BackArrow from '@/app-example/components/ui/BackArrowModified'
 import OptionToggle from '@/app-example/components/ui/OptionToggle/OptionToggle'
 import { CUSTOM_ICON_REF } from '@/app-example/components/ui/SvgIcons/IconRef'
 import SvgIcons from '@/app-example/components/ui/SvgIcons/SvgIcons'
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 function ForgotPassword() {
+	const [toggleSMS, setToggleSMS] = useState<boolean>(false);
+
+	const handleToggleSMS = () => {
+		setToggleSMS((prev)=> !prev)
+	};
+	
+	const handleToggleEmail = () => {
+		setToggleSMS((prev)=> !prev)
+	};
+
 	return (
 		<ScrollView style={styles.container}>
 			{/* Header */}
@@ -27,8 +37,8 @@ function ForgotPassword() {
 
 			{/* Options */}
 			<View style={[styles.row, styles.optionWrapper]}>
-				<OptionToggle title='SMS' baseStyle={{...styles.optionBox, ...styles.shadow,  marginRight: 15 }} textStyle={styles.optionToggleText} />
-				<OptionToggle title='Email' baseStyle={{...styles.optionBox, ...styles.shadow, marginLeft: 15 }} textStyle={styles.optionToggleText}/>
+				<OptionToggle toggled={toggleSMS} title='SMS' baseStyle={{...styles.optionBox, ...styles.shadow,  marginRight: 15 }} textStyle={styles.optionToggleText} handleClick={handleToggleSMS} />
+				<OptionToggle toggled={!toggleSMS} title='Email' baseStyle={{...styles.optionBox, ...styles.shadow, marginLeft: 15 }} textStyle={styles.optionToggleText} handleClick={handleToggleEmail} />
 			</View>
 
 			{/* Info */}

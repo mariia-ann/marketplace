@@ -4,16 +4,18 @@ interface Props {
   baseStyle?: any;
   textStyle?: any;
   title?: string;
+  handleClick?: ()=> void;
+  toggled?: boolean;
 }
 
 function OptionToggle(props: Props) {
 
-  const { baseStyle, textStyle, title } = props;
+  const { baseStyle, textStyle, title, handleClick, toggled } = props;
 
   return (
-    <Pressable style={{ padding: 3, ...baseStyle }}>
+    <Pressable style={{ padding: 3, ...baseStyle }} onPress={handleClick}>
       <Text style={textStyle}>{title}</Text>
-      <View style={{width: 18, height: 18, borderWidth: 1, borderColor: "#8E6CEF", borderRadius: 100}}></View>
+      <View style={{width: 18, height: 18, borderWidth: 1, borderColor: "#8E6CEF", borderRadius: 100, ...(toggled && {backgroundColor: "#8E6CEF"})}}></View>
     </Pressable>
   )
 }
