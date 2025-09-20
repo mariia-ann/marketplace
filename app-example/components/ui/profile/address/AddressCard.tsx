@@ -1,44 +1,69 @@
 import CustomSwitch from "@/app-example/components/CustomSwitch";
+import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
-import { PencilSimple } from 'phosphor-react-native';
-import React, { ReactElement } from 'react';
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { PencilSimple } from "phosphor-react-native";
+import React from "react";
+import { Image, ImageSourcePropType, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 interface AddressCardProps {
-    title: string;
-    address: string;
-    logo: ReactElement;
-    active: boolean;
-    onPress: () => void;
-    isSwitchEnabled: boolean;
-    onToggleSwitch: () => void;
+  id: number;
+  title: string;
+  address: string;
+  city: string;
+  codePostal: number;
+  logo: ImageSourcePropType;
+  active: boolean;
+  onPress: () => void;
+  isSwitchEnabled: boolean;
+  onToggleSwitch: () => void;
 }
-
-export default function AddressCard({ title, address, logo, active, onPress, isSwitchEnabled, onToggleSwitch }: AddressCardProps) {
-    return (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.9}
-            style={[styles.container, (active || isSwitchEnabled) && styles.activeBorder]}>
-
-            <View style={styles.header}>
-                <View style={styles.logoTitle}>
-                    {logo}
-                    <Text style={styles.title}>{title}</Text>
-                </View>
-                <CustomSwitch value={isSwitchEnabled} onToggle={onToggleSwitch} />
-            </View>
-
-            <View style={styles.address}>
-                <Text numberOfLines={3} style={styles.addressText}>{address}</Text>
-                <Link href="/(tabs)/profile/addresses/changeAddress" asChild>
-                    <Pressable>
-                        <PencilSimple size={24} color="#170F2B" style={styles.pencilIcon} />
-                    </Pressable>
-                </Link>
-            </View>
-
-        </TouchableOpacity>
-    );
+const logos = {
+  novaPoshta: logoNovaPoshta,
 };
+
+export default function AddressCard({ id, title, address, city, codePostal, logo, active, onPress, isSwitchEnabled, onToggleSwitch }: AddressCardProps) {
+
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.9}
+      style={[styles.container, (active || isSwitchEnabled) && styles.activeBorder]}
+    >
+      <View style={styles.header}>
+        <View style={styles.logoTitle}>
+          <Image source={logo} style={{ width: 26, height: 26 }} />
+          <Text style={styles.title}>{title}</Text>
+        </View>
+        <CustomSwitch value={isSwitchEnabled} onToggle={onToggleSwitch} />
+      </View>
+
+      <View style={styles.address}>
+        <Text numberOfLines={3} style={styles.addressText}>
+          {address}, {city}, {codePostal}
+        </Text>
+        <Link
+          href={{
+            pathname: "/(tabs)/profile/addresses/changeAddress",
+            params: {
+              id: id.toString(),
+              title,
+              address,
+              city,
+              codePostal: codePostal.toString(),
+              logo: "novaPoshta",
+            },
+          }}
+          asChild
+        >
+          <Pressable>
+            <PencilSimple size={24} color="#170F2B" style={styles.pencilIcon} />
+          </Pressable>
+        </Link>
+      </View>
+    </TouchableOpacity>
+  );
+}
 
 const styles = StyleSheet.create({
     container: {
