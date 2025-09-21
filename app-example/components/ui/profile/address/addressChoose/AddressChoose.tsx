@@ -1,5 +1,6 @@
 import CustomSwitch from '@/app-example/components/CustomSwitch';
 import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import logoUkrposhta from '@/assets/images/profile/address/logoUkrposhta.png';
 import Colors from '@/constants/Colors';
 import { useRouter } from "expo-router";
 import { CaretRight } from "phosphor-react-native";
@@ -7,6 +8,7 @@ import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface AddressChooseProps {
+    id?: number;
     title: string;
     address: string;
     city: string;
@@ -14,9 +16,22 @@ interface AddressChooseProps {
     logo: any;
 }
 
-const AddressChoose: React.FC<AddressChooseProps> = ({ title, address, city, codePostal }) => {
+const logos: Record<string, any> = {
+    novaPoshta: logoNovaPoshta,
+    ukrposhta: logoUkrposhta,
+};
+
+const AddressChoose: React.FC<AddressChooseProps> = ({ id, title, address, city, codePostal, logo }) => {
     const [isDefault, setIsDefault] = useState(true);
     const router = useRouter();
+
+    // Визначаємо логотип на основі назви
+    const getLogo = () => {
+        if (title.includes('Укрпошта')) {
+            return logos.ukrposhta;
+        }
+        return logos.novaPoshta;
+    };
 
     return (
         <ScrollView>
@@ -37,10 +52,19 @@ const AddressChoose: React.FC<AddressChooseProps> = ({ title, address, city, cod
                 <Text style={styles.label}>Спосіб доставки</Text>
                 <TouchableOpacity
                     style={styles.input}
-                    onPress={() => router.push("/(tabs)/profile/addresses/changeAddress/deliveryMethod")}
+                    onPress={() => router.push({
+                        pathname: "/(tabs)/profile/addresses/changeAddress/deliveryMethod",
+                        params: {
+                            id: id?.toString() || '',
+                            title,
+                            address,
+                            city,
+                            codePostal: codePostal.toString(),
+                        }
+                    })}
                 >
                     <View style={styles.deliveryRow}>
-                        <Image source={logoNovaPoshta} style={styles.logo} resizeMode="contain" />
+                        <Image source={getLogo()} style={styles.logo} resizeMode="contain" />
                         <Text style={styles.inputText}>{title}</Text>
                     </View>
                     <CaretRight size={18} weight="bold" />

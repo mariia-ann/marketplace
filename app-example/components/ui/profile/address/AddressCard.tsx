@@ -51,7 +51,7 @@ export default function AddressCard({ id, title, address, city, codePostal, logo
               address,
               city,
               codePostal: codePostal.toString(),
-              logo: "novaPoshta",
+              logo: title.includes('Укрпошта') ? 'ukrposhta' : 'novaPoshta',
             },
           }}
           asChild
@@ -66,55 +66,55 @@ export default function AddressCard({ id, title, address, city, codePostal, logo
 }
 
 const styles = StyleSheet.create({
-    container: {
-        height: 135,
-        borderRadius: 10,
-        backgroundColor: Colors.white,
-        marginHorizontal: 20,
-        marginTop: 24,
-        marginBottom: 16,
-        paddingHorizontal: 10,
-        paddingTop: 14,
-        paddingBottom: 14,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 15,
-        elevation: 4,
-    },
-    activeBorder: {
-        borderWidth: 1,
-        borderColor: Colors.softPurple,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    logoTitle: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    title: {
-        fontWeight: 700,
-        fontSize: 16,
-        color: Colors.blackMain,
-        marginLeft: 18,
-    },
-    address: {
-        flexDirection: 'row',
-        marginTop: 16,
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    addressText: {
-        fontFamily: 'Manrope',
-        fontSize: 16,
-        color: Colors.blackMain,
-        width: '75%',
-    },
-    pencilIcon: {
-        marginRight: 10,
-        marginTop: 14,
-    },
+  container: {
+    height: 135,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    marginHorizontal: 20,
+    marginTop: 24,
+    marginBottom: 16,
+    paddingHorizontal: 10,
+    paddingTop: 14,
+    paddingBottom: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    elevation: 4,
+  },
+  activeBorder: {
+    borderWidth: 1,
+    borderColor: Colors.softPurple,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  logoTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    fontWeight: 700,
+    fontSize: 16,
+    color: Colors.blackMain,
+    marginLeft: 18,
+  },
+  address: {
+    flexDirection: 'row',
+    marginTop: 16,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  addressText: {
+    fontFamily: 'Manrope',
+    fontSize: 16,
+    color: Colors.blackMain,
+    width: '75%',
+  },
+  pencilIcon: {
+    marginRight: 10,
+    marginTop: 14,
+  },
 });

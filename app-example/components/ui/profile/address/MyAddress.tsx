@@ -1,4 +1,5 @@
 import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import logoUkrposhta from '@/assets/images/profile/address/logoUkrposhta.png';
 import Colors from "@/constants/Colors";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from 'react';
@@ -16,6 +17,7 @@ type Address = {
 
 const logos: Record<string, any> = {
   novaPoshta: logoNovaPoshta,
+  ukrposhta: logoUkrposhta,
 };
 
 const INITIAL_ADDRESSES: Address[] = [
@@ -37,7 +39,7 @@ const INITIAL_ADDRESSES: Address[] = [
   },
   {
     id: 3,
-    title: "Кур’єр Нова Пошта",
+    title: "Кур'єр Нова Пошта",
     address: "проспект Вернадського, б. 36",
     city: "Київ",
     codePostal: 4211,
@@ -46,7 +48,12 @@ const INITIAL_ADDRESSES: Address[] = [
 ];
 
 export default function MyAddress() {
-  const { deletedId } = useLocalSearchParams<{ deletedId?: string }>();
+  const { deletedId, updatedId, updatedTitle, updatedLogo } = useLocalSearchParams<{
+    deletedId?: string;
+    updatedId?: string;
+    updatedTitle?: string;
+    updatedLogo?: string;
+  }>();
   const router = useRouter();
 
   const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
@@ -58,6 +65,19 @@ export default function MyAddress() {
       setAddresses(prev => prev.filter((item) => item.id !== Number(deletedId)));
     }
   }, [deletedId]);
+
+  // оновлення адреси при зміні способу доставки
+  useEffect(() => {
+    if (updatedId && updatedTitle && updatedLogo) {
+      setAddresses(prev =>
+        prev.map(item =>
+          item.id === Number(updatedId)
+            ? { ...item, title: updatedTitle, logoKey: updatedLogo }
+            : item
+        )
+      );
+    }
+  }, [updatedId, updatedTitle, updatedLogo]);
 
   const handleSwitchToggle = (index: number) => {
     setActiveSwitchIndex(prev => (prev === index ? null : index));
@@ -111,7 +131,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: 'white',
     fontSize: 16,
-    //fontFamily: 'OutfitBold',
+    fontFamily: 'ManropeBold',
     fontWeight: 700,
   },
 })

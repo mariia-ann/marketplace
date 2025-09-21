@@ -1,4 +1,5 @@
 import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import logoUkrposhta from '@/assets/images/profile/address/logoUkrposhta.png';
 import Colors from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -9,7 +10,7 @@ import AddressChoose from './addressChoose/AddressChoose';
 
 const logos: Record<string, any> = {
   novaPoshta: logoNovaPoshta,
-  // можеш додати інші ключі для інших логотипів
+  ukrposhta: logoUkrposhta,
 };
 
 export default function ChangeAddress() {
@@ -27,6 +28,14 @@ export default function ChangeAddress() {
 
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentLogo, setCurrentLogo] = useState(logo || 'novaPoshta');
+
+  // Оновлюємо дані при зміні параметрів
+  React.useEffect(() => {
+    setCurrentTitle(title);
+    setCurrentLogo(logo || 'novaPoshta');
+  }, [title, logo]);
 
   const handleConfirmDelete = () => {
     setConfirmModalVisible(false);
@@ -34,19 +43,25 @@ export default function ChangeAddress() {
   };
 
   const handleCloseSuccess = () => {
-  setSuccessModalVisible(false);
-  router.replace(`/(tabs)/profile/addresses?deletedId=${id}`);
-};
+    setSuccessModalVisible(false);
+    router.replace(`/(tabs)/profile/addresses?deletedId=${id}`);
+  };
+
+  const handleSave = () => {
+    // Передаємо оновлені дані назад до MyAddress
+    router.replace(`/(tabs)/profile/addresses?updatedId=${id}&updatedTitle=${currentTitle}&updatedLogo=${currentLogo}`);
+  };
 
   return (
     <>
       <ScrollView contentContainerStyle={{ paddingBottom: 62 }} style={styles.container}>
         <AddressChoose
-          title={title}
+          id={Number(id)}
+          title={currentTitle}
           address={address}
           city={city}
           codePostal={numericPostal}
-          logo={logo ? logos[logo] : undefined}
+          logo={logos[currentLogo]}
         />
 
         <View style={styles.buttonsWrapper}>
@@ -57,7 +72,7 @@ export default function ChangeAddress() {
             <Text style={styles.deleteText}>Видалити</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.saveButton}>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.saveText}>Зберегти</Text>
           </TouchableOpacity>
         </View>
@@ -122,85 +137,85 @@ export default function ChangeAddress() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 20,
-        paddingTop: 24,
-        backgroundColor: Colors.white,
-        flex: 1,
-    },
-    buttonsWrapper: {
-        gap: 8,
-    },
-    deleteButton: {
-        height: 52,
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: Colors.softPurple,
-        backgroundColor: Colors.white,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    deleteText: {
-        fontFamily: 'ManropeBold',
-        fontSize: 16,
-        color: Colors.blackMain,
-    },
-    saveButton: {
-        height: 52,
-        borderRadius: 10,
-        backgroundColor: Colors.softPurple,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    saveText: {
-        fontFamily: 'ManropeBold',
-        fontSize: 16,
-        color: '#FFFFFF',
-    },
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 45,
-    },
+  container: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    backgroundColor: Colors.white,
+    flex: 1,
+  },
+  buttonsWrapper: {
+    gap: 8,
+  },
+  deleteButton: {
+    height: 52,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.softPurple,
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteText: {
+    fontFamily: 'ManropeBold',
+    fontSize: 16,
+    color: Colors.blackMain,
+  },
+  saveButton: {
+    height: 52,
+    borderRadius: 10,
+    backgroundColor: Colors.softPurple,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  saveText: {
+    fontFamily: 'ManropeBold',
+    fontSize: 16,
+    color: '#FFFFFF',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 45,
+  },
 
-    modalContent: {
-        backgroundColor: Colors.white,
-        borderRadius: 10,
-        paddingTop: 16,
-        paddingHorizontal: 24,
-        paddingBottom: 24,
-        width: '100%',
-        position: 'relative',
-    },
-    closeIcon: {
-        position: 'absolute',
-        right: 16,
-        zIndex: 1,
-    },
-    modalText: {
-        fontFamily: 'Manrope',
-        fontSize: 22,
-        color: Colors.blackMain,
-        marginBottom: 24,
-    },
-    confirmButton: {
-        height: 41,
-        borderRadius: 10,
-        backgroundColor: Colors.white,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        borderColor: Colors.softPurple,
-        borderWidth: 1,
-    },
-    confirmText: {
-        fontFamily: 'ManropeBold',
-        fontSize: 16,
-        color: Colors.softPurple,
-    },
-    okButtonWrapper: {
-        alignItems: 'flex-end',
-    },
+  modalContent: {
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    paddingTop: 16,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    width: '100%',
+    position: 'relative',
+  },
+  closeIcon: {
+    position: 'absolute',
+    right: 16,
+    zIndex: 1,
+  },
+  modalText: {
+    fontFamily: 'Manrope',
+    fontSize: 22,
+    color: Colors.blackMain,
+    marginBottom: 24,
+  },
+  confirmButton: {
+    height: 41,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    borderColor: Colors.softPurple,
+    borderWidth: 1,
+  },
+  confirmText: {
+    fontFamily: 'ManropeBold',
+    fontSize: 16,
+    color: Colors.softPurple,
+  },
+  okButtonWrapper: {
+    alignItems: 'flex-end',
+  },
 });
