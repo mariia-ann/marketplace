@@ -1,3 +1,4 @@
+import { mockReview as review } from "@/app-example/types/review";
 import Colors from "@/constants/Colors";
 import { Link } from "expo-router";
 import {
@@ -11,7 +12,6 @@ import React, { useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Comments from "./Comments";
 import ConfirmedPurchase from "./ConfirmedPurchase";
-import { mockReview as review } from "./review";
 
 export default function ReviewProductCard() {
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);

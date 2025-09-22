@@ -51,3 +51,32 @@ export const mockReview: ProductReview = {
     },
   ],
 };
+
+
+interface SellerReview {
+  number: number;
+  date: string;
+  seller: string;
+  product: string;
+  confirmed: boolean;
+  comment: string;
+  ratingPrice: number;
+  ratingDesc: number;
+  ratingAvialability: number;
+  ratingDeliveryDeadlines: number;
+  ratingRecommended: number;
+}
+
+export const mockReviewSeller: SellerReview = {
+   number: 714695809,
+  date: '19.04.2025',
+  seller: 'MILENA',
+  product: 'Плаття шавкове 9876 Біле',
+  confirmed: true,
+  comment: "Продавець допоміг з вибором розміру, приємне і ввічливе спілкування.",
+  ratingPrice: 5,
+  ratingDesc: 5,
+  ratingAvialability: 5,
+  ratingDeliveryDeadlines: 5,
+  ratingRecommended: 5,
+}
