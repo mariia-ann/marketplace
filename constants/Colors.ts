@@ -14,6 +14,7 @@ const Colors = {
     purple50: "#F5F4FE",
     purple100: "#EDEAFD",
     purple300: "#C3B9F9",
+    line: "#CCCCCC",
 };
 
 export default Colors;
