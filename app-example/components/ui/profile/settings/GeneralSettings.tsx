@@ -1,28 +1,37 @@
 import { Link } from "expo-router";
-import { CaretRight, Lock } from "phosphor-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { CaretRight, Lock, XCircle } from "phosphor-react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CountryFlag from "react-native-country-flag";
+import Modal from "react-native-modal";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export default function GeneralSettings() {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModalCountry = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <View style={styles.block}>
-      <Link href="/">
+      <Pressable onPress={toggleModalCountry}>
         <View style={styles.link}>
           <Text style={styles.text}>Країна</Text>
           <CountryFlag isoCode="ua" size={32} />
         </View>
-      </Link>
+      </Pressable>
       {/* <Link href="/"> */}
-        <View style={styles.link}>
-          <Text style={styles.text}>Мова</Text>
-          <Text style={styles.textTr}>Українська</Text>
-        </View>
+      <View style={styles.link}>
+        <Text style={styles.text}>Мова</Text>
+        <Text style={styles.textTr}>Українська</Text>
+      </View>
       {/* </Link> */}
       {/* <Link href="/"> */}
-        <View style={styles.link}>
-          <Text style={styles.text}>Валюта</Text>
-          <Text style={styles.textTr}>грн</Text>
-        </View>
+      <View style={styles.link}>
+        <Text style={styles.text}>Валюта</Text>
+        <Text style={styles.textTr}>грн</Text>
+      </View>
       {/* </Link> */}
       <Link href={{ pathname: "/profile/settings/notificationSettings" }}>
         <View style={styles.link}>
@@ -39,6 +48,15 @@ export default function GeneralSettings() {
           <CaretRight size={18} weight="bold" />
         </View>
       </Link>
+
+      <Modal isVisible={isModalVisible}>
+        <View style={styles.modal}>
+          <TouchableOpacity onPress={toggleModalCountry}>
+              <XCircle size={32} weight="thin" />
+            </TouchableOpacity>
+          <Text>I am the modal content!</Text>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -46,7 +64,6 @@ export default function GeneralSettings() {
 const styles = StyleSheet.create({
   block: {
     gap: 16,
-    
   },
   link: {
     width: "100%",
@@ -72,13 +89,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   changePassword: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   textTr: {
     fontFamily: "Manrope",
     fontSize: 16,
-    color: '#999999',
+    color: "#999999",
+  },
+  modal: {
+    // flex: 1,
+    width: 300,
+    backgroundColor: Colors.white,
   }
 });

@@ -2,6 +2,8 @@ import GeneralSettings from "@/app-example/components/ui/profile/settings/Genera
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function Settings() {
+
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
