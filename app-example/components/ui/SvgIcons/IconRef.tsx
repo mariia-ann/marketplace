@@ -1,3 +1,7 @@
+// ILLUSTRTIONS
+import ForgotPasswordIllustration from "./Illustrations/ForgotPasswordIllustrations";
+
+//ICONS
 import AppleIcon from "./Icons/Apple";
 import Eye from "./Icons/Eye";
 import Facebook from "./Icons/Facebook";
@@ -10,6 +14,7 @@ export enum CUSTOM_ICON_REF {
 	Apple = 'Apple',
 	EyeIcon = 'EyeIcon',
 	Info = 'Info',
+	ForgotPasswordIllustrations = 'ForgotPasswordIllustrations',
 }
 
 export const CustomIconRef:any = {
@@ -18,4 +23,5 @@ export const CustomIconRef:any = {
 	[CUSTOM_ICON_REF.Apple]: AppleIcon,
 	[CUSTOM_ICON_REF.EyeIcon]: Eye,
 	[CUSTOM_ICON_REF.Info]: Info,
+	[CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration
 }

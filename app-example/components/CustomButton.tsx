@@ -16,27 +16,30 @@ type CustomButtonProps = {
   whiteTheme?: boolean;
 };
 const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles, whiteTheme, customTextStyles }) => {
-  const isWhiteTheme = whiteTheme ? { color: "" } : {};
+
+  const styles = StyleSheet.create({
+  addButton: {
+    backgroundColor: whiteTheme ? "#fff" : "#8E6CEF",
+    borderColor: "#8E6CEF",
+    borderWidth: 1,
+    height: 52,
+    borderRadius: 10,
+    // justifyContent: "center",
+    // alignItems: "center",
+  },
+  addButtonText: {
+    color: whiteTheme ? "" : "white",
+    fontSize: 16,
+    textAlign: "center",
+    fontFamily: "ManropeSemiBold",
+  },
+});
+
   return (
     <Pressable style={{...styles.addButton, ...customStyles}} onPress={onPress}>
       <Text style={{...styles.addButtonText, ...customTextStyles}}>{title}</Text>
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  addButton: {
-    backgroundColor: "#8E6CEF",
-    height: 52,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  addButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontFamily: "ManropeSemiBold",
-  },
-});
 
 export default CustomButton;
