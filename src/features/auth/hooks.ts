@@ -1,51 +1,41 @@
-import { api } from '@/src/lib/api';
-import { useAuth } from '@/src/stores/auth';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from "@/src/stores/auth";
+import { useMutation } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
+import { AuthResponse, Credentials, login, register, RegisterInput } from "./api";
 
-type Credentials = { email: string; password: string; };
-
-export function useRegister ()
+const useSetSession = () =>
 {
-    const setSession = useAuth( s => s.setSession );
-    return useMutation( {
-        mutationFn: async ( input: Credentials ) =>
-        {
-            const { data } = await api.post( '/auth/register', input );
-            // expect: { user, accessToken, refreshToken }
-            return data as { user: any; accessToken: string; refreshToken: string; };
-        },
-        onSuccess: ( data ) => setSession( {
+    const setSession = useAuth( ( s ) => s.setSession );
+    return ( data: AuthResponse ) =>
+        setSession( {
             user: data.user,
             accessToken: data.accessToken,
             refreshToken: data.refreshToken,
-        } ),
-    } );
-}
+        } );
+};
 
 export function useLogin ()
 {
-    const setSession = useAuth( s => s.setSession );
-    return useMutation( {
-        mutationFn: async ( input: Credentials ) =>
-        {
-            const { data } = await api.post( '/auth/login', input );
-            // expect: { user, accessToken, refreshToken }
-            return data as { user: any; accessToken: string; refreshToken: string; };
-        },
-        onSuccess: ( data ) => setSession( {
-            user: data.user,
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
-        } ),
+    const setSession = useSetSession();
+    return useMutation<AuthResponse, AxiosError, Credentials>( {
+        mutationKey: ["auth", "login"],
+        mutationFn: login,
+        onSuccess: setSession,
     } );
 }
 
-export function useLogout ()
+export function useRegisterAndLogin ()
 {
-    const qc = useQueryClient();
-    const clearSession = useAuth( s => s.clearSession );
-    return useMutation( {
-        mutationFn: async () => { try { await api.post( '/auth/logout' ); } catch { } },
-        onSettled: () => { clearSession(); qc.clear(); },
+    const setSession = useSetSession();
+    return useMutation<AuthResponse, AxiosError, RegisterInput>( {
+        mutationKey: ["auth", "register-and-login"],
+        mutationFn: async ( input ) =>
+        {
+            await register( input );
+            return await login( { name: input.name, email: input.email, phone: input.phone, password: input.password } );
+        },
+        onSuccess: setSession,
+        // retry only network errors if you want:
+        retry: ( count, err ) => ( !err.response ? count < 2 : false ),
     } );
 }

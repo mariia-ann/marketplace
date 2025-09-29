@@ -1,3 +1,4 @@
+import { QueryProvider } from "@/src/features/providers/query";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
@@ -35,27 +36,29 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      {/* Welcome page screens */}
-      <Stack.Screen
-        name='(main)'
-        options={{ headerShown: false }}
-      />
-      {/* Auth page screens */}
-      <Stack.Screen
-        name='auth'
-        options={{ headerShown: false }}
-      />
-      {/* Main app after login */}
-      <Stack.Screen
-        name='(tabs)'
-        options={{ headerShown: false }}
-      />
-      {/* 404 page */}
-      <Stack.Screen
-        name='+not-found'
-        options={{}}
-      />
-    </Stack>
+    <QueryProvider>
+      <Stack>
+        {/* Welcome page screens */}
+        <Stack.Screen
+          name='(main)'
+          options={{ headerShown: false }}
+        />
+        {/* Auth page screens */}
+        <Stack.Screen
+          name='auth'
+          options={{ headerShown: false }}
+        />
+        {/* Main app after login */}
+        <Stack.Screen
+          name='(tabs)'
+          options={{ headerShown: false }}
+        />
+        {/* 404 page */}
+        <Stack.Screen
+          name='+not-found'
+          options={{}}
+        />
+      </Stack>
+    </QueryProvider>
   );
 }

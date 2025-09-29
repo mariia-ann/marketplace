@@ -1,8 +1,8 @@
-import { authStore } from '@/src/stores/auth'; // note: static accessor, not the hook
+import { authStore } from '@/src/stores/auth';
 import axios from 'axios';
 
 export const api = axios.create( {
-    baseURL: 'https://api.example.com', // TODO: set your API
+    baseURL: 'http://34.227.53.16:3000',
     timeout: 15000,
 } );
 

@@ -1,12 +1,5 @@
 import React, { FC } from "react";
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  ViewStyle,
-} from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 
 type CustomButtonProps = {
   title: string;
@@ -14,12 +7,30 @@ type CustomButtonProps = {
   customStyles?: any;
   customTextStyles?: any;
   whiteTheme?: boolean;
+  disabled?: boolean;
 };
-const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles, whiteTheme, customTextStyles }) => {
+const CustomButton: FC<CustomButtonProps> = ({
+  title,
+  onPress,
+  customStyles,
+  whiteTheme,
+  customTextStyles,
+  disabled,
+}) => {
   const isWhiteTheme = whiteTheme ? { color: "" } : {};
   return (
-    <Pressable style={{...styles.addButton, ...customStyles}} onPress={onPress}>
-      <Text style={{...styles.addButtonText, ...customTextStyles}}>{title}</Text>
+    <Pressable
+      style={{
+        ...styles.addButton,
+        ...(customStyles || {}),
+        ...(disabled ? { opacity: 0.5 } : {}),
+      }}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <Text style={{ ...styles.addButtonText, ...customTextStyles }}>
+        {title}
+      </Text>
     </Pressable>
   );
 };
