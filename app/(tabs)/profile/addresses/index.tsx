@@ -1,5 +1,5 @@
-import MyAddress from '@/app-example/components/ui/profile/address/MyAddress';
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import MyAddress from "@/src/components/ui/profile/address/MyAddress";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function Addresses() {
   return (
@@ -12,7 +12,7 @@ export default function Addresses() {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     flex: 1,
   },
-})
+});

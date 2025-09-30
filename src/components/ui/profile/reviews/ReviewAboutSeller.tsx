@@ -1,15 +1,14 @@
-import { mockReviewSeller as review } from "@/app-example/types/review";
-import { formatNumber } from "@/app-example/utils/formatNumber";
-import { formatRating } from "@/app-example/utils/formatRating";
-import { truncateText } from "@/app-example/utils/truncateText";
 import Colors from "@/constants/Colors";
+import { mockReviewSeller as review } from "@/src/types/review";
+import { formatNumber } from "@/src/utils/formatNumber";
+import { formatRating } from "@/src/utils/formatRating";
+import { truncateText } from "@/src/utils/truncateText";
 import { CaretRight, Star } from "phosphor-react-native";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import ConfirmedPurchase from "./ConfirmedPurchase";
 
 export default function ReviewAboutSeller() {
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.card}>
@@ -25,7 +24,11 @@ export default function ReviewAboutSeller() {
             <Text style={styles.textKey}>
               Продавець: <Text style={styles.textValue}>{review.seller}</Text>
             </Text>
-            <CaretRight size={14} weight="bold" color={Colors.softPurple} />
+            <CaretRight
+              size={14}
+              weight='bold'
+              color={Colors.softPurple}
+            />
           </View>
           <View style={styles.blockSellerDetail}>
             <Text style={styles.textKey}>
@@ -34,7 +37,11 @@ export default function ReviewAboutSeller() {
                 {truncateText(review.product)}
               </Text>
             </Text>
-            <CaretRight size={14} weight="bold" color={Colors.softPurple} />
+            <CaretRight
+              size={14}
+              weight='bold'
+              color={Colors.softPurple}
+            />
           </View>
           <View>{!review.confirmed && <ConfirmedPurchase />}</View>
         </View>
@@ -51,7 +58,11 @@ export default function ReviewAboutSeller() {
           <View style={styles.blockRatingDetail}>
             <Text style={styles.textRatingName}>Актуальна ціна:</Text>
             <View style={styles.ratingSection}>
-              <Star size={20} color={Colors.yellow} weight="fill" />
+              <Star
+                size={20}
+                color={Colors.yellow}
+                weight='fill'
+              />
               <Text style={styles.rating}>
                 {formatRating(review.ratingPrice)}
               </Text>
@@ -61,7 +72,11 @@ export default function ReviewAboutSeller() {
           <View style={styles.blockRatingDetail}>
             <Text style={styles.textRatingName}>Актуальний опис товару:</Text>
             <View style={styles.ratingSection}>
-              <Star size={20} color={Colors.yellow} weight="fill" />
+              <Star
+                size={20}
+                color={Colors.yellow}
+                weight='fill'
+              />
               <Text style={styles.rating}>
                 {formatRating(review.ratingDesc)}
               </Text>
@@ -73,7 +88,11 @@ export default function ReviewAboutSeller() {
               Актуальна наявність товару:
             </Text>
             <View style={styles.ratingSection}>
-              <Star size={20} color={Colors.yellow} weight="fill" />
+              <Star
+                size={20}
+                color={Colors.yellow}
+                weight='fill'
+              />
               <Text style={styles.rating}>
                 {formatRating(review.ratingAvialability)}
               </Text>
@@ -85,7 +104,11 @@ export default function ReviewAboutSeller() {
               Дотримання термінів доставки:
             </Text>
             <View style={styles.ratingSection}>
-              <Star size={20} color={Colors.yellow} weight="fill" />
+              <Star
+                size={20}
+                color={Colors.yellow}
+                weight='fill'
+              />
               <Text style={styles.rating}>
                 {formatRating(review.ratingDeliveryDeadlines)}
               </Text>
@@ -95,7 +118,11 @@ export default function ReviewAboutSeller() {
           <View style={styles.blockRatingDetail}>
             <Text style={styles.textRatingNameBold}>Рекомендація:</Text>
             <View style={styles.ratingSection}>
-              <Star size={20} color={Colors.yellow} weight="fill" />
+              <Star
+                size={20}
+                color={Colors.yellow}
+                weight='fill'
+              />
               <Text style={styles.rating}>
                 {formatRating(review.ratingRecommended)}
               </Text>

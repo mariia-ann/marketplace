@@ -1,7 +1,8 @@
-import { Comment } from "@/app-example/types/Comment";
+import { Comment } from "@/src/types/Comment";
 import { ImageSourcePropType } from "react-native";
 
-interface ProductReview {
+interface ProductReview
+{
   title: string;
   articul: number;
   seller: string;
@@ -19,7 +20,7 @@ export const mockReview: ProductReview = {
   title: "Брюки жіночі 9873 Сірі",
   articul: 9000000018541,
   seller: "Назва Продавця",
-  image: require("@/assets/images/reviews/product-review.png"),
+  image: require( "@/assets/images/reviews/product-review.png" ),
   price: 1500,
   size: "M",
   quantity: 1,
@@ -53,7 +54,8 @@ export const mockReview: ProductReview = {
 };
 
 
-interface SellerReview {
+interface SellerReview
+{
   number: number;
   date: string;
   seller: string;
@@ -68,7 +70,7 @@ interface SellerReview {
 }
 
 export const mockReviewSeller: SellerReview = {
-   number: 714695809,
+  number: 714695809,
   date: '19.04.2025',
   seller: 'MILENA',
   product: 'Плаття шавкове 9876 Біле',
@@ -79,4 +81,4 @@ export const mockReviewSeller: SellerReview = {
   ratingAvialability: 5,
   ratingDeliveryDeadlines: 5,
   ratingRecommended: 5,
-}
+};

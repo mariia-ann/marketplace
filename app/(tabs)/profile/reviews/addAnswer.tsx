@@ -1,6 +1,6 @@
-import CustomButton from "@/app-example/components/CustomButton";
-import AddAnswerInputs from "@/app-example/components/ui/profile/reviews/AddAnswerInputs";
 import Colors from "@/constants/Colors";
+import CustomButton from "@/src/components/common/CustomButton";
+import AddAnswerInputs from "@/src/components/ui/profile/reviews/AddAnswerInputs";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
@@ -19,7 +19,10 @@ export default function AddAnswer() {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <ScrollView contentContainerStyle={styles.container}>
         <AddAnswerInputs />
-        <CustomButton title="Опублікувати відповідь" onPress={handleSubmit} />
+        <CustomButton
+          title='Опублікувати відповідь'
+          onPress={handleSubmit}
+        />
       </ScrollView>
     </SafeAreaView>
   );

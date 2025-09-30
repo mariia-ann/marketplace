@@ -1,4 +1,4 @@
-import { ProfileHeader } from "@/app-example/components/ProfileHeader";
+import { ProfileHeader } from "@/src/components/common/ProfileHeader";
 import { Stack } from "expo-router";
 import React from "react";
 
@@ -30,7 +30,7 @@ export default function ProfileStackLayout() {
     { name: "settings/changePassword", title: "Змінити пароль" },
     { name: "support/index", title: "Служба підтримки" },
     { name: "support/chat", title: "Чат-підтримки" },
-    { name: "support/chat/selectOrder", title: "Оберіть замовлення"},
+    { name: "support/chat/selectOrder", title: "Оберіть замовлення" },
   ];
 
   return (
@@ -47,9 +47,9 @@ export default function ProfileStackLayout() {
       }}
     >
       <Stack.Screen
-        name="index"
+        name='index'
         options={{
-          headerShown: false, 
+          headerShown: false,
         }}
       />
       {profileScreens.map(({ name, title }) => (
@@ -61,7 +61,6 @@ export default function ProfileStackLayout() {
             // headerLeft: null,
           }}
         />
-        
       ))}
     </Stack>
   );

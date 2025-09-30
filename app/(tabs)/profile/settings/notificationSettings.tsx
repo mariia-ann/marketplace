@@ -1,17 +1,15 @@
-import NotificationList from "@/app-example/components/ui/profile/settings/NotificationSettings";
+import NotificationList from "@/src/components/ui/profile/settings/NotificationSettings";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
-
 
 export default function NotificationSettings() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-          <ScrollView contentContainerStyle={styles.container}>
-            <NotificationList />
-          </ScrollView>
-        </SafeAreaView>
+      <ScrollView contentContainerStyle={styles.container}>
+        <NotificationList />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
