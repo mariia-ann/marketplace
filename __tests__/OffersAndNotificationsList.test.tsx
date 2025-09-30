@@ -1,4 +1,4 @@
-import OffersAndNotificationsList from "@/app-example/components/ui/profile/notifications/notificationsList";
+import OffersAndNotificationsList from "@/src/components/ui/profile/notifications/notificationsList";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import React from "react";
 

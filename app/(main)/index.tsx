@@ -1,10 +1,10 @@
+import Colors from "@/constants/Colors";
 import CrossfadeTexts, {
   CrossfadeTextsHandle,
-} from "@/app-example/components/ui/welcome_page/ChangingText";
+} from "@/src/components/ui/welcome_page/ChangingText";
 import PaginationIndicator, {
   PaginationIndicatorHandle,
-} from "@/app-example/components/ui/welcome_page/Pagination";
-import Colors from "@/constants/Colors";
+} from "@/src/components/ui/welcome_page/Pagination";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {

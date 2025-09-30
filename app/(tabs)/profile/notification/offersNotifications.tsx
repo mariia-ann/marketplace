@@ -1,4 +1,4 @@
-import OffersAndNotificationsList from "@/app-example/components/ui/profile/notifications/notificationsList";
+import OffersAndNotificationsList from "@/src/components/ui/profile/notifications/notificationsList";
 import { SafeAreaView, StyleSheet } from "react-native";
 
 export default function OffersAndNotifications() {

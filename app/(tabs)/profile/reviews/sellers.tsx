@@ -1,4 +1,4 @@
-import ReviewAboutSeller from "@/app-example/components/ui/profile/reviews/ReviewAboutSeller";
+import ReviewAboutSeller from "@/src/components/ui/profile/reviews/ReviewAboutSeller";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function SellerReviews() {

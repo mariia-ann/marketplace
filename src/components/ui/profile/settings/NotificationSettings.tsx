@@ -1,5 +1,4 @@
-
-import CustomSwitch from "@/app-example/components/CustomSwitch";
+import CustomSwitch from "@/src/components/common/CustomSwitch";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -14,7 +13,8 @@ export default function NotificationList() {
     useState(false);
   const [isDiscountsEnabled, setIsDiscountsEnabled] = useState(false);
 
-    const toggleMyOrderSwitch = () => setIsMyOrderEnabled((previousState) => !previousState);
+  const toggleMyOrderSwitch = () =>
+    setIsMyOrderEnabled((previousState) => !previousState);
 
   return (
     <View style={styles.block}>
