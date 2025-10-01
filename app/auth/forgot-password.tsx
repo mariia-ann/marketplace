@@ -10,35 +10,40 @@ function ForgotPassword() {
 	const [toggleSMS, setToggleSMS] = useState<boolean>(false);
 
 	const handleToggleSMS = () => {
-		setToggleSMS((prev)=> !prev)
+		setToggleSMS((prev) => !prev)
 	};
-	
+
 	const handleToggleEmail = () => {
-		setToggleSMS((prev)=> !prev)
+		setToggleSMS((prev) => !prev)
 	};
+
+	const backarrowStyles = {
+		backArrowWrapper: styles.backArrowWrapper,
+		backIconCircle: styles.backIconCircle
+	}
 
 	return (
 		<ScrollView style={styles.container}>
 			{/* Header */}
 			<View style={[styles.row, styles.header]}>
-				<BackArrow style={styles.backArrowWrapper} />
+				<BackArrow style={backarrowStyles} />
 				<Text style={styles.headerTitle}>Забули пароль?</Text>
-				<Text /> 
+				<Text />
 			</View>
 
 			{/* Illustration + Title */}
 			<View style={styles.centeredColumn}>
-				<SvgIcons 
-					name={CUSTOM_ICON_REF.ForgotPasswordIllustrations} 
-					baseStyle={styles.illustration} 
+				<SvgIcons
+					name={CUSTOM_ICON_REF.ForgotPasswordIllustrations}
+					baseStyle={styles.illustration}
 				/>
 				<Text style={styles.subtitle}>Як ви хочете отримати код?</Text>
 			</View>
 
 			{/* Options */}
 			<View style={[styles.row, styles.optionWrapper]}>
-				<OptionToggle toggled={toggleSMS} title='SMS' baseStyle={{...styles.optionBox, ...styles.shadow,  marginRight: 15 }} textStyle={styles.optionToggleText} handleClick={handleToggleSMS} />
-				<OptionToggle toggled={!toggleSMS} title='Email' baseStyle={{...styles.optionBox, ...styles.shadow, marginLeft: 15 }} textStyle={styles.optionToggleText} handleClick={handleToggleEmail} />
+				<OptionToggle toggled={toggleSMS} title='SMS' baseStyle={{ ...styles.optionBox, ...styles.shadow, marginRight: 15, maxWidth: 300 }} textStyle={styles.optionToggleText} handleClick={handleToggleSMS} />
+				<OptionToggle toggled={!toggleSMS} title='Email' baseStyle={{ ...styles.optionBox, ...styles.shadow, marginLeft: 15, maxWidth: 300, }} textStyle={styles.optionToggleText} handleClick={handleToggleEmail} />
 			</View>
 
 			{/* Info */}
@@ -49,16 +54,16 @@ function ForgotPassword() {
 
 			{/* Buttons */}
 			<View style={styles.buttonWrapper}>
-				<CustomButton 
-					customStyles={{ marginBottom: 10 }} 
-					title='Відправити код' 
-					onPress={() => { }} 
+				<CustomButton
+					customStyles={{ marginBottom: 10, justifyContent: "center", alignItems: "center", maxWidth: 400, minWidth: 350, }}
+					title='Відправити код'
+					onPress={() => { }}
 				/>
-				<CustomButton 
-					title='Відміна' 
-					customStyles={styles.cancelButton} 
-					customTextStyles={styles.cancelButtonText} 
-					onPress={() => { }} 
+				<CustomButton
+					title='Відміна'
+					customStyles={styles.cancelButton}
+					customTextStyles={styles.cancelButtonText}
+					onPress={() => { }}
 				/>
 			</View>
 		</ScrollView>
@@ -91,6 +96,7 @@ const styles = StyleSheet.create({
 	},
 
 	headerTitle: {
+		fontFamily: "Manrope",
 		fontSize: 22,
 	},
 
@@ -102,12 +108,21 @@ const styles = StyleSheet.create({
 		// zIndex: 1,
 	},
 
+	backIconCircle: {
+		width: 40,
+		height: 40,
+		justifyContent: "center",
+		alignItems: "center",
+		borderRadius: "100%"
+	},
+
 	illustration: {
 		width: 300,
 		height: 300,
 	},
 
 	subtitle: {
+		fontFamily: "Manrope",
 		textAlign: "center",
 		fontSize: 18,
 	},
@@ -128,6 +143,7 @@ const styles = StyleSheet.create({
 	},
 
 	optionToggleText: {
+		fontFamily: "Manrope",
 		color: "#8E6CEF",
 		fontWeight: "bold",
 	},
@@ -138,9 +154,11 @@ const styles = StyleSheet.create({
 
 	infoWrapper: {
 		paddingTop: 30,
+		paddingBottom: 30
 	},
 
 	infoText: {
+		fontFamily: "Manrope",
 		textAlign: "center",
 		fontSize: 16,
 	},
@@ -149,9 +167,13 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		fontSize: 16,
 		fontWeight: "bold",
+		fontFamily: "Manrope",
 	},
 
 	buttonWrapper: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
 		padding: 12,
 		paddingTop: 20,
 	},
@@ -159,7 +181,11 @@ const styles = StyleSheet.create({
 	cancelButton: {
 		backgroundColor: "#fff",
 		borderWidth: 1,
+		maxWidth: 400,
+		minWidth: 350,
 		borderColor: "#8E6CEF",
+		justifyContent: "center",
+		alignItems: "center"
 	},
 
 	cancelButtonText: {

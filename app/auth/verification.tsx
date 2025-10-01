@@ -27,6 +27,7 @@ function VerificationPage() {
 					textStyle={styles.verificationInputLabelStyle}
 					label='Введіть код'
 					placeholder=""
+					keyboardType='number-pad'
 					value={{}}
 					onChangeText={()=> {}}
 					customStyle={styles.verificationInputTextBox}
