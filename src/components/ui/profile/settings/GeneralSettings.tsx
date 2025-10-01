@@ -5,12 +5,18 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import CountryFlag from "react-native-country-flag";
 import ModalWrapper from "../../ModalWrapper";
 import ChangeCountryModal from "./ChangeCountryModal";
+import ChangeLanguageModal from "./ChangeLanguageModal";
 
 export default function GeneralSettings() {
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalCountry, setModalCountry] = useState(false);
+  const [isModalLanguage, setModalLanguage] = useState(false);
 
   const toggleModalCountry = () => {
-    setModalVisible(!isModalVisible);
+    setModalCountry(!isModalCountry);
+  };
+
+  const toggleModalLanguage = () => {
+    setModalLanguage(!isModalLanguage);
   };
 
   return (
@@ -21,12 +27,14 @@ export default function GeneralSettings() {
           <CountryFlag isoCode="ua" size={32} />
         </View>
       </Pressable>
-      {/* <Link href="/"> */}
-      <View style={styles.link}>
-        <Text style={styles.text}>Мова</Text>
-        <Text style={styles.textTr}>Українська</Text>
-      </View>
-      {/* </Link> */}
+
+      <Pressable onPress={toggleModalLanguage}>
+        <View style={styles.link}>
+          <Text style={styles.text}>Мова</Text>
+          <Text style={styles.textTr}>Українська</Text>
+        </View>
+      </Pressable>
+
       {/* <Link href="/"> */}
       <View style={styles.link}>
         <Text style={styles.text}>Валюта</Text>
@@ -49,8 +57,9 @@ export default function GeneralSettings() {
         </View>
       </Link>
 
+      {/* Країна модалка */}
       <ModalWrapper
-        isVisible={isModalVisible}
+        isVisible={isModalCountry}
         onClose={toggleModalCountry}
         title="Країна"
         buttonType="border"
@@ -58,6 +67,18 @@ export default function GeneralSettings() {
         onConfirm={toggleModalCountry}
       >
         <ChangeCountryModal />
+      </ModalWrapper>
+
+      {/* Вибір мови модалка */}
+      <ModalWrapper
+        isVisible={isModalLanguage}
+        onClose={toggleModalLanguage}
+        title="Мова"
+        buttonType="border"
+        buttonText="Застосувати"
+        onConfirm={toggleModalLanguage}
+      >
+        <ChangeLanguageModal />
       </ModalWrapper>
     </View>
   );
