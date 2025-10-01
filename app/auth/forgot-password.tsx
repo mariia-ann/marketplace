@@ -1,8 +1,8 @@
-import CustomButton from '@/app-example/components/CustomButton'
-import BackArrow from '@/app-example/components/ui/BackArrowModified'
+import CustomButton from '@/src/components/common/CustomButton'
+import BackArrow from '@/src/components/ui/BackArrowModified'
 import OptionToggle from '@/app-example/components/ui/OptionToggle/OptionToggle'
-import { CUSTOM_ICON_REF } from '@/app-example/components/ui/SvgIcons/IconRef'
-import SvgIcons from '@/app-example/components/ui/SvgIcons/SvgIcons'
+import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef'
+import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 

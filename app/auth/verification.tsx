@@ -1,6 +1,6 @@
-import CustomButton from '@/app-example/components/CustomButton';
-import BackArrowModified from '@/app-example/components/ui/BackArrowModified';
-import CustomInput from '@/app-example/components/ui/customInput/Input';
+import CustomButton from '@/src/components/common/CustomButton';
+import BackArrowModified from '@/src/components/ui/BackArrowModified';
+import CustomInput from '@/src/components/common/customInput/Input';
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
