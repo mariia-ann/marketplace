@@ -1,11 +1,7 @@
-import Benefits from "@/app-example/components/ui/profile/profile/Benefits";
-import DashBoard from "@/app-example/components/ui/profile/profile/DashBoard";
-import User from "@/app-example/components/ui/profile/profile/User";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet
-} from "react-native";
+import Benefits from "@/src/components/ui/profile/profile/Benefits";
+import DashBoard from "@/src/components/ui/profile/profile/DashBoard";
+import User from "@/src/components/ui/profile/profile/User";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function ProfilePage() {
   return (
@@ -25,5 +21,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 56,
   },
-  
 });

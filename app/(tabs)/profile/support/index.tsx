@@ -1,17 +1,16 @@
-import SupportScreen from '@/app-example/components/ui/profile/support/SupportScreen';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import SupportScreen from "@/src/components/ui/profile/support/SupportScreen";
+import { SafeAreaView, StyleSheet } from "react-native";
 export default function Support() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <SupportScreen />
-    </SafeAreaView >
-
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     flex: 1,
   },
 });

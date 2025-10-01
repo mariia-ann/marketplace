@@ -1,9 +1,5 @@
-import ChangePasswordForm from "@/app-example/components/ui/profile/settings/ChangePasswordForm";
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import ChangePasswordForm from "@/src/components/ui/profile/settings/ChangePasswordForm";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function ChangePassword() {
   return (

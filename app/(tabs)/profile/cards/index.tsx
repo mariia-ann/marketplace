@@ -1,4 +1,4 @@
-import MyCards from "@/app-example/components/ui/profile/cards/MyCards";
+import MyCards from "@/src/components/ui/profile/cards/MyCards";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function MyCardsList() {

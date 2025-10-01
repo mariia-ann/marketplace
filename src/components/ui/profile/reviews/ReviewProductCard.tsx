@@ -1,4 +1,5 @@
 import Colors from "@/constants/Colors";
+import { mockReview as review } from "@/src/types/review";
 import { Link } from "expo-router";
 import {
   Chat,
@@ -8,22 +9,32 @@ import {
   ThumbsUp,
 } from "phosphor-react-native";
 import React, { useState } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Comments from "./Comments";
 import ConfirmedPurchase from "./ConfirmedPurchase";
-import { mockReview as review } from "./review";
 
 export default function ReviewProductCard() {
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
 
   const handleToggleComments = () => {
-    setIsCommentsVisible(prev => !prev);
-  }
+    setIsCommentsVisible((prev) => !prev);
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.card}>
         <View style={styles.infoBlock}>
-          <Image style={styles.image} source={review.image} />
+          <Image
+            style={styles.image}
+            source={review.image}
+          />
           <View style={styles.info}>
             <View style={styles.infoProduct}>
               <Text style={styles.text}>{review.title}</Text>
@@ -31,7 +42,11 @@ export default function ReviewProductCard() {
             </View>
             <View style={styles.seller}>
               <Text style={styles.sellerName}>{review.seller}</Text>
-              <Storefront size={32} weight="thin" color="#8E6CEF" />
+              <Storefront
+                size={32}
+                weight='thin'
+                color='#8E6CEF'
+              />
             </View>
             <View style={styles.paramBlock}>
               <View style={styles.param}>
@@ -53,17 +68,27 @@ export default function ReviewProductCard() {
             </View>
             {review.confirmed && <ConfirmedPurchase />}
             <View style={styles.rating}>
-              <Star size={20} color="#FFA500" weight="fill" />
+              <Star
+                size={20}
+                color='#FFA500'
+                weight='fill'
+              />
               <Text style={styles.ratingText}>{review.rating}</Text>
             </View>
             <Text style={styles.response}>{review.response}</Text>
             <View style={styles.likesBlock}>
               <View style={styles.likes}>
-                <ThumbsDown size={32} weight="thin" />
+                <ThumbsDown
+                  size={32}
+                  weight='thin'
+                />
                 <Text>0</Text>
               </View>
               <View style={styles.likes}>
-                <ThumbsUp size={32} weight="thin" />
+                <ThumbsUp
+                  size={32}
+                  weight='thin'
+                />
                 <Text>12</Text>
               </View>
             </View>
@@ -71,17 +96,26 @@ export default function ReviewProductCard() {
           </View>
         </View>
         <View style={styles.commentsBlock}>
-          <Link href='/profile/reviews/addComment'
-            asChild>
+          <Link
+            href='/profile/reviews/addComment'
+            asChild
+          >
             <Pressable style={styles.btnComment}>
-              <Chat size={32} weight="thin" />
+              <Chat
+                size={32}
+                weight='thin'
+              />
             </Pressable>
           </Link>
           <TouchableOpacity onPress={handleToggleComments}>
-            <Text style={styles.comments}>Коментарі ({review.comments?.length || 0})</Text>
+            <Text style={styles.comments}>
+              Коментарі ({review.comments?.length || 0})
+            </Text>
           </TouchableOpacity>
         </View>
-        {isCommentsVisible && review.comments && <Comments comments={review.comments} />}
+        {isCommentsVisible && review.comments && (
+          <Comments comments={review.comments} />
+        )}
       </View>
     </ScrollView>
   );
