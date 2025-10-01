@@ -1,28 +1,45 @@
 import { Link } from "expo-router";
 import { CaretRight, Lock } from "phosphor-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import CountryFlag from "react-native-country-flag";
+import ModalWrapper from "../../ModalWrapper";
+import ChangeCountryModal from "./ChangeCountryModal";
+import ChangeLanguageModal from "./ChangeLanguageModal";
 
 export default function GeneralSettings() {
+  const [isModalCountry, setModalCountry] = useState(false);
+  const [isModalLanguage, setModalLanguage] = useState(false);
+
+  const toggleModalCountry = () => {
+    setModalCountry(!isModalCountry);
+  };
+
+  const toggleModalLanguage = () => {
+    setModalLanguage(!isModalLanguage);
+  };
+
   return (
     <View style={styles.block}>
-      <Link href="/">
+      <Pressable onPress={toggleModalCountry}>
         <View style={styles.link}>
           <Text style={styles.text}>Країна</Text>
           <CountryFlag isoCode="ua" size={32} />
         </View>
-      </Link>
-      {/* <Link href="/"> */}
+      </Pressable>
+
+      <Pressable onPress={toggleModalLanguage}>
         <View style={styles.link}>
           <Text style={styles.text}>Мова</Text>
           <Text style={styles.textTr}>Українська</Text>
         </View>
-      {/* </Link> */}
+      </Pressable>
+
       {/* <Link href="/"> */}
-        <View style={styles.link}>
-          <Text style={styles.text}>Валюта</Text>
-          <Text style={styles.textTr}>грн</Text>
-        </View>
+      <View style={styles.link}>
+        <Text style={styles.text}>Валюта</Text>
+        <Text style={styles.textTr}>грн</Text>
+      </View>
       {/* </Link> */}
       <Link href={{ pathname: "/profile/settings/notificationSettings" }}>
         <View style={styles.link}>
@@ -39,6 +56,30 @@ export default function GeneralSettings() {
           <CaretRight size={18} weight="bold" />
         </View>
       </Link>
+
+      {/* Країна модалка */}
+      <ModalWrapper
+        isVisible={isModalCountry}
+        onClose={toggleModalCountry}
+        title="Країна"
+        buttonType="border"
+        buttonText="Застосувати"
+        onConfirm={toggleModalCountry}
+      >
+        <ChangeCountryModal />
+      </ModalWrapper>
+
+      {/* Вибір мови модалка */}
+      <ModalWrapper
+        isVisible={isModalLanguage}
+        onClose={toggleModalLanguage}
+        title="Мова"
+        buttonType="border"
+        buttonText="Застосувати"
+        onConfirm={toggleModalLanguage}
+      >
+        <ChangeLanguageModal />
+      </ModalWrapper>
     </View>
   );
 }
@@ -46,7 +87,6 @@ export default function GeneralSettings() {
 const styles = StyleSheet.create({
   block: {
     gap: 16,
-    
   },
   link: {
     width: "100%",
@@ -72,13 +112,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   changePassword: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   textTr: {
     fontFamily: "Manrope",
     fontSize: 16,
-    color: '#999999',
-  }
+    color: "#999999",
+  },
 });
