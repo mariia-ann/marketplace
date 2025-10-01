@@ -8,7 +8,7 @@ interface ModalWrapperProps {
   isVisible: boolean;
   onClose: () => void;
   title: string;
-  children: ReactNode;
+  children?: ReactNode;
   buttonType?: "border" | "ok";
   buttonText?: string; // для кнопки з бордером
   onConfirm?: () => void;
