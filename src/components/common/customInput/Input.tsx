@@ -1,11 +1,11 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardTypeOptions, StyleSheet, Text, TextInput, View } from "react-native";
 import { CUSTOM_ICON_REF } from "../SvgIcons/IconRef";
 import SvgIcons from "../SvgIcons/SvgIcons";
 
 interface Props {
-	directionRow: boolean;
+	directionRow?: boolean;
 	value: any;
-	label: string;
+	label?: string;
 	placeholder: string;
 	onChangeText: (value: any) => void;
 	textStyle: any;
@@ -13,6 +13,7 @@ interface Props {
 	othertextprops?: any;
 	passwordInput?: boolean;
 	passwordIconBaseStyle?: any;
+	keyboardType?: KeyboardTypeOptions;
 	errors?: {
 		isError?: boolean;
 		errorMessage?: string;
@@ -21,17 +22,18 @@ interface Props {
 }
 
 function CustomInput(props: Props) {
-	const { label, textStyle, customStyle, onChangeText, placeholder, value, othertextprops, passwordInput, passwordIconBaseStyle, errors } = props;
+	const { directionRow, label, textStyle, customStyle, onChangeText, placeholder, value, othertextprops, passwordInput, passwordIconBaseStyle, keyboardType, errors } = props;
 	const isErrorStyling = () => {
 		return errors?.isError ? {color: "#D30004", borderColor: "#D30004"} : {};
 	};
 	return (
-		<View style={styles.baseContainer}>
-			<Text style={textStyle}>{label}</Text>
+		<View style={ directionRow ? styles.baseRowContainer : styles.baseContainer }>
+			{label && <Text style={textStyle}>{label}</Text>}
 			<View style={styles.inputContainer}>
 				<TextInput
 					placeholder={placeholder}
 					value={value}
+					keyboardType={keyboardType}
 					onChangeText={onChangeText}
 					style={{...customStyle, ...isErrorStyling()}}
 					{...othertextprops}
@@ -48,6 +50,7 @@ export default CustomInput;
 
 const styles = StyleSheet.create({
 	baseContainer: { display: "flex", flexDirection: "column" },
+	baseRowContainer: { display: "flex", flexDirection: "row" },
 	inputContainer: { position: "relative" },
 	inputErrorText: {color: "#D30004", position: "absolute", right: 6, top: 8, width: 25, fontFamily: "Manrope"}
 })
