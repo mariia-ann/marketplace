@@ -26,7 +26,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
   return (
     <Modal isVisible={isVisible}>
       <View style={styles.modal}>
-       
+        
         <TouchableOpacity onPress={onClose} style={styles.closeModal}>
           <XCircle size={32} weight="thin" />
         </TouchableOpacity>
@@ -104,9 +104,10 @@ const styles = StyleSheet.create({
   },
 });
 
-
 // Використання:
-{/* 
+{ /* 
+
+// Кнопка з бордером
 <ModalWrapper
   isVisible={isModalVisible}
   onClose={toggleModalCountry}
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
   <ChangeCountryModal />
 </ModalWrapper>
 
+// Кнопка ОК
 <ModalWrapper
   isVisible={isOkVisible}
   onClose={toggleOk}
@@ -127,4 +129,14 @@ const styles = StyleSheet.create({
   <Text>Ваш профіль оновлено</Text>
 </ModalWrapper> 
 
-*/}
+// Без children
+<ModalWrapper
+  isVisible={isConfirmVisible}
+  onClose={toggleConfirm}
+  title="Адресу успішно видалено"
+  buttonType="ok"
+  onConfirm={handleDelete}
+/>
+
+*/
+}

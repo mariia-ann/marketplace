@@ -5,7 +5,7 @@ type LanguageType = {
   language: string;
 };
 
-const initialanguages: LanguageType[] = [
+const initialLanguages: LanguageType[] = [
   {
     id: 0,
     language: "Українська",
@@ -21,7 +21,7 @@ const ChangeLanguageModal = () => {
 
   return (
     <View>
-      {initialanguages.map((language) => (
+      {initialLanguages.map((language) => (
         <TouchableOpacity
           key={language.id}
           style={styles.countryContainer}

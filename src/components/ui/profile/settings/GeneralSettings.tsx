@@ -5,42 +5,46 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import CountryFlag from "react-native-country-flag";
 import ModalWrapper from "../../ModalWrapper";
 import ChangeCountryModal from "./ChangeCountryModal";
+import ChangeCurrencyModal from "./ChangeCurrencyModal";
 import ChangeLanguageModal from "./ChangeLanguageModal";
 
 export default function GeneralSettings() {
-  const [isModalCountry, setModalCountry] = useState(false);
-  const [isModalLanguage, setModalLanguage] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState({
+  id: 0,
+  type: "Українська гривня",
+  value: "грн",
+});
+  const [modalType, setModalType] = useState<
+    "country" | "language" | "currency" | null
+  >(null);
 
-  const toggleModalCountry = () => {
-    setModalCountry(!isModalCountry);
-  };
-
-  const toggleModalLanguage = () => {
-    setModalLanguage(!isModalLanguage);
-  };
+  const openModal = (type: "country" | "language" | "currency") =>
+    setModalType(type);
+  const closeModal = () => setModalType(null);
 
   return (
     <View style={styles.block}>
-      <Pressable onPress={toggleModalCountry}>
+      <Pressable onPress={() => openModal("country")}>
         <View style={styles.link}>
           <Text style={styles.text}>Країна</Text>
           <CountryFlag isoCode="ua" size={32} />
         </View>
       </Pressable>
 
-      <Pressable onPress={toggleModalLanguage}>
+      <Pressable onPress={() => openModal("language")}>
         <View style={styles.link}>
           <Text style={styles.text}>Мова</Text>
           <Text style={styles.textTr}>Українська</Text>
         </View>
       </Pressable>
 
-      {/* <Link href="/"> */}
-      <View style={styles.link}>
-        <Text style={styles.text}>Валюта</Text>
-        <Text style={styles.textTr}>грн</Text>
-      </View>
-      {/* </Link> */}
+      <Pressable onPress={() => openModal("currency")}>
+        <View style={styles.link}>
+          <Text style={styles.text}>Валюта</Text>
+          <Text style={styles.textTr}>{selectedCurrency.value}</Text>
+        </View>
+      </Pressable>
+
       <Link href={{ pathname: "/profile/settings/notificationSettings" }}>
         <View style={styles.link}>
           <Text style={styles.text}>Налаштування сповіщень</Text>
@@ -59,26 +63,44 @@ export default function GeneralSettings() {
 
       {/* Країна модалка */}
       <ModalWrapper
-        isVisible={isModalCountry}
-        onClose={toggleModalCountry}
+        isVisible={modalType === "country"}
+        onClose={closeModal}
         title="Країна"
         buttonType="border"
         buttonText="Застосувати"
-        onConfirm={toggleModalCountry}
+        onConfirm={closeModal}
       >
         <ChangeCountryModal />
       </ModalWrapper>
 
       {/* Вибір мови модалка */}
       <ModalWrapper
-        isVisible={isModalLanguage}
-        onClose={toggleModalLanguage}
+        isVisible={modalType === "language"}
+        onClose={closeModal}
         title="Мова"
         buttonType="border"
         buttonText="Застосувати"
-        onConfirm={toggleModalLanguage}
+        onConfirm={closeModal}
       >
         <ChangeLanguageModal />
+      </ModalWrapper>
+
+      {/* Вибір валюти модалка */}
+      <ModalWrapper
+        isVisible={modalType === "currency"}
+        onClose={closeModal}
+        title="Валюта"
+        buttonType="border"
+        buttonText="Застосувати"
+        onConfirm={closeModal}
+      >
+        <ChangeCurrencyModal
+        initialSelectedId={selectedCurrency.id}
+          onSelect={(currency) => {
+            setSelectedCurrency(currency);
+            // TODO: зберегти у redux/zustand
+          }}
+        />
       </ModalWrapper>
     </View>
   );
