@@ -1,107 +1,140 @@
-import logoNovaPoshta from "@/assets/images/profile/address/logoNovaPoshta.png";
-import Colors from "@/constants/Colors";
-import CustomSwitch from "@/src/components/common/CustomSwitch";
-import { useRouter } from "expo-router";
-import { CaretRight } from "phosphor-react-native";
-import React, { useState } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-const ChangeAddress = () => {
-  const [isDefault, setIsDefault] = useState(true);
+import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import logoUkrposhta from '@/assets/images/profile/address/logoUkrposhta.png';
+import Colors from '@/constants/Colors';
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { XCircle } from "phosphor-react-native";
+import React, { useState } from 'react';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import AddressChoose from './addressChoose/AddressChoose';
+
+const logos: Record<string, any> = {
+  novaPoshta: logoNovaPoshta,
+  ukrposhta: logoUkrposhta,
+};
+
+export default function ChangeAddress() {
+  const { id, title, address, city, codePostal, logo } = useLocalSearchParams<{
+    id: string;
+    title: string;
+    address: string;
+    city: string;
+    codePostal: string;
+    logo?: string;
+  }>();
+
+  const numericPostal = Number(codePostal);
   const router = useRouter();
 
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentLogo, setCurrentLogo] = useState(logo || 'novaPoshta');
+
+  // Оновлюємо дані при зміні параметрів
+  React.useEffect(() => {
+    setCurrentTitle(title);
+    setCurrentLogo(logo || 'novaPoshta');
+  }, [title, logo]);
+
+  const handleConfirmDelete = () => {
+    setConfirmModalVisible(false);
+    setSuccessModalVisible(true);
+  };
+
+  const handleCloseSuccess = () => {
+    setSuccessModalVisible(false);
+    router.replace(`/(tabs)/profile/addresses?deletedId=${id}`);
+  };
+
+  const handleSave = () => {
+    // Передаємо оновлені дані назад до MyAddress
+    router.replace(`/(tabs)/profile/addresses?updatedId=${id}&updatedTitle=${currentTitle}&updatedLogo=${currentLogo}`);
+  };
+
   return (
-    <ScrollView
-      contentContainerStyle={{ paddingBottom: 62 }}
-      style={styles.container}
-    >
-      <View style={styles.block}>
-        <Text style={styles.labelCity}>Місто</Text>
-        <TouchableOpacity
-          style={styles.input}
-          //onPress={() => navigation.navigate('ChooseCityScreen')}
-        >
-          <Text style={styles.inputText}>Київ</Text>
-          <CaretRight
-            size={18}
-            weight='bold'
-          />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.block}>
-        <Text style={styles.label}>Спосіб доставки</Text>
-        <TouchableOpacity
-          style={styles.input}
-          onPress={() =>
-            router.push(
-              "/(tabs)/profile/addresses/changeAddress/deliveryMethod"
-            )
-          }
-        >
-          <View style={styles.deliveryRow}>
-            <Image
-              source={logoNovaPoshta}
-              style={styles.logo}
-              resizeMode='contain'
-            />
-            <Text style={styles.inputText}>Відділення Нова Пошта</Text>
-          </View>
-          <CaretRight
-            size={18}
-            weight='bold'
-          />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.block}>
-        <Text style={styles.label}>Відділення</Text>
-        <TouchableOpacity
-          style={styles.input}
-          //onPress={() => navigation.navigate('ChooseBranchScreen')}
-        >
-          <Text
-            style={styles.inputText}
-            numberOfLines={1}
-            ellipsizeMode='tail'
-          >
-            Відділення №131 (до 30 кг) : просп. Палладіна, 46
-          </Text>
-          <CaretRight
-            size={18}
-            weight='bold'
-          />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.switchContainer}>
-        <Text style={styles.switchLabel}>
-          Встановити як адресу доставки за замовчуванням
-        </Text>
-        <CustomSwitch
-          value={isDefault}
-          onToggle={() => setIsDefault(!isDefault)}
+    <>
+      <ScrollView contentContainerStyle={{ paddingBottom: 62 }} style={styles.container}>
+        <AddressChoose
+          id={Number(id)}
+          title={currentTitle}
+          address={address}
+          city={city}
+          codePostal={numericPostal}
+          logo={logos[currentLogo]}
         />
-      </View>
 
-      <View style={styles.buttonsWrapper}>
-        <TouchableOpacity style={styles.deleteButton}>
-          <Text style={styles.deleteText}>Видалити</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonsWrapper}>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => setConfirmModalVisible(true)}
+          >
+            <Text style={styles.deleteText}>Видалити</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.saveButton}>
-          <Text style={styles.saveText}>Зберегти</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Text style={styles.saveText}>Зберегти</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      {/* Модалка підтвердження */}
+      <Modal
+        visible={confirmModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setConfirmModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.closeIcon}
+              onPress={() => setConfirmModalVisible(false)}
+            >
+              <XCircle  size={32} color="#170f2b"  weight="thin"/>
+            </TouchableOpacity>
+
+            <Text style={styles.modalText}>Бажаєте видалити адресу?</Text>
+
+            <TouchableOpacity
+              style={styles.confirmButton}
+              onPress={handleConfirmDelete}
+            >
+              <Text style={styles.confirmText}>Підтвердити</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Модалка успіху */}
+      <Modal
+        visible={successModalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={handleCloseSuccess}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.closeIcon}
+              onPress={handleCloseSuccess}
+            >
+              <XCircle  size={32} color="#170f2b" weight="thin"/>
+            </TouchableOpacity>
+
+            <Text style={styles.modalText}>Адресу успішно видалено!</Text>
+
+            <View style={styles.okButtonWrapper}>
+              <TouchableOpacity onPress={handleCloseSuccess}>
+                <Text style={styles.confirmText}>Ок</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -109,63 +142,6 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     backgroundColor: Colors.white,
     flex: 1,
-  },
-  block: {
-    marginBottom: 16,
-  },
-  labelCity: {
-    fontFamily: "Manrope",
-    fontSize: 18,
-    color: Colors.blackMain,
-    marginBottom: 12,
-  },
-  label: {
-    fontFamily: "Manrope",
-    fontSize: 16,
-    color: Colors.blackMain,
-    marginBottom: 12,
-  },
-  input: {
-    height: 48,
-    borderRadius: 10,
-    borderColor: Colors.grey400,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  inputText: {
-    fontFamily: "Manrope",
-    fontSize: 16,
-    color: Colors.blackMain,
-    flex: 1,
-    paddingRight: 5,
-  },
-  deliveryRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  logo: {
-    width: 20,
-    height: 20,
-    marginRight: 5,
-    marginBottom: 1,
-  },
-  switchContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 24,
-    marginBottom: 114,
-  },
-  switchLabel: {
-    fontFamily: "Manrope",
-    fontSize: 14,
-    color: Colors.blackMain,
-    flex: 1,
-    paddingRight: 10,
   },
   buttonsWrapper: {
     gap: 8,
@@ -176,12 +152,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.softPurple,
     backgroundColor: Colors.white,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   deleteText: {
-    //fontFamily: 'Outfit-Bold',
-    fontWeight: 700,
+    fontFamily: 'ManropeBold',
     fontSize: 16,
     color: Colors.blackMain,
   },
@@ -189,15 +164,58 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 10,
     backgroundColor: Colors.softPurple,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   saveText: {
-    //fontFamily: 'Outfit-Bold',
-    fontWeight: 700,
+    fontFamily: 'ManropeBold',
     fontSize: 16,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 45,
+  },
+
+  modalContent: {
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    paddingTop: 16,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    width: '100%',
+    position: 'relative',
+  },
+  closeIcon: {
+    position: 'absolute',
+    right: 16,
+    zIndex: 1,
+  },
+  modalText: {
+    fontFamily: 'Manrope',
+    fontSize: 22,
+    color: Colors.blackMain,
+    marginBottom: 24,
+  },
+  confirmButton: {
+    height: 41,
+    borderRadius: 10,
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    borderColor: Colors.softPurple,
+    borderWidth: 1,
+  },
+  confirmText: {
+    fontFamily: 'ManropeBold',
+    fontSize: 16,
+    color: Colors.softPurple,
+  },
+  okButtonWrapper: {
+    alignItems: 'flex-end',
   },
 });
-
-export default ChangeAddress;

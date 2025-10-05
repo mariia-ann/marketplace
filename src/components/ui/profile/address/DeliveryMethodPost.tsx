@@ -1,17 +1,41 @@
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const deliveryOptions = [
-    { id: 1, title: 'Відділення Нова Пошта', price: '60 грн' },
-    { id: 2, title: 'Кур’єр Нова Пошта', price: '60 грн' },
-    { id: 3, title: 'Поштомат Нова Пошта', price: '60 грн' },
-    { id: 4, title: 'Відділення Укрпошта', price: '40 грн' },
+    { id: 1, title: 'Відділення Нова Пошта', price: '60 грн', logoKey: 'novaPoshta' },
+    { id: 2, title: 'Кур\'єр Нова Пошта', price: '60 грн', logoKey: 'novaPoshta' },
+    { id: 3, title: 'Поштомат Нова Пошта', price: '60 грн', logoKey: 'novaPoshta' },
+    { id: 4, title: 'Відділення Укрпошта', price: '40 грн', logoKey: 'ukrposhta' },
 ];
 
-
 export default function DeliveryMethodPost() {
+    const router = useRouter();
+    const { id, title, address, city, codePostal } = useLocalSearchParams<{
+        id: string;
+        title: string;
+        address: string;
+        city: string;
+        codePostal: string;
+    }>();
 
     const [selectedId, setSelectedId] = useState(1);
+
+    const handleSelectOption = (option: typeof deliveryOptions[0]) => {
+        setSelectedId(option.id);
+        // Передаємо вибраний спосіб доставки назад до ChangeAddress з оновленими даними
+        router.replace({
+            pathname: "/(tabs)/profile/addresses/changeAddress",
+            params: {
+                id,
+                title: option.title,
+                address,
+                city,
+                codePostal,
+                logo: option.logoKey,
+            },
+        });
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -20,7 +44,7 @@ export default function DeliveryMethodPost() {
                     <TouchableOpacity
                         key={option.id}
                         style={[styles.optionContainer, index === 0 && { marginTop: 32 }]}
-                        onPress={() => setSelectedId(option.id)}
+                        onPress={() => handleSelectOption(option)}
                     >
                         <View style={styles.radioWrapper}>
                             <View
