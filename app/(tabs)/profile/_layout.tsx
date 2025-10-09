@@ -8,6 +8,7 @@ export default function ProfileStackLayout() {
     { name: "cards/index", title: "Мої картки" },
     { name: "cards/addCards", title: "Додати картку" },
     { name: "addresses/index", title: "Мої адреси" },
+    { name: "addresses/addNewAddress", title: "Додати нову адресу" },
     { name: "addresses/changeAddress", title: "Редагування адреси" },
     {
       name: "addresses/changeAddress/deliveryMethod",
