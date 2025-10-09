@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 16,
     right: 16,
+    zIndex: 10,
+    elevation: 10,
   },
   titleModal: {
     fontFamily: "Manrope",

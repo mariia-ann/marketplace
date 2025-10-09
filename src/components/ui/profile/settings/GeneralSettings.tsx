@@ -9,11 +9,14 @@ import ChangeCurrencyModal from "./ChangeCurrencyModal";
 import ChangeLanguageModal from "./ChangeLanguageModal";
 
 export default function GeneralSettings() {
+ const [selectedCountry, setSelectedCountry] = useState({id: 0, country: "Ukraine", isoCode: "ua"});
+  const [selectedLanguage, setSelectedLanguage] = useState({ id: 0, type: "Українська" });
   const [selectedCurrency, setSelectedCurrency] = useState({
   id: 0,
   type: "Українська гривня",
   value: "грн",
 });
+
   const [modalType, setModalType] = useState<
     "country" | "language" | "currency" | null
   >(null);
@@ -27,14 +30,14 @@ export default function GeneralSettings() {
       <Pressable onPress={() => openModal("country")}>
         <View style={styles.link}>
           <Text style={styles.text}>Країна</Text>
-          <CountryFlag isoCode="ua" size={32} />
+          <CountryFlag isoCode={selectedCountry.isoCode} size={32} />
         </View>
       </Pressable>
 
       <Pressable onPress={() => openModal("language")}>
         <View style={styles.link}>
           <Text style={styles.text}>Мова</Text>
-          <Text style={styles.textTr}>Українська</Text>
+          <Text style={styles.textTr}>{selectedLanguage.type}</Text>
         </View>
       </Pressable>
 
@@ -70,7 +73,12 @@ export default function GeneralSettings() {
         buttonText="Застосувати"
         onConfirm={closeModal}
       >
-        <ChangeCountryModal />
+        <ChangeCountryModal initialSelectedId={selectedCountry.id}
+          onSelect={(country) => {
+            setSelectedCountry(country);
+            // TODO: зберегти у redux/zustand
+          }}
+          />
       </ModalWrapper>
 
       {/* Вибір мови модалка */}
@@ -82,7 +90,11 @@ export default function GeneralSettings() {
         buttonText="Застосувати"
         onConfirm={closeModal}
       >
-        <ChangeLanguageModal />
+        <ChangeLanguageModal initialSelectedId={selectedLanguage.id}
+          onSelect={(language) => {
+            setSelectedLanguage(language);
+            // TODO: зберегти у redux/zustand
+          }} />
       </ModalWrapper>
 
       {/* Вибір валюти модалка */}

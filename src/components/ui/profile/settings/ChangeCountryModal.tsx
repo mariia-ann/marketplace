@@ -1,42 +1,48 @@
-import { JSX, useState } from "react";
+import { countries, CountryType } from "@/constants/countries";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CountryFlag from "react-native-country-flag";
-type CountryType = {
-  id: number;
-  country: string;
-  icon: JSX.Element;
+
+type ChangeCountryModalProps = {
+  onSelect: (country: (typeof countries)[number]) => void;
+  initialSelectedId: number;
 };
 
-const initialCountries: CountryType[] = [
-  {
-    id: 0,
-    country: "Ukraine",
-    icon: <CountryFlag isoCode="ua" size={32} />,
-  },
-  {
-    id: 1,
-    country: "United Kingdom",
-    icon: <CountryFlag isoCode="gb" size={32} />,
-  },
-];
+const ChangeCountryModal: React.FC<ChangeCountryModalProps> = ({
+  onSelect,
+  initialSelectedId,
+}) => {
+  const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
 
-const ChangeCountryModal = () => {
-  const [selectedId, setSelectedId] = useState<number>(0);
+  useEffect(() => {
+    setSelectedId(initialSelectedId);
+  }, [initialSelectedId]);
+
+  const handleSelect = (country: CountryType) => {
+    setSelectedId(country.id);
+    onSelect(country);
+  };
 
   return (
     <View>
-      {initialCountries.map((country) => (
+      {countries.map((country) => (
         <TouchableOpacity
           key={country.id}
           style={styles.countryContainer}
-          onPress={() => setSelectedId(country.id)}
+          onPress={() => handleSelect(country)}
         >
           <View style={styles.radioWrapper}>
             <View style={[selectedId === country.id && styles.radioCircle]} />
           </View>
           <View style={styles.countryInfo}>
             <Text style={styles.countryText}>{country.country}</Text>
-            <View>{country.icon}</View>
+            <View>
+              <CountryFlag
+                key={country.id}
+                isoCode={country.isoCode}
+                size={32}
+              />
+            </View>
           </View>
         </TouchableOpacity>
       ))}
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     alignItems: "center",
     width: "100%",
-    paddingVertical: 10
+    paddingVertical: 10,
   },
 
   radioWrapper: {
@@ -76,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   countryText: {
     fontFamily: "Manrope",

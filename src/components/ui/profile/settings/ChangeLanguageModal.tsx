@@ -1,38 +1,37 @@
-import { useState } from "react";
+import { languages, LanguageType } from "@/constants/languages";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-type LanguageType = {
-  id: number;
-  language: string;
+
+type ChangeLanguageModalProps = {
+  onSelect: (language: typeof languages[number]) => void;
+  initialSelectedId: number;
 };
 
-const initialLanguages: LanguageType[] = [
-  {
-    id: 0,
-    language: "Українська",
-  },
-  {
-    id: 1,
-    language: "Англійська",
-  },
-];
-
-const ChangeLanguageModal = () => {
-  const [selectedId, setSelectedId] = useState<number>(0);
+const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({ onSelect, initialSelectedId }) => {
+    const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
+  
+    useEffect(() => {
+      setSelectedId(initialSelectedId);
+    }, [initialSelectedId]);
+  
+    const handleSelect = (language: LanguageType) => {
+      setSelectedId(language.id);
+      onSelect(language);
+    };
 
   return (
     <View>
-      {initialLanguages.map((language) => (
+      {languages.map((language) => (
         <TouchableOpacity
           key={language.id}
-          style={styles.countryContainer}
-          onPress={() => setSelectedId(language.id)}
+          style={styles.languageContainer}
+          onPress={() => handleSelect(language)}
         >
           <View style={styles.radioWrapper}>
             <View style={[selectedId === language.id && styles.radioCircle]} />
           </View>
-        
-            <Text style={styles.countryText}>{language.language}</Text>
-          
+
+          <Text style={styles.languageText}>{language.type}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -42,12 +41,12 @@ const ChangeLanguageModal = () => {
 export default ChangeLanguageModal;
 
 const styles = StyleSheet.create({
-  countryContainer: {
+  languageContainer: {
     flexDirection: "row",
     marginBottom: 8,
     alignItems: "center",
     width: "100%",
-    paddingVertical: 10
+    paddingVertical: 10,
   },
 
   radioWrapper: {
@@ -67,13 +66,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: "#8E6CEF",
   },
-  countryInfo: {
+  languageInfo: {
     flexDirection: "row",
     justifyContent: "space-between",
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
-  countryText: {
+  languageText: {
     fontFamily: "Manrope",
     fontSize: 16,
   },
