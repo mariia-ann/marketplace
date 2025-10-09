@@ -1,5 +1,5 @@
 // ILLUSTRTIONS
-import ForgotPasswordIllustration from "./Illustrations/ForgotPasswordIllustrations";
+import ForgotPasswordIllustration from "./Icons/Illustrations/ForgotPasswordIllustrations";
 
 //ICONS
 import AppleIcon from "./Icons/Apple";
