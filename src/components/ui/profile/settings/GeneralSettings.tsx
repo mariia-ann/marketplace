@@ -1,29 +1,53 @@
 import { Link } from "expo-router";
 import { CaretRight, Lock } from "phosphor-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import CountryFlag from "react-native-country-flag";
+import ModalWrapper from "../../ModalWrapper";
+import ChangeCountryModal from "./ChangeCountryModal";
+import ChangeCurrencyModal from "./ChangeCurrencyModal";
+import ChangeLanguageModal from "./ChangeLanguageModal";
 
 export default function GeneralSettings() {
+ const [selectedCountry, setSelectedCountry] = useState({id: 0, country: "Ukraine", isoCode: "ua"});
+  const [selectedLanguage, setSelectedLanguage] = useState({ id: 0, type: "Українська" });
+  const [selectedCurrency, setSelectedCurrency] = useState({
+  id: 0,
+  type: "Українська гривня",
+  value: "грн",
+});
+
+  const [modalType, setModalType] = useState<
+    "country" | "language" | "currency" | null
+  >(null);
+
+  const openModal = (type: "country" | "language" | "currency") =>
+    setModalType(type);
+  const closeModal = () => setModalType(null);
+
   return (
     <View style={styles.block}>
-      <Link href="/">
+      <Pressable onPress={() => openModal("country")}>
         <View style={styles.link}>
           <Text style={styles.text}>Країна</Text>
-          <CountryFlag isoCode="ua" size={32} />
+          <CountryFlag isoCode={selectedCountry.isoCode} size={32} />
         </View>
-      </Link>
-      {/* <Link href="/"> */}
+      </Pressable>
+
+      <Pressable onPress={() => openModal("language")}>
         <View style={styles.link}>
           <Text style={styles.text}>Мова</Text>
-          <Text style={styles.textTr}>Українська</Text>
+          <Text style={styles.textTr}>{selectedLanguage.type}</Text>
         </View>
-      {/* </Link> */}
-      {/* <Link href="/"> */}
+      </Pressable>
+
+      <Pressable onPress={() => openModal("currency")}>
         <View style={styles.link}>
           <Text style={styles.text}>Валюта</Text>
-          <Text style={styles.textTr}>грн</Text>
+          <Text style={styles.textTr}>{selectedCurrency.value}</Text>
         </View>
-      {/* </Link> */}
+      </Pressable>
+
       <Link href={{ pathname: "/profile/settings/notificationSettings" }}>
         <View style={styles.link}>
           <Text style={styles.text}>Налаштування сповіщень</Text>
@@ -39,6 +63,57 @@ export default function GeneralSettings() {
           <CaretRight size={18} weight="bold" />
         </View>
       </Link>
+
+      {/* Країна модалка */}
+      <ModalWrapper
+        isVisible={modalType === "country"}
+        onClose={closeModal}
+        title="Країна"
+        buttonType="border"
+        buttonText="Застосувати"
+        onConfirm={closeModal}
+      >
+        <ChangeCountryModal initialSelectedId={selectedCountry.id}
+          onSelect={(country) => {
+            setSelectedCountry(country);
+            // TODO: зберегти у redux/zustand
+          }}
+          />
+      </ModalWrapper>
+
+      {/* Вибір мови модалка */}
+      <ModalWrapper
+        isVisible={modalType === "language"}
+        onClose={closeModal}
+        title="Мова"
+        buttonType="border"
+        buttonText="Застосувати"
+        onConfirm={closeModal}
+      >
+        <ChangeLanguageModal initialSelectedId={selectedLanguage.id}
+          onSelect={(language) => {
+            setSelectedLanguage(language);
+            // TODO: зберегти у redux/zustand
+          }} />
+      </ModalWrapper>
+
+      {/* Вибір валюти модалка */}
+      <ModalWrapper
+        isVisible={modalType === "currency"}
+        onClose={closeModal}
+        title="Валюта"
+        buttonType="border"
+        buttonText="Застосувати"
+        onConfirm={closeModal}
+      >
+        <ChangeCurrencyModal
+        initialSelectedId={selectedCurrency.id}
+          onSelect={(currency) => {
+            setSelectedCurrency(currency);
+            // TODO: зберегти у redux/zustand
+          }}
+        />
+      </ModalWrapper>
     </View>
   );
 }
@@ -46,7 +121,6 @@ export default function GeneralSettings() {
 const styles = StyleSheet.create({
   block: {
     gap: 16,
-    
   },
   link: {
     width: "100%",
@@ -72,13 +146,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   changePassword: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 4,
-    alignItems: 'center',
+    alignItems: "center",
   },
   textTr: {
     fontFamily: "Manrope",
     fontSize: 16,
-    color: '#999999',
-  }
+    color: "#999999",
+  },
 });
