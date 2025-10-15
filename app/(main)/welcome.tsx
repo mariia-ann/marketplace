@@ -24,14 +24,14 @@ export default function WelcomeScreen() {
         <View style={styles.buttonBlock}>
           <PrimaryButton
             title='Увійти'
-            onPress={() => router.push("/(tabs)/profile")}
+            onPress={() => router.push("/auth/login")}
             size='L'
             active={true}
           />
           <SecondaryButton
             title='Зареєструватись'
+            onPress={() => router.push("/auth/signup")}
             size='L'
-            onPress={() => {}}
           />
           <SecondaryButton
             title='Продовжити як гість'
