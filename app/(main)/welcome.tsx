@@ -1,6 +1,7 @@
 import Colors from "@/constants/Colors";
 import { router } from "expo-router";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import SecondaryButton from "@/src/components/common/ SecondaryButton.";
 import PrimaryButton from "@/src/components/common/PrimaryButton";
@@ -37,7 +38,7 @@ export default function WelcomeScreen() {
             title='Продовжити як гість'
             active={true}
             size='L'
-            onPress={() => {}}
+            onPress={() => router.push("/(tabs)/profile")}
           />
         </View>
         <View style={styles.linkBlock}>
