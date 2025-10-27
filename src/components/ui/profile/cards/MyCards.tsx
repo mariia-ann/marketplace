@@ -81,8 +81,8 @@ export default function MyCards() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    marginHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: 20,
+    paddingTop: 32,
     display: "flex",
     flex: 1,
     flexDirection: "column",

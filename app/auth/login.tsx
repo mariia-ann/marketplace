@@ -1,101 +1,46 @@
-import CustomButton from "@/src/components/common/CustomButton";
-import CustomInput from "@/src/components/common/customInput/Input";
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
-import BackArrow from "@/src/components/ui/BackArrowModified";
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Colors from "@/constants/Colors";
+import { NavigationHeader } from "@/src/components/common/NavigationHeader";
+import { router } from "expo-router";
+import PrimaryButton from "../../src/components/common/buttons/PrimaryButton";
+import InputWithLabel from "../../src/components/common/customInput/BasicInput";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = () => {
-    console.log("Logging in with:", email, password);
-  };
-
-  const style = {
-    backArrowWrapper: {
-      // position: 'absolute',
-      // left: 20,
-      // top: 70,
-      // zIndex: 1,
-    },
-    backIconCircle: {
-      backgroundColor: "#AC94E8",
-      borderRadius: 20,
-      width: 40,
-      height: 40,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  };
-
   return (
-    <View style={styles.container}>
-      <View
-        style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-      >
-        <BackArrow style={style} />
-        <Text
-          style={{
-            width: "80%",
-            textAlign: "center",
-            fontSize: 22,
-            ...styles.fontTheme,
-          }}
-        >
-          З поверненням!
-        </Text>
+    <SafeAreaView
+      edges={["bottom"]}
+      style={styles.container}
+    >
+      <NavigationHeader
+        title='З поверненням!'
+        showBack
+        onBack={() => router.back()}
+      />
+      <Text style={{ ...styles.fontTheme, ...styles.heading }}>
+        Вітаємо у нашому Маркетплейсі!
+      </Text>
+      <View style={{ gap: 20 }}>
+        <InputWithLabel
+          label='email/телефон'
+          placeholder='email@gmail.com'
+          errorMessage='Невірний формат email'
+        />
+        <InputWithLabel
+          label='Введіть пароль'
+          placeholder='Пароль'
+          errorMessage='Невірний пароль'
+          secureTextEntry={true}
+        />
+        <PrimaryButton
+          title='Увійти'
+          onPress={() => {}}
+          size='L'
+        />
       </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          paddingTop: 30,
-          paddingBottom: 20,
-        }}
-      >
-        <Text style={{ fontSize: 15, ...styles.fontTheme }}>
-          Вітаємо у нашому Маркетплейсі!
-        </Text>
-      </View>
-      <CustomInput
-        textStyle={styles.label}
-        directionRow
-        label='email/телефон'
-        placeholder='Email'
-        value={email}
-        onChangeText={setEmail}
-        customStyle={{ ...styles.input, ...styles.fontTheme }}
-      />
-      <CustomInput
-        label='Введіть пароль'
-        textStyle={styles.label}
-        directionRow
-        placeholder='Password'
-        value={password}
-        onChangeText={setPassword}
-        othertextprops={{
-          secureTextEntry: true,
-        }}
-        errors={{ isError: true, errorMessage: "Пароль не співпадає!" }}
-        passwordInput
-        passwordIconBaseStyle={{ width: 25 }}
-        customStyle={styles.input}
-      />
-      {/** Awaiting the functionality of login from backend when done, change false with the conditional variable */}
-      {true && (
-        <Text style={{ color: "#D30004", textAlign: "right", paddingTop: 10 }}>
-          Пароль не співпадає!
-        </Text>
-      )}
-      <CustomButton
-        title='Увійти'
-        onPress={handleLogin}
-        customStyles={{ marginTop: 70 }}
-      />
       {/* <AntIcons name={"google"} size={30} /> */}
 
       <Text style={styles.socialmediatextloginstyle}>
@@ -116,11 +61,11 @@ const Login = () => {
           baseStyle={styles.socialMediaiconStyle}
         />
         <SvgIcons
-          name={CUSTOM_ICON_REF.Facebook}
+          name={CUSTOM_ICON_REF.Apple}
           baseStyle={styles.socialMediaiconStyle}
         />
         <SvgIcons
-          name={CUSTOM_ICON_REF.Apple}
+          name={CUSTOM_ICON_REF.Facebook}
           baseStyle={styles.socialMediaiconStyle}
         />
       </View>
@@ -140,21 +85,31 @@ const Login = () => {
           Зареєструйтесь!
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
-  container: { display: "flex", flexDirection: "column", padding: 20 },
-  fontTheme: { color: "#170F2B", fontFamily: "Manrope" },
-  heading: { fontSize: 24, marginBottom: 20, textAlign: "center" },
-  label: { color: "#999999", paddingBottom: 10, fontFamily: "Manrope" },
+  container: {
+    display: "flex",
+    flex: 1,
+    flexDirection: "column",
+    paddingHorizontal: 20,
+    backgroundColor: Colors.white,
+  },
+  fontTheme: { color: Colors.blackMain, fontFamily: "Manrope" },
+  heading: {
+    fontSize: 16,
+    marginTop: 32,
+    marginBottom: 18,
+    textAlign: "center",
+  },
   input: {
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: "#999999",
+    borderColor: Colors.grey400,
     marginBottom: 15,
     padding: 12,
   },
@@ -163,10 +118,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Manrope",
     paddingTop: 30,
-    color: "#999999",
+    color: Colors.grey400,
   },
   ifsignedin: {
-    color: "#999999",
+    color: Colors.grey400,
     fontFamily: "Manrope",
   },
   socialMediaiconStyle: {

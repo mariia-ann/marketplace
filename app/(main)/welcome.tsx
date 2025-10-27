@@ -3,8 +3,8 @@ import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import SecondaryButton from "@/src/components/common/ SecondaryButton.";
-import PrimaryButton from "@/src/components/common/PrimaryButton";
+import SecondaryButton from "@/src/components/common/buttons/SecondaryButton";
+import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
 import TextLink from "@/src/components/common/TextLink_w_arrow";
 import WelcomeBackground from "@/src/components/ui/welcome_page/WelcomeBackground";
 

@@ -497,7 +497,7 @@ export default function LoadingScreen() {
           duration: 300,
           useNativeDriver: true,
         }).start(() => {
-          router.push("/(main)/welcome");
+          router.replace("/(main)/welcome");
         });
       }, 1000);
       return () => clearTimeout(timeout);
@@ -568,7 +568,7 @@ export default function LoadingScreen() {
         )}
       </View>
       <View style={styles.bottomContainer}>
-        {stage != 1 ? (
+        {stage !== 1 ? (
           <>
             <CrossfadeTexts
               ref={crossfadeRef}
