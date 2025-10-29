@@ -9,15 +9,16 @@ import {
 } from "react-native";
 import Colors from "@/constants/Colors";
 
-interface InputWithLabelProps extends TextInputProps {
+interface BasicFormInputProps extends TextInputProps {
   label: string;
   errorMessage?: string;
 }
-
-const InputWithLabel = forwardRef<TextInput, InputWithLabelProps>(
+// this component is a basic form input which accepts label, errorMessage and other TextInputProps
+const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
   ({ label, errorMessage, style, onFocus, onBlur, ...rest }, ref) => {
     const [isFocused, setIsFocused] = useState(false);
 
+    // Handlers for focus and blur events
     const handleFocus = (e: FocusEvent) => {
       setIsFocused(true);
       onFocus?.(e);
@@ -52,8 +53,8 @@ const InputWithLabel = forwardRef<TextInput, InputWithLabelProps>(
   }
 );
 
-InputWithLabel.displayName = "InputWithLabel";
-export default InputWithLabel;
+BasicFormInput.displayName = "BasicFormInput";
+export default BasicFormInput;
 
 const styles = StyleSheet.create({
   container: {

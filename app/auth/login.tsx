@@ -1,15 +1,46 @@
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/constants/Colors";
 import { NavigationHeader } from "@/src/components/common/NavigationHeader";
 import { router } from "expo-router";
 import PrimaryButton from "../../src/components/common/buttons/PrimaryButton";
-import InputWithLabel from "../../src/components/common/customInput/BasicInput";
+import BasicFormInput from "../../src/components/common/customInput/BasicFormInput";
+import { useLogin } from "../../src/features/auth/hooks";
+import { isAxiosError } from "axios";
+import { useAuthStore } from "../../src/state/useAuthStore";
 
 const Login = () => {
+  const { mutate: doLogin, isPending /* error */ } = useLogin();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    // no validation for now — just send what’s typed
+    console.log("Submitting login", { email, password });
+    doLogin(
+      { email, password },
+      {
+        onSuccess: () =>
+          console.log("Login success", useAuthStore.getState().getUser()),
+        onError: (e) => {
+          if (isAxiosError(e)) {
+            console.log("Login error 1", e.response?.status, e.response?.data);
+          } else {
+            // non-Axios error (type remains unknown)
+            console.log(
+              "Login error 2",
+              e instanceof Error ? "this e.message " + e.message : String(e)
+            );
+          }
+        },
+      }
+    );
+  };
+
   return (
     <SafeAreaView
       edges={["bottom"]}
@@ -24,20 +55,24 @@ const Login = () => {
         Вітаємо у нашому Маркетплейсі!
       </Text>
       <View style={{ gap: 20 }}>
-        <InputWithLabel
+        <BasicFormInput
           label='email/телефон'
           placeholder='email@gmail.com'
-          errorMessage='Невірний формат email'
+          value={email}
+          onChangeText={setEmail}
+          // errorMessage='Невірний формат email'
         />
-        <InputWithLabel
+        <BasicFormInput
           label='Введіть пароль'
           placeholder='Пароль'
-          errorMessage='Невірний пароль'
           secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+          // errorMessage='Невірний пароль'
         />
         <PrimaryButton
-          title='Увійти'
-          onPress={() => {}}
+          title={isPending ? "Входимо..." : "Увійти"}
+          onPress={handleSubmit}
           size='L'
         />
       </View>
