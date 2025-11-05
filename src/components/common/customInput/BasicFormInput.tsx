@@ -43,6 +43,7 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
           placeholderTextColor={Colors.grey400}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          autoCapitalize='none'
           {...rest}
         />
         {errorMessage ? (

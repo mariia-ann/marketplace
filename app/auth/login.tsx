@@ -68,12 +68,13 @@ const Login = () => {
           secureTextEntry={true}
           value={password}
           onChangeText={setPassword}
-          // errorMessage='Невірний пароль'
+          errorMessage='Невірний пароль'
         />
         <PrimaryButton
           title={isPending ? "Входимо..." : "Увійти"}
           onPress={handleSubmit}
           size='L'
+          active={!isPending}
         />
       </View>
       {/* <AntIcons name={"google"} size={30} /> */}
