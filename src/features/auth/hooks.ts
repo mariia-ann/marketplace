@@ -1,39 +1,63 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getUserById, login, LoginDto, LoginResponse } from "@/src/features/auth/api";
-import { AuthUser, useAuthStore } from "@/src/state/useAuthStore";
-import parseJwt from "@/src/utils/jwtParse";
+// src/features/auth/queries.ts
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "@/src/state/useAuthStore";
+import { getUserById } from "@/src/features/auth/api";
+import { api } from "@/src/lib/api";
+
+
+
+export function useMe ()
+{
+    const { userId } = useAuthStore( s => ( { userId: s.userId } ) );
+    return useQuery( {
+        queryKey: ["me", userId],
+        queryFn: () => getUserById( userId! ),
+        enabled: !!userId,
+        staleTime: 60_000,
+        refetchOnMount: "always",
+    } );
+}
 
 export function useLogin ()
 {
-    const setToken = useAuthStore( ( s ) => s.setToken );
-    const setUser = useAuthStore( ( s ) => s.setUser );
     const qc = useQueryClient();
+    const setToken = useAuthStore( s => s.setToken );
+    const setUserId = useAuthStore( s => s.setUserId );
+
+    const parseJwt = ( t: string ) =>
+    {
+        try {
+            const b = t.split( "." )[1].replace( /-/g, "+" ).replace( /_/g, "/" );
+            const j = decodeURIComponent( atob( b ).split( "" ).map( c => "%" + ( "00" + c.charCodeAt( 0 ).toString( 16 ) ).slice( -2 ) ).join( "" ) );
+            return JSON.parse( j );
+        } catch { return {}; }
+    };
 
     return useMutation( {
-        mutationFn: ( dto: LoginDto ) => login( dto ),
-        onSuccess: async ( data: LoginResponse ) =>
+        mutationFn: async ( dto: { email: string; password: string; } ) =>
         {
-            // Save token:
-            setToken( data.access_token );
-            // Decode JWT to get user ID:
-            const { userId } = parseJwt( data.access_token );
-            console.log( "Decoded user ID:", userId );
-            // Get user info and save to store:
-            const me = await qc.fetchQuery( {
-                queryKey: ["me"],
-                queryFn: () => getUserById( userId ),
-            } );
-
-            // Map backend user → store user and save
-            const mapped: AuthUser = {
-                id: me.id,
-                displayName: me.firstName ?? me.email?.split( "@" )[0] ?? "User",
-                email: me.email,
-                isSeller: me.isSeller,
-                isPhoneValidated: me.isPhoneValidated,
-                isEmailValidated: me.isEmailValidated ?? false,
-            };
-            setUser( { ...mapped } );
+            const { data } = await api.post( "auth/login", dto, { skipAuth: true } );
+            return data as { access_token: string; };
+        },
+        onSuccess: ( { access_token } ) =>
+        {
+            setToken( access_token );
+            const p = parseJwt( access_token );
+            const uid = p?.userId ?? p?.uid ?? p?.sub ?? null;
+            setUserId( uid );
+            qc.invalidateQueries( { queryKey: ["me"] } );
         },
     } );
+}
+
+export function useLogout ()
+{
+    const qc = useQueryClient();
+    const signOut = useAuthStore( s => s.signOut );
+    return () =>
+    {
+        signOut();
+        qc.removeQueries( { queryKey: ["me"] } );
+        qc.clear();
+    };
 }

@@ -6,11 +6,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/constants/Colors";
 import { NavigationHeader } from "@/src/components/common/NavigationHeader";
 import { router } from "expo-router";
-import PrimaryButton from "../../src/components/common/buttons/PrimaryButton";
-import BasicFormInput from "../../src/components/common/customInput/BasicFormInput";
-import { useLogin } from "../../src/features/auth/hooks";
+import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
+import BasicFormInput from "@/src/components/common/customInput/BasicFormInput";
+import { useLogin } from "@/src/features/auth/hooks";
 import { isAxiosError } from "axios";
-import { useAuthStore } from "../../src/state/useAuthStore";
+import { useAuthStore } from "@/src/state/useAuthStore";
 
 const Login = () => {
   const { mutate: doLogin, isPending /* error */ } = useLogin();
@@ -25,7 +25,7 @@ const Login = () => {
       { email, password },
       {
         onSuccess: () =>
-          console.log("Login success", useAuthStore.getState().getUser()),
+          console.log("Login success", useAuthStore.getState().userId),
         onError: (e) => {
           if (isAxiosError(e)) {
             console.log("Login error 1", e.response?.status, e.response?.data);
