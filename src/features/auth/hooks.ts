@@ -1,9 +1,7 @@
 // src/features/auth/queries.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/src/state/useAuthStore";
-import { getUserById } from "@/src/features/auth/api";
-import { api } from "@/src/lib/api";
-
+import { getUserById, login as loginApi, logout as logoutApi } from "@/src/features/auth/api";
 
 
 export function useMe ()
@@ -34,11 +32,7 @@ export function useLogin ()
     };
 
     return useMutation( {
-        mutationFn: async ( dto: { email: string; password: string; } ) =>
-        {
-            const { data } = await api.post( "auth/login", dto, { skipAuth: true } );
-            return data as { access_token: string; };
-        },
+        mutationFn: async ( dto: { email: string; password: string; } ) => loginApi( dto ),
         onSuccess: ( { access_token } ) =>
         {
             setToken( access_token );
@@ -54,10 +48,18 @@ export function useLogout ()
 {
     const qc = useQueryClient();
     const signOut = useAuthStore( s => s.signOut );
-    return () =>
-    {
-        signOut();
-        qc.removeQueries( { queryKey: ["me"] } );
-        qc.clear();
-    };
+
+    return useMutation( {
+        mutationFn: async () => logoutApi(),
+        onSuccess: () =>
+        {
+            signOut();
+            qc.removeQueries( { queryKey: ["me"] } );
+            qc.clear();
+        },
+        onError: ( e ) =>
+        {
+            console.log( "Logout failed:", e instanceof Error ? e.message : String( e ) );
+        }
+    } );
 }

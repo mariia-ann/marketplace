@@ -1,6 +1,6 @@
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/constants/Colors";
@@ -10,36 +10,32 @@ import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
 import BasicFormInput from "@/src/components/common/customInput/BasicFormInput";
 import { useLogin } from "@/src/features/auth/hooks";
 import { isAxiosError } from "axios";
-import { useAuthStore } from "@/src/state/useAuthStore";
 
 const Login = () => {
-  const { mutate: doLogin, isPending /* error */ } = useLogin();
+  const { mutate: doLogin, isPending, error, isSuccess } = useLogin();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const loginErrorMsg = (() => {
+    if (!error) return undefined;
+    if (isAxiosError(error)) {
+      const status = error.response?.status;
+      if (status === 400 || status === 401) return "Невірний email або пароль";
+      return "Помилка входу. Спробуйте ще раз.";
+    }
+    return "Сталася несподівана помилка.";
+  })();
+
   const handleSubmit = () => {
-    // no validation for now — just send what’s typed
-    console.log("Submitting login", { email, password });
-    doLogin(
-      { email, password },
-      {
-        onSuccess: () =>
-          console.log("Login success", useAuthStore.getState().userId),
-        onError: (e) => {
-          if (isAxiosError(e)) {
-            console.log("Login error 1", e.response?.status, e.response?.data);
-          } else {
-            // non-Axios error (type remains unknown)
-            console.log(
-              "Login error 2",
-              e instanceof Error ? "this e.message " + e.message : String(e)
-            );
-          }
-        },
-      }
-    );
+    doLogin({ email, password });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.replace("/(tabs)");
+    }
+  }, [isSuccess]);
 
   return (
     <SafeAreaView
@@ -68,13 +64,13 @@ const Login = () => {
           secureTextEntry={true}
           value={password}
           onChangeText={setPassword}
-          errorMessage='Невірний пароль'
+          errorMessage={loginErrorMsg}
         />
         <PrimaryButton
           title={isPending ? "Входимо..." : "Увійти"}
           onPress={handleSubmit}
           size='L'
-          active={!isPending}
+          active={!isPending && !!email && !!password}
         />
       </View>
       {/* <AntIcons name={"google"} size={30} /> */}
