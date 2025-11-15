@@ -2,6 +2,7 @@ import { NavigationHeader } from "@/src/components/common/NavigationHeader";
 import { Stack } from "expo-router";
 import React from "react";
 import Colors from "../../../constants/Colors";
+import { useAuthStore } from "../../../src/state/useAuthStore";
 
 export default function ProfileStackLayout() {
   const profileScreens = [

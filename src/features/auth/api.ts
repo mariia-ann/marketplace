@@ -16,7 +16,8 @@ export async function login ( dto: LoginDto ): Promise<LoginResponse>
 }
 
 export async function getUserById ( id: string )
-{
+{   
+    console.warn( 'inside api.ts from getUserById', id );
     const { data } = await api.get( `users/${id}`, { requireAuth: true } );
     return data;
 }

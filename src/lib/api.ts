@@ -1,5 +1,6 @@
 import axios, { CanceledError, isCancel } from "axios";
 import { useAuthStore } from "@/src/state/useAuthStore";
+import { router } from "expo-router";
 
 declare module "axios" {
     export interface AxiosRequestConfig
@@ -55,9 +56,16 @@ api.interceptors.response.use(
 
         // Central 401 handling for calls that attempted auth but failed (expired token)
         if ( error?.response?.status === 401 ) {
-        // You can softly sign out or trigger a refresh flow here
-        // useAuthStore.getState().signOut();
+            // You can softly sign out or trigger a refresh flow here
+            console.warn( "Token expired or invalid. Clearing auth..." );
+            useAuthStore.getState().signOut();
+            try {
+                router.replace( "/" ); // or "/auth/login"
+            } catch { }
+            // Optional: prevent axios from retrying infinite loop
+            return Promise.reject( error );
         }
+
         return Promise.reject( error );
     }
 );

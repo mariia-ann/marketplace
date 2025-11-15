@@ -2,10 +2,11 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import React, { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
+import { RestoreGate } from "@/src/features/auth/guards";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { queryClient } from "@/src/lib/queryClient";
 import { asyncStoragePersister } from "@/src/lib/persistor";
+import { useAuthStore } from "../src/state/useAuthStore";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -45,32 +46,34 @@ export default function RootLayout() {
         client={queryClient}
         persistOptions={{ persister: asyncStoragePersister }}
       >
-        <Stack>
-          {/* Welcome page screens */}
-          <Stack.Screen
-            name='(main)'
-            options={{ headerShown: false }}
-          />
-          {/* Auth screens */}
-          <Stack.Screen
-            name='auth/login'
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name='auth/signup'
-            options={{ headerShown: false }}
-          />
-          {/* Main app after login */}
-          <Stack.Screen
-            name='(tabs)'
-            options={{ headerShown: false }}
-          />
-          {/* 404 page */}
-          <Stack.Screen
-            name='+not-found'
-            options={{}}
-          />
-        </Stack>
+        <RestoreGate>
+          <Stack>
+            {/* Welcome page screens */}
+            <Stack.Screen
+              name='(main)'
+              options={{ headerShown: false }}
+            />
+            {/* Auth screens */}
+            <Stack.Screen
+              name='auth/login'
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='auth/signup'
+              options={{ headerShown: false }}
+            />
+            {/* Main app after login */}
+            <Stack.Screen
+              name='(tabs)'
+              options={{ headerShown: false }}
+            />
+            {/* 404 page */}
+            <Stack.Screen
+              name='+not-found'
+              options={{}}
+            />
+          </Stack>
+        </RestoreGate>
       </PersistQueryClientProvider>
     </SafeAreaProvider>
   );

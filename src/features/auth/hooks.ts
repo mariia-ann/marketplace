@@ -3,19 +3,29 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/src/state/useAuthStore";
 import { getUserById, login as loginApi, logout as logoutApi } from "@/src/features/auth/api";
 
-
+/* this hook is used to fetch the current user's data
+if it was already fecthed it should not make an api call and just return cached data */
 export function useMe ()
 {
-    const { userId } = useAuthStore( s => ( { userId: s.userId } ) );
+    const userId = useAuthStore( s => s.userId );
+    // const { userId } = useAuthStore( s => ( { userId: s.userId } ) );
+    // This creates a NEW object { userId: ... } on EVERY render
+    // which triggers React Query to think dependencies changed it was the cause of infinite loops.
+
     return useQuery( {
         queryKey: ["me", userId],
-        queryFn: () => getUserById( userId! ),
+        queryFn: async () =>
+        {
+            // console.warn( ">>> queryFn in useMe is running with userId:", userId );
+            return getUserById( userId! );
+        },
         enabled: !!userId,
         staleTime: 60_000,
-        refetchOnMount: "always",
+        refetchOnMount: false,
     } );
 }
-
+/* this hook is used to perform login. it calls login(from auth/api.ts) as loginApi
+and on success sets the token and userId in the auth store */
 export function useLogin ()
 {
     const qc = useQueryClient();
@@ -44,6 +54,8 @@ export function useLogin ()
     } );
 }
 
+/* this hook is used to perform logout. it calls logout(from auth/api.ts) as logoutApi 
+and on success clears the token and userId from the auth store */
 export function useLogout ()
 {
     const qc = useQueryClient();

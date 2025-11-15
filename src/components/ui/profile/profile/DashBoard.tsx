@@ -20,7 +20,7 @@ export default function DashBoard() {
   const handleLogout = () => {
     doLogout(undefined, {
       onSuccess: () => {
-        router.replace("/");
+        router.replace("/(main)/welcome");
       },
     });
   };
