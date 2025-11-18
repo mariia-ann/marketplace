@@ -1,6 +1,8 @@
-import { ProfileHeader } from "@/src/components/common/ProfileHeader";
+import { NavigationHeader } from "@/src/components/common/NavigationHeader";
 import { Stack } from "expo-router";
 import React from "react";
+import Colors from "../../../constants/Colors";
+import { useAuthStore } from "../../../src/state/useAuthStore";
 
 export default function ProfileStackLayout() {
   const profileScreens = [
@@ -37,13 +39,15 @@ export default function ProfileStackLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
-        header: (props) => <ProfileHeader {...props} />,
-        headerTitleAlign: "center",
-        headerTitleStyle: {
-          fontSize: 22,
-          fontFamily: "Manrope",
-          color: "#170F2B",
-        },
+        header: (props) => (
+          <NavigationHeader
+            {...props}
+            customStyles={{
+              paddingHorizontal: 20,
+              backgroundColor: Colors.white,
+            }}
+          />
+        ),
       }}
     >
       <Stack.Screen
@@ -58,7 +62,6 @@ export default function ProfileStackLayout() {
           name={name}
           options={{
             title: title,
-            // headerLeft: null,
           }}
         />
       ))}

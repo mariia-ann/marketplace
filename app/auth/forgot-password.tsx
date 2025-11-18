@@ -1,5 +1,5 @@
 import CustomButton from '@/src/components/common/CustomButton'
-import BackArrow from '@/src/components/ui/BackArrowModified'
+import BackArrow from "@/src/components/common/buttons/BackButton";
 import OptionToggle from "@/src/components/common/OptionToggle/OptionToggle";
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";

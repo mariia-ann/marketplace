@@ -58,20 +58,24 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
     }).start();
   };
 
-  const backgroundColor = progress.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [Colors.purple200, Colors.softPurple, Colors.activePurple],
-  });
+  const backgroundColor = active
+    ? progress.interpolate({
+        inputRange: [0, 0.5, 1],
+        outputRange: [Colors.purple200, Colors.softPurple, Colors.activePurple],
+      })
+    : Colors.purple200;
 
   const textColor = progress.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [Colors.purple400, Colors.white, Colors.white],
   });
 
-  const scale = progress.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [1, 1, 0.98],
-  });
+  const scale = active
+    ? progress.interpolate({
+        inputRange: [0, 0.5, 1],
+        outputRange: [1, 1, 0.98],
+      })
+    : 1;
 
   return (
     <AnimatedPressable
@@ -84,8 +88,7 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
         { backgroundColor, transform: [{ scale }] },
         style,
       ]}
-      // If you want screen readers to treat inactive as disabled:
-      // accessibilityState={{ disabled: !active }}
+      accessibilityState={{ disabled: !active }}
     >
       <Animated.Text style={[styles.label, { color: textColor }, textStyle]}>
         {title}
@@ -111,9 +114,9 @@ const styles = StyleSheet.create({
 });
 
 const sizeStyles: Record<ButtonSize, ViewStyle> = {
-  L: { width: 350 },
-  M: { width: 320 },
-  S: { width: 252 },
+  L: { minWidth: 350 },
+  M: { minWidth: 320 },
+  S: { minWidth: 252 },
 };
 
 export default PrimaryButton;
