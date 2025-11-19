@@ -1,8 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, FlatList, Image, Dimensions, StyleSheet } from 'react-native';
 
+interface BannerCarouselProps {
+  banners?: any[];
+  baseStyle?: any;
+}
+
 const banners = [
-  require('@/assets/images/home_page/bannerCarousel/baner1.png'),
+  require('@/assets/images/home_page/bannerCarousel/banner3.png'),
   require('@/assets/images/home_page/bannerCarousel/baner2.png'),
   require('@/assets/images/home_page/bannerCarousel/baner1.png'),
 ];
@@ -12,7 +17,8 @@ const { width } = Dimensions.get('window');
 const BANNER_HORIZONTAL_MARGIN = 16;
 const BANNER_WIDTH = width - BANNER_HORIZONTAL_MARGIN * 2;
 
-export default function BannerCarousel() {
+export default function BannerCarousel(props: BannerCarouselProps) {
+  const {baseStyle} = props;
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -26,14 +32,17 @@ export default function BannerCarousel() {
     return () => clearInterval(interval);
   }, [currentIndex]);
 
+  const ITEM_WIDTH = BANNER_WIDTH + BANNER_HORIZONTAL_MARGIN * 2;
+
   const onScrollEnd = (event: any) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const newIndex = Math.round(offsetX / BANNER_WIDTH);
+    const newIndex = Math.round(offsetX / ITEM_WIDTH);
     setCurrentIndex(newIndex);
-  };
+};
+
 
   return (
-    <View style={styles.container}>
+    <View style={baseStyle}>
       <FlatList
         ref={flatListRef}
         data={banners}
@@ -43,7 +52,8 @@ export default function BannerCarousel() {
           <View style={styles.bannerWrapper}>
             <Image source={item} style={styles.image} />
             <View style={styles.dotsContainer}>
-              {banners.map((_, index) => (
+              <View style={{ backgroundColor :"#F5F4FEB2", width: 75, display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", borderRadius: 10, paddingVertical: 2 }}>
+                {banners.map((_, index) => (
                 <View
                   key={index}
                   style={[
@@ -52,11 +62,11 @@ export default function BannerCarousel() {
                   ]}
                 />
               ))}
+              </View>
             </View>
           </View>
         )}
         horizontal
-        pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onScrollEnd}
         getItemLayout={(_, index) => ({
@@ -64,7 +74,7 @@ export default function BannerCarousel() {
           offset: BANNER_WIDTH * index,
           index,
         })}
-        snapToInterval={BANNER_WIDTH}
+        snapToInterval={BANNER_WIDTH * 2}
         decelerationRate="fast"
         snapToAlignment="start"
       />
@@ -73,11 +83,11 @@ export default function BannerCarousel() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
   bannerWrapper: {
     width: BANNER_WIDTH,
     height: 180,
     position: 'relative',
+    right: 30,
     marginHorizontal: BANNER_HORIZONTAL_MARGIN,
   },
   image: {
@@ -98,15 +108,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
+    width: 10,
+    height: 10,
+    borderRadius: 20,
     backgroundColor: '#fff',
+    borderColor: "#AC94E8",
+    borderWidth: 2,
     marginHorizontal: 4,
   },
   activeDot: {
-    width: 12,
-    backgroundColor: '#fff',
-    borderRadius: 2,
+    width: 25,
+    backgroundColor: '#8E6CEF',
+    borderColor: "#8E6CEF",
+    borderWidth: 2,
+    borderRadius: 4,
   },
 });
