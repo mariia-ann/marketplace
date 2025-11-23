@@ -9,10 +9,12 @@ import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View 
 
 const AddNewAddress = () => {
     const router = useRouter();
-    const { title, city: paramCity } = useLocalSearchParams<{
+    const { title, city: paramCity, third } = useLocalSearchParams<{
         title?: string;
         city?: string;
+        third?: string;
     }>();
+
 
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState<string>('');
     const [isDefault, setIsDefault] = useState(true);
@@ -20,16 +22,46 @@ const AddNewAddress = () => {
     const [street, setStreet] = useState('');
     const [building, setBuilding] = useState('');
     const [apartment, setApartment] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+    const [thirdValue, setThirdValue] = useState('');
+
+    // Функції валідації для введення тільки цифр
+    const handleBuildingChange = (text: string) => {
+        const numericText = text;
+        setBuilding(numericText);
+    };
+
+    const handleApartmentChange = (text: string) => {
+        const numericText = text.replace(/[^0-9]/g, '');
+        setApartment(numericText);
+    };
+
+    const handlePostalCodeChange = (text: string) => {
+        const numericText = text.replace(/[^0-9]/g, '');
+        if (numericText.length <= 6) {
+            setPostalCode(numericText);
+        }
+    };
+
+    // Додаємо лог для відстеження змін selectedDeliveryMethod
+    useEffect(() => {
+        console.log('AddNewAddress - selectedDeliveryMethod changed to:', selectedDeliveryMethod);
+    }, [selectedDeliveryMethod]);
 
     // Обробляємо параметри з навігації
     useEffect(() => {
+        console.log('AddNewAddress - received params:', { title, paramCity });
         if (title) {
+            console.log('Setting delivery method to:', title);
             setSelectedDeliveryMethod(title);
         }
         if (paramCity) {
             setCity(paramCity);
         }
-    }, [title, paramCity]);
+        if (third) {
+            setThirdValue(third);
+        }
+    }, [title, paramCity, third]);
 
     const logos: Record<string, any> = {
         novaPoshta: logoNovaPost,
@@ -46,27 +78,30 @@ const AddNewAddress = () => {
 
     // Визначаємо назву поля та placeholder залежно від методу доставки
     const getThirdFieldConfig = () => {
-        if (selectedDeliveryMethod === 'Відділення Нова Пошта' || selectedDeliveryMethod === 'Відділення Укрпошта') {
+        console.log('getThirdFieldConfig - selectedDeliveryMethod:', selectedDeliveryMethod);
+
+        if (selectedDeliveryMethod.includes('Відділення')) {
             return {
                 title: 'Відділення',
                 placeholder: 'Оберіть номер відділення',
                 type: 'select'
             };
-        } else if (selectedDeliveryMethod === 'Поштомат Нова Пошта') {
+        } else if (selectedDeliveryMethod.includes('Поштомат')) {
             return {
                 title: 'Поштомат',
                 placeholder: 'Оберіть поштомат',
                 type: 'select'
             };
-        } else if (selectedDeliveryMethod === 'Кур\'єр Нова Пошта') {
+        } else if (selectedDeliveryMethod.includes('Кур')) {
             return {
-                title: 'Вулиця',
-                placeholder: 'Введіть вулицю',
+                title: 'Адреса доставки',
+                placeholder: 'Введіть адресу',
                 type: 'input'
             };
         }
         return null;
     };
+
 
     const handleDeliveryMethodSelect = () => {
         router.push({
@@ -81,14 +116,70 @@ const AddNewAddress = () => {
         });
     };
 
+    const handleSaveAddress = () => {
+        // Перевіряємо чи заповнені обов'язкові поля
+        if (!city || !selectedDeliveryMethod) {
+            console.log('Потрібно заповнити місто та спосіб доставки');
+            return;
+        }
+
+        // Формуємо адресу залежно від типу доставки
+        let fullAddress = '';
+        if (selectedDeliveryMethod.includes('Кур')) {
+            // Для кур'єра використовуємо вулицю та номер будинку
+            fullAddress = `${street}, ${building}${apartment ? ', кв. ' + apartment : ''}`;
+        } else {
+            // Для відділень та поштоматів використовуємо вибране значення
+            fullAddress = thirdValue || 'Адреса буде вказана після вибору';
+        }
+
+        // Визначаємо поштовий код
+        const finalPostalCode = postalCode || Math.floor(Math.random() * 9000) + 1000;
+
+        // Генеруємо унікальний ID для нової адреси
+        const newId = Date.now();
+
+        // Визначаємо logoKey
+        const logoKey = selectedDeliveryMethod.includes('Укрпошта') ? 'ukrposhta' : 'novaPoshta';
+
+
+        // Переходимо назад до списку адрес з новою адресою
+        router.replace(`/(tabs)/profile/addresses?newAddress=${JSON.stringify({
+            id: newId,
+            title: selectedDeliveryMethod,
+            address: fullAddress,
+            city,
+            codePostal: finalPostalCode,
+            logoKey
+        })}`);
+    };
+
     return (
         <ScrollView contentContainerStyle={{ paddingBottom: 62 }} style={styles.container}>
+            {/** Валідація форми для активності кнопки Зберегти */}
+            {(() => {
+                return null;
+            })()}
             {/* Поле Місто */}
             <View style={styles.block}>
                 <Text style={styles.labelCity}>Місто</Text>
                 <TouchableOpacity
                     style={styles.input}
-                    onPress={() => {/* Navigate to city selection */ }}
+                    onPress={() => {
+                        router.push({
+                            pathname: "/(tabs)/profile/addresses/changeAddress/cityFields",
+                            params: {
+                                source: 'add',
+                                city: city || '',
+                                // provide defaults for required fields used by the picker route
+                                id: '',
+                                title: selectedDeliveryMethod || '',
+                                address: thirdValue || '',
+                                codePostal: postalCode || '',
+                                third: thirdValue || '',
+                            }
+                        });
+                    }}
                 >
                     <Text style={city ? styles.inputText : styles.placeholderText}>
                         {city || 'Оберіть місто'}
@@ -122,39 +213,82 @@ const AddNewAddress = () => {
                     <Text style={styles.label}>{getThirdFieldConfig()?.title}</Text>
                     {getThirdFieldConfig()?.type === 'input' ? (
                         <>
-                            <TextInput
-                                style={styles.input}
-                                placeholder={getThirdFieldConfig()?.placeholder}
-                                placeholderTextColor={Colors.grey400}
-                                value={street}
-                                onChangeText={setStreet}
-                            />
+                            <View style={styles.block}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Введіть вулицю"
+                                    placeholderTextColor={Colors.grey400}
+                                    value={street}
+                                    onChangeText={setStreet}
+                                />
+                            </View>
 
-                            <View style={styles.rowInputs}>
-                                <View style={styles.halfInput}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Введіть номер"
-                                        placeholderTextColor={Colors.grey400}
-                                        value={building}
-                                        onChangeText={setBuilding}
-                                    />
-                                </View>
-                                <View style={styles.halfInput}>
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Введіть номер"
-                                        placeholderTextColor={Colors.grey400}
-                                        value={apartment}
-                                        onChangeText={setApartment}
-                                    />
+                            <View style={styles.block}>
+
+                                <View style={styles.rowInputs}>
+                                    <View style={styles.thirdInput}>
+                                        <Text style={styles.label}>Будинок</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Введіть номер"
+                                            placeholderTextColor={Colors.grey400}
+                                            value={building}
+                                            onChangeText={handleBuildingChange}
+
+                                        />
+                                    </View>
+                                    <View style={styles.thirdInput}>
+                                        <Text style={styles.label}>Квартира</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Введіть номер"
+                                            placeholderTextColor={Colors.grey400}
+                                            value={apartment}
+                                            onChangeText={handleApartmentChange}
+                                            keyboardType="numeric"
+                                        />
+                                    </View>
+                                    <View style={styles.thirdInput}>
+                                        <Text style={styles.label}>Поштовий індекс</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Введіть номер"
+                                            placeholderTextColor={Colors.grey400}
+                                            value={postalCode}
+                                            onChangeText={handlePostalCodeChange}
+                                            keyboardType="numeric"
+                                            maxLength={6}
+                                        />
+                                    </View>
                                 </View>
                             </View>
                         </>
                     ) : (
-                        <TouchableOpacity style={styles.input}>
-                            <Text style={styles.placeholderText}>
-                                {getThirdFieldConfig()?.placeholder}
+                        <TouchableOpacity
+                            style={styles.input}
+                            onPress={() => {
+                                const isUkr = selectedDeliveryMethod.includes('Укрпошта');
+                                const isDepartment = selectedDeliveryMethod.includes('Відділення');
+                                const pathname = isDepartment
+                                    ? "/(tabs)/profile/addresses/changeAddress/departmentFields"
+                                    : "/(tabs)/profile/addresses/changeAddress/parcelFields";
+                                router.push({
+                                    pathname,
+                                    params: {
+                                        source: 'add',
+                                        carrier: isUkr ? 'ukr' : 'nova',
+                                        type: isDepartment ? 'department' : 'parcel',
+                                        city,
+                                        id: '',
+                                        title: selectedDeliveryMethod || '',
+                                        address: thirdValue || '',
+                                        codePostal: postalCode || '',
+                                    }
+                                });
+                            }}
+                        >
+                            <Text style={thirdValue ? styles.inputText : styles.placeholderText}>
+                                {thirdValue || getThirdFieldConfig()?.placeholder}
                             </Text>
                             <CaretRight size={18} weight="bold" />
                         </TouchableOpacity>
@@ -183,9 +317,28 @@ const AddNewAddress = () => {
                     <Text style={styles.cancelText}>Відхилити</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.saveButton}>
-                    <Text style={styles.saveText}>Зберегти</Text>
-                </TouchableOpacity>
+                {(() => {
+                    const isCourier = selectedDeliveryMethod.includes('Кур');
+                    const thirdFieldConfig = getThirdFieldConfig();
+                    const hasThirdField = Boolean(thirdFieldConfig);
+                    const isThirdFieldValid = !hasThirdField || (isCourier ? (street.trim() && building.trim() && postalCode.trim()) : Boolean(thirdValue.trim()));
+
+                    const isFormValid = Boolean(
+                        city &&
+                        selectedDeliveryMethod &&
+                        isThirdFieldValid
+                    );
+
+                    return (
+                        <TouchableOpacity
+                            style={[styles.saveButton, !isFormValid && { backgroundColor: '#b9a3f5' }]}
+                            onPress={handleSaveAddress}
+                            disabled={!isFormValid}
+                        >
+                            <Text style={styles.saveText}>Зберегти</Text>
+                        </TouchableOpacity>
+                    );
+                })()}
             </View>
         </ScrollView>
     );
@@ -222,6 +375,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+
     },
     inputText: {
         fontFamily: 'Manrope',
@@ -250,10 +404,10 @@ const styles = StyleSheet.create({
     },
     rowInputs: {
         flexDirection: 'row',
-        marginTop: 16,
-        gap: 20,
+        gap: 10,
     },
-    halfInput: {
+
+    thirdInput: {
         flex: 1,
     },
     switchContainer: {

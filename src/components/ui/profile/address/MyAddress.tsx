@@ -49,11 +49,13 @@ const INITIAL_ADDRESSES: Address[] = [
 ];
 
 export default function MyAddress() {
-  const { deletedId, updatedId, updatedTitle, updatedLogo } = useLocalSearchParams<{
+  const { deletedId, updatedId, updatedTitle, updatedLogo, updatedAddress, newAddress } = useLocalSearchParams<{
     deletedId?: string;
     updatedId?: string;
     updatedTitle?: string;
     updatedLogo?: string;
+    updatedAddress?: string;
+    newAddress?: string;
   }>();
   const router = useRouter();
 
@@ -67,18 +69,36 @@ export default function MyAddress() {
     }
   }, [deletedId]);
 
-  // оновлення адреси при зміні способу доставки
+  // оновлення адреси при зміні способу доставки або адреси
   useEffect(() => {
     if (updatedId && updatedTitle && updatedLogo) {
       setAddresses(prev =>
         prev.map(item =>
           item.id === Number(updatedId)
-            ? { ...item, title: updatedTitle, logoKey: updatedLogo }
+            ? {
+              ...item,
+              title: decodeURIComponent(updatedTitle),
+              logoKey: updatedLogo,
+              ...(updatedAddress && { address: decodeURIComponent(updatedAddress) })
+            }
             : item
         )
       );
     }
-  }, [updatedId, updatedTitle, updatedLogo]);
+  }, [updatedId, updatedTitle, updatedLogo, updatedAddress]);
+
+  // додавання нової адреси
+  useEffect(() => {
+    if (newAddress) {
+      try {
+        const addressData = JSON.parse(newAddress);
+        console.log('Додаємо нову адресу:', addressData);
+        setAddresses(prev => [...prev, addressData]);
+      } catch (error) {
+        console.error('Помилка парсингу нової адреси:', error);
+      }
+    }
+  }, [newAddress]);
 
   const handleSwitchToggle = (index: number) => {
     setActiveSwitchIndex(prev => (prev === index ? null : index));
@@ -123,7 +143,7 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 10,
     marginHorizontal: 20,
-    marginTop: 220,
+    marginTop: 120,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 40,

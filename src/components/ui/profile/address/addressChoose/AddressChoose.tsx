@@ -5,7 +5,7 @@ import CustomSwitch from '@/src/components/common/CustomSwitch';
 import { useRouter } from "expo-router";
 import { CaretRight } from "phosphor-react-native";
 import React, { useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 interface AddressChooseProps {
     id?: number;
@@ -14,6 +14,7 @@ interface AddressChooseProps {
     city: string;
     codePostal: number;
     logo: any;
+    onAddressChange?: (address: string) => void;
 }
 
 const logos: Record<string, any> = {
@@ -21,9 +22,51 @@ const logos: Record<string, any> = {
     ukrposhta: logoUkrposhta,
 };
 
-const AddressChoose: React.FC<AddressChooseProps> = ({ id, title, address, city, codePostal, logo }) => {
+const AddressChoose: React.FC<AddressChooseProps> = ({ id, title, address, city, codePostal, logo, onAddressChange }) => {
     const [isDefault, setIsDefault] = useState(true);
     const router = useRouter();
+
+    // Стан для полів адреси кур'єра
+    const [street, setStreet] = useState('');
+    const [building, setBuilding] = useState('');
+    const [apartment, setApartment] = useState('');
+
+    // Функції валідації для введення тільки цифр
+    const handleBuildingChange = (text: string) => {
+        const normalized = text.replace(/[^0-9a-zA-Zа-яА-ЯёЁїЇіІєЄґҐ\/\\\-\s]/g, '');
+        setBuilding(normalized);
+    };
+    const handleApartmentChange = (text: string) => {
+        const numericText = text.replace(/[^0-9]/g, '');
+        setApartment(numericText);
+    };
+
+    // Парсимо існуючу адресу при завантаженні
+    React.useEffect(() => {
+        if (title.includes('Кур') && address) {
+            // Простий парсинг адреси для кур'єра
+            const parts = address.split(', ');
+            if (parts.length >= 1) {
+                setStreet(parts[0] || '');
+            }
+            if (parts.length >= 2) {
+                setBuilding(parts[1] || '');
+            }
+            if (parts.length >= 3 && parts[2].includes('кв.')) {
+                setApartment(parts[2].replace('кв. ', '') || '');
+            }
+        }
+    }, [address, title]);
+
+    // Оновлюємо адресу при зміні полів кур'єрської доставки
+    React.useEffect(() => {
+        if (title.includes('Кур') && onAddressChange && street && building) {
+            const newAddress = `${street}, ${building}${apartment ? ', кв. ' + apartment : ''}`.trim();
+            if (newAddress !== address) {
+                onAddressChange(newAddress);
+            }
+        }
+    }, [street, building, apartment, title, onAddressChange, address]);
 
     // Визначаємо логотип на основі назви
     const getLogo = () => {
@@ -33,6 +76,34 @@ const AddressChoose: React.FC<AddressChooseProps> = ({ id, title, address, city,
         return logos.novaPoshta;
     };
 
+    // Визначаємо назву поля та placeholder залежно від методу доставки
+    const getThirdFieldConfig = () => {
+        if (title.includes('Відділення')) {
+            return {
+                title: 'Відділення',
+                placeholder: 'Оберіть номер відділення',
+                type: 'select'
+            };
+        } else if (title.includes('Поштомат')) {
+            return {
+                title: 'Поштомат',
+                placeholder: 'Оберіть поштомат',
+                type: 'select'
+            };
+        } else if (title.includes('Кур')) {
+            return {
+                title: 'Адреса доставки',
+                placeholder: 'Введіть адресу',
+                type: 'input'
+            };
+        }
+        return {
+            title: 'Відділення',
+            placeholder: 'Оберіть номер відділення',
+            type: 'select'
+        };
+    };
+
     return (
         <ScrollView>
 
@@ -40,7 +111,17 @@ const AddressChoose: React.FC<AddressChooseProps> = ({ id, title, address, city,
                 <Text style={styles.labelCity}>Місто</Text>
                 <TouchableOpacity
                     style={styles.input}
-                //onPress={() => navigation.navigate('ChooseCityScreen')}
+                    onPress={() => router.push({
+                        pathname: "/(tabs)/profile/addresses/changeAddress/cityFields",
+                        params: {
+                            source: 'change',
+                            id: id?.toString() || '',
+                            title,
+                            address,
+                            city,
+                            codePostal: codePostal.toString(),
+                        }
+                    })}
                 >
                     <Text style={styles.inputText}>{city}</Text>
                     <CaretRight size={18} weight="bold" />
@@ -72,20 +153,96 @@ const AddressChoose: React.FC<AddressChooseProps> = ({ id, title, address, city,
             </View>
 
             <View style={styles.block}>
-                <Text style={styles.label}>Відділення</Text>
-                <TouchableOpacity
-                    style={styles.input}
-                //onPress={() => navigation.navigate('ChooseBranchScreen')}
-                >
-                    <Text
-                        style={styles.inputText}
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
+                {getThirdFieldConfig().type !== 'input' && (
+                    <Text style={styles.label}>{getThirdFieldConfig().title}</Text>
+                )}
+                {getThirdFieldConfig().type === 'input' ? (
+                    <>
+                        <View style={styles.block}>
+                            <Text style={styles.label}>Адреса доставки</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Введіть вулицю"
+                                placeholderTextColor={Colors.grey400}
+                                value={street}
+                                onChangeText={setStreet}
+                            />
+                        </View>
+
+                        <View style={styles.block}>
+
+                            <View style={styles.rowInputs}>
+                                <View style={styles.thirdInput}>
+                                    <Text style={styles.label}>Номер будинку</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Номер будинку"
+                                        placeholderTextColor={Colors.grey400}
+                                        value={building}
+                                        onChangeText={handleBuildingChange}
+
+                                    />
+                                </View>
+                                <View style={styles.thirdInput}>
+                                    <Text style={styles.label}>Номер квартири</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Номер квартири"
+                                        placeholderTextColor={Colors.grey400}
+                                        value={apartment}
+                                        onChangeText={handleApartmentChange}
+                                        keyboardType="numeric"
+                                    />
+                                </View>
+                                <View style={styles.thirdInput}>
+                                    <Text style={styles.label}>Поштовий індекс</Text>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Поштовий індекс"
+                                        placeholderTextColor={Colors.grey400}
+                                        value={codePostal.toString()}
+                                        editable={false}
+                                        keyboardType="numeric"
+                                        maxLength={6}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                    </>
+                ) : (
+                    <TouchableOpacity
+                        style={styles.input}
+                        onPress={() => {
+                            const isUkr = title.includes('Укрпошта');
+                            const isDepartment = title.includes('Відділення');
+                            const pathname = isDepartment
+                                ? "/(tabs)/profile/addresses/changeAddress/departmentFields"
+                                : "/(tabs)/profile/addresses/changeAddress/parcelFields";
+                            router.push({
+                                pathname,
+                                params: {
+                                    source: 'change',
+                                    carrier: isUkr ? 'ukr' : 'nova',
+                                    type: isDepartment ? 'department' : 'parcel',
+                                    city,
+                                    id: id?.toString() || '',
+                                    title,
+                                    address,
+                                    codePostal: codePostal.toString(),
+                                }
+                            });
+                        }}
                     >
-                        {address}
-                    </Text>
-                    <CaretRight size={18} weight="bold" />
-                </TouchableOpacity>
+                        <Text
+                            style={styles.inputText}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                        >
+                            {address || getThirdFieldConfig().placeholder}
+                        </Text>
+                        <CaretRight size={18} weight="bold" />
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.switchContainer}>
@@ -157,6 +314,14 @@ const styles = StyleSheet.create({
         color: Colors.blackMain,
         flex: 1,
         paddingRight: 10,
+    },
+    rowInputs: {
+        flexDirection: 'row',
+        marginTop: 12,
+        gap: 10,
+    },
+    thirdInput: {
+        flex: 1,
     },
 });
 

@@ -30,12 +30,14 @@ export default function ChangeAddress() {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title);
   const [currentLogo, setCurrentLogo] = useState(logo || 'novaPoshta');
+  const [currentAddress, setCurrentAddress] = useState(address);
 
   // Оновлюємо дані при зміні параметрів
   React.useEffect(() => {
     setCurrentTitle(title);
     setCurrentLogo(logo || 'novaPoshta');
-  }, [title, logo]);
+    setCurrentAddress(address);
+  }, [title, logo, address]);
 
   const handleConfirmDelete = () => {
     setConfirmModalVisible(false);
@@ -48,8 +50,17 @@ export default function ChangeAddress() {
   };
 
   const handleSave = () => {
-    // Передаємо оновлені дані назад до MyAddress
-    router.replace(`/(tabs)/profile/addresses?updatedId=${id}&updatedTitle=${currentTitle}&updatedLogo=${currentLogo}`);
+    console.log('Зберігаємо зміни адреси:', {
+      id,
+      title: currentTitle,
+      logo: currentLogo,
+      address: currentAddress,
+      city,
+      codePostal
+    });
+
+    // Передаємо оновлену адресу назад до MyAddress
+    router.replace(`/(tabs)/profile/addresses?updatedId=${id}&updatedTitle=${encodeURIComponent(currentTitle)}&updatedLogo=${currentLogo}&updatedAddress=${encodeURIComponent(currentAddress)}`);
   };
 
   return (
@@ -58,10 +69,11 @@ export default function ChangeAddress() {
         <AddressChoose
           id={Number(id)}
           title={currentTitle}
-          address={address}
+          address={currentAddress}
           city={city}
           codePostal={numericPostal}
           logo={logos[currentLogo]}
+          onAddressChange={setCurrentAddress}
         />
 
         <View style={styles.buttonsWrapper}>
@@ -91,7 +103,7 @@ export default function ChangeAddress() {
               style={styles.closeIcon}
               onPress={() => setConfirmModalVisible(false)}
             >
-              <XCircle  size={32} color="#170f2b"  weight="thin"/>
+              <XCircle size={32} color="#170f2b" weight="thin" />
             </TouchableOpacity>
 
             <Text style={styles.modalText}>Бажаєте видалити адресу?</Text>
@@ -119,7 +131,7 @@ export default function ChangeAddress() {
               style={styles.closeIcon}
               onPress={handleCloseSuccess}
             >
-              <XCircle  size={32} color="#170f2b" weight="thin"/>
+              <XCircle size={32} color="#170f2b" weight="thin" />
             </TouchableOpacity>
 
             <Text style={styles.modalText}>Адресу успішно видалено!</Text>

@@ -19,20 +19,28 @@ export default function DeliveryMethodPost() {
         codePostal: string;
     }>();
 
-    const [selectedId, setSelectedId] = useState(1);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+
+    // Визначаємо початковий обраний варіант на основі переданого title
+    React.useEffect(() => {
+        if (title) {
+            const matchingOption = deliveryOptions.find(option => option.title === title);
+            if (matchingOption) {
+                setSelectedId(matchingOption.id);
+            }
+        }
+    }, [title]);
 
     const handleSelectOption = (option: typeof deliveryOptions[0]) => {
         setSelectedId(option.id);
-        // Передаємо вибраний спосіб доставки назад до ChangeAddress з оновленими даними
-        router.replace({
-            pathname: "/(tabs)/profile/addresses/changeAddress",
+        console.log('Selected delivery method:', option.title);
+        // Передаємо вибраний спосіб доставки назад до AddNewAddress з оновленими даними
+        router.push({
+            pathname: "/(tabs)/profile/addresses/addNewAddress",
             params: {
-                id,
                 title: option.title,
-                address,
-                city,
-                codePostal,
                 logo: option.logoKey,
+                city: city,
             },
         });
     };

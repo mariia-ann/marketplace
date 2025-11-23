@@ -14,6 +14,12 @@ export default function ProfileStackLayout() {
       name: "addresses/changeAddress/deliveryMethod",
       title: "Спосіб доставки",
     },
+    { name: "addresses/changeAddress/parcelFields", title: "Поштомат" },
+    { name: "addresses/changeAddress/departmentFields", title: "Відділення" },
+    {
+      name: "addresses/changeAddress/cityFields",
+      title: "Місто",
+    },
     {
       name: "notification/offersNotifications",
       title: "Пропозиції та сповіщення",
