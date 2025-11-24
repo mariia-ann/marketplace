@@ -30,7 +30,7 @@ export default defineConfig([
       prettier: prettier,
     },
     rules: {
-      /* React Hooks — VERY important for RN */
+      /* React Hooks — which are VERY important for RN */
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
 
