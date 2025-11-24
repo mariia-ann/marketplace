@@ -9,19 +9,19 @@ import Google from "./Icons/Google";
 import Info from "./Icons/Info";
 
 export enum CUSTOM_ICON_REF {
-	Google = 'Google',
-	Facebook = 'Facebook',
-	Apple = 'Apple',
-	EyeIcon = 'EyeIcon',
-	Info = 'Info',
-	ForgotPasswordIllustrations = 'ForgotPasswordIllustrations',
+  Google = "Google",
+  Facebook = "Facebook",
+  Apple = "Apple",
+  EyeIcon = "EyeIcon",
+  Info = "Info",
+  ForgotPasswordIllustrations = "ForgotPasswordIllustrations",
 }
 
-export const CustomIconRef:any = {
-	[CUSTOM_ICON_REF.Google]: Google,
-	[CUSTOM_ICON_REF.Facebook]: Facebook,
-	[CUSTOM_ICON_REF.Apple]: AppleIcon,
-	[CUSTOM_ICON_REF.EyeIcon]: Eye,
-	[CUSTOM_ICON_REF.Info]: Info,
-	[CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration
-}
+export const CustomIconRef: any = {
+  [CUSTOM_ICON_REF.Google]: Google,
+  [CUSTOM_ICON_REF.Facebook]: Facebook,
+  [CUSTOM_ICON_REF.Apple]: AppleIcon,
+  [CUSTOM_ICON_REF.EyeIcon]: Eye,
+  [CUSTOM_ICON_REF.Info]: Info,
+  [CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration,
+};

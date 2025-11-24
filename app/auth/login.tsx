@@ -38,13 +38,10 @@ const Login = () => {
   }, [isSuccess]);
 
   return (
-    <RequireGuest to='/(tabs)'>
-      <SafeAreaView
-        edges={["bottom"]}
-        style={styles.container}
-      >
+    <RequireGuest to="/(tabs)">
+      <SafeAreaView edges={["bottom"]} style={styles.container}>
         <NavigationHeader
-          title='З поверненням!'
+          title="З поверненням!"
           showBack
           onBack={() => router.back()}
         />
@@ -53,15 +50,15 @@ const Login = () => {
         </Text>
         <View style={{ gap: 20 }}>
           <BasicFormInput
-            label='email/телефон'
-            placeholder='email@gmail.com'
+            label="email/телефон"
+            placeholder="email@gmail.com"
             value={email}
             onChangeText={setEmail}
             // errorMessage='Невірний формат email'
           />
           <BasicFormInput
-            label='Введіть пароль'
-            placeholder='Пароль'
+            label="Введіть пароль"
+            placeholder="Пароль"
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
@@ -70,7 +67,7 @@ const Login = () => {
           <PrimaryButton
             title={isPending ? "Входимо..." : "Увійти"}
             onPress={handleSubmit}
-            size='L'
+            size="L"
             active={!isPending && !!email && !!password}
           />
         </View>

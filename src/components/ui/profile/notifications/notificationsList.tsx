@@ -117,8 +117,8 @@ export default function OffersAndNotificationsList() {
   return (
     <SafeAreaView style={styles.container}>
       <TwoTabsSwitch
-        option1='Пропозиції'
-        option2='Сповіщення'
+        option1="Пропозиції"
+        option2="Сповіщення"
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />

@@ -1,4 +1,4 @@
-import CustomButton from '@/src/components/common/CustomButton'
+import CustomButton from "@/src/components/common/CustomButton";
 import BackArrow from "@/src/components/common/buttons/BackButton";
 import OptionToggle from "@/src/components/common/OptionToggle/OptionToggle";
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
@@ -44,7 +44,7 @@ function ForgotPassword() {
       <View style={[styles.row, styles.optionWrapper]}>
         <OptionToggle
           toggled={toggleSMS}
-          title='SMS'
+          title="SMS"
           baseStyle={{
             ...styles.optionBox,
             ...styles.shadow,
@@ -56,7 +56,7 @@ function ForgotPassword() {
         />
         <OptionToggle
           toggled={!toggleSMS}
-          title='Email'
+          title="Email"
           baseStyle={{
             ...styles.optionBox,
             ...styles.shadow,
@@ -84,11 +84,11 @@ function ForgotPassword() {
             maxWidth: 400,
             minWidth: 350,
           }}
-          title='Відправити код'
+          title="Відправити код"
           onPress={() => {}}
         />
         <CustomButton
-          title='Відміна'
+          title="Відміна"
           customStyles={styles.cancelButton}
           customTextStyles={styles.cancelButtonText}
           onPress={() => {}}

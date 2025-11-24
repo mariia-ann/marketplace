@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 import { Platform, StyleSheet } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 interface Props {
   children: ReactNode;
@@ -11,7 +11,7 @@ export default function KeyboardAwareLayout({ children }: Props) {
     <KeyboardAwareScrollView
       style={styles.scroll}
       contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps='handled'
+      keyboardShouldPersistTaps="handled"
       enableOnAndroid={true}
       extraScrollHeight={Platform.OS === "ios" ? 20 : 100}
     >
@@ -23,11 +23,11 @@ export default function KeyboardAwareLayout({ children }: Props) {
 const styles = StyleSheet.create({
   scroll: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   container: {
     flexGrow: 1,
     paddingBottom: 60,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 });

@@ -28,10 +28,7 @@ const ChangeAddress = () => {
           //onPress={() => navigation.navigate('ChooseCityScreen')}
         >
           <Text style={styles.inputText}>Київ</Text>
-          <CaretRight
-            size={18}
-            weight='bold'
-          />
+          <CaretRight size={18} weight="bold" />
         </TouchableOpacity>
       </View>
 
@@ -41,7 +38,7 @@ const ChangeAddress = () => {
           style={styles.input}
           onPress={() =>
             router.push(
-              "/(tabs)/profile/addresses/changeAddress/deliveryMethod"
+              "/(tabs)/profile/addresses/changeAddress/deliveryMethod",
             )
           }
         >
@@ -49,14 +46,11 @@ const ChangeAddress = () => {
             <Image
               source={logoNovaPoshta}
               style={styles.logo}
-              resizeMode='contain'
+              resizeMode="contain"
             />
             <Text style={styles.inputText}>Відділення Нова Пошта</Text>
           </View>
-          <CaretRight
-            size={18}
-            weight='bold'
-          />
+          <CaretRight size={18} weight="bold" />
         </TouchableOpacity>
       </View>
 
@@ -66,17 +60,10 @@ const ChangeAddress = () => {
           style={styles.input}
           //onPress={() => navigation.navigate('ChooseBranchScreen')}
         >
-          <Text
-            style={styles.inputText}
-            numberOfLines={1}
-            ellipsizeMode='tail'
-          >
+          <Text style={styles.inputText} numberOfLines={1} ellipsizeMode="tail">
             Відділення №131 (до 30 кг) : просп. Палладіна, 46
           </Text>
-          <CaretRight
-            size={18}
-            weight='bold'
-          />
+          <CaretRight size={18} weight="bold" />
         </TouchableOpacity>
       </View>
 

@@ -271,7 +271,7 @@ export default function LoadingScreen() {
   }
   // For STAGE 2 to STAGE 4 calculate the next target positions rotating images clockwise
   function calculateNextTargetPositions(
-    animations: AnimationData[]
+    animations: AnimationData[],
   ): { x: number; y: number }[] {
     const currentTargets = animations.map((a) => ({
       x: a.targetX,
@@ -311,7 +311,7 @@ export default function LoadingScreen() {
             easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,
           }),
-        ])
+        ]),
       );
       // Animate the font size from 24 to 72
       const growText = Animated.timing(animatedFontSize, {
@@ -340,7 +340,7 @@ export default function LoadingScreen() {
       paginationRef.current?.trigger(2);
       // get new positions of images on which they'll move in animation
       const shiftedTargets = calculateNextTargetPositions(
-        imageAnimations.current
+        imageAnimations.current,
       );
       // Animate text shrinking to preset size
       // This will animate the text from 72px to 32px
@@ -397,7 +397,7 @@ export default function LoadingScreen() {
       paginationRef.current?.trigger(3);
       // get new positions of images on which they'll move in animation
       const shiftedTargets = calculateNextTargetPositions(
-        imageAnimations.current
+        imageAnimations.current,
       );
       const imageAnims = imageAnimations.current.map((anim, i) => {
         const imgDef = images[i];
@@ -446,7 +446,7 @@ export default function LoadingScreen() {
       paginationRef.current?.trigger(4);
       // get new positions of images on which they'll move in animation
       const shiftedTargets = calculateNextTargetPositions(
-        imageAnimations.current
+        imageAnimations.current,
       );
       const imageAnims = imageAnimations.current.map((anim, i) => {
         const imgDef = images[i];
@@ -561,10 +561,7 @@ export default function LoadingScreen() {
           </>
         ) : (
           // Fallback content until layout is ready
-          <ActivityIndicator
-            size='large'
-            color={Colors.blackMain}
-          />
+          <ActivityIndicator size="large" color={Colors.blackMain} />
         )}
       </View>
       <View style={styles.bottomContainer}>

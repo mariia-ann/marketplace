@@ -32,7 +32,7 @@ const ChangeCountryModal: React.FC<ChangeCountryModalProps> = ({
           onPress={() => handleSelect(country)}
         >
           <View style={styles.radioWrapper}>
-            <View style={[selectedId === country.id && styles.radioCircle]} />
+            <View style={selectedId === country.id && styles.radioCircle} />
           </View>
           <View style={styles.countryInfo}>
             <Text style={styles.countryText}>{country.country}</Text>

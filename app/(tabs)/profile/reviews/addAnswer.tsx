@@ -19,10 +19,7 @@ export default function AddAnswer() {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <ScrollView contentContainerStyle={styles.container}>
         <AddAnswerInputs />
-        <CustomButton
-          title='Опублікувати відповідь'
-          onPress={handleSubmit}
-        />
+        <CustomButton title="Опублікувати відповідь" onPress={handleSubmit} />
       </ScrollView>
     </SafeAreaView>
   );

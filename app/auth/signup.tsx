@@ -48,7 +48,7 @@ const Signup = () => {
           }}
         >
           <CustomButton
-            title='Покупця'
+            title="Покупця"
             customStyles={{
               padding: 10,
               borderTopRightRadius: 0,
@@ -64,7 +64,7 @@ const Signup = () => {
             }}
           />
           <CustomButton
-            title='Продавця'
+            title="Продавця"
             customStyles={{
               padding: 10,
               borderTopLeftRadius: 0,
@@ -100,8 +100,8 @@ const Signup = () => {
         <CustomInput
           textStyle={styles.label}
           directionRow
-          label='email/телефон'
-          placeholder='Email'
+          label="email/телефон"
+          placeholder="Email"
           value={email}
           onChangeText={setEmail}
           customStyle={{ ...styles.input, ...styles.fontTheme }}
@@ -109,8 +109,8 @@ const Signup = () => {
         <CustomInput
           textStyle={styles.label}
           directionRow
-          label='email/телефон'
-          placeholder='Email'
+          label="email/телефон"
+          placeholder="Email"
           value={email}
           onChangeText={setEmail}
           customStyle={{ ...styles.input, ...styles.fontTheme }}
@@ -118,17 +118,17 @@ const Signup = () => {
         <CustomInput
           textStyle={styles.label}
           directionRow
-          label='Телефон'
-          placeholder='+38(0XX)-XXX-XXXX'
+          label="Телефон"
+          placeholder="+38(0XX)-XXX-XXXX"
           value={email}
           onChangeText={setEmail}
           customStyle={{ ...styles.input, ...styles.fontTheme }}
         />
         <CustomInput
-          label='Введіть пароль'
+          label="Введіть пароль"
           textStyle={styles.label}
           directionRow
-          placeholder='Password'
+          placeholder="Password"
           value={password}
           onChangeText={setPassword}
           othertextprops={{
@@ -140,10 +140,10 @@ const Signup = () => {
           customStyle={styles.input}
         />
         <CustomInput
-          label='Введіть пароль'
+          label="Введіть пароль"
           textStyle={styles.label}
           directionRow
-          placeholder='Password'
+          placeholder="Password"
           value={password}
           onChangeText={setPassword}
           othertextprops={{
@@ -163,7 +163,7 @@ const Signup = () => {
           }}
         >
           <CheckBox
-            title='Я погоджуюсь з'
+            title="Я погоджуюсь з"
             isChecked={checked}
             onPress={() => setChecked((prev) => !prev)}
             titleStyle={styles.checkboxTitleStyle}
@@ -173,7 +173,7 @@ const Signup = () => {
         {/** Awaiting the functionality of login from backend when done, change false with the conditional variable */}
         {/* {true && <Text style={{color: "#D30004", textAlign: "right", paddingTop: 10}}>Пароль не співпадає!</Text>} */}
         <CustomButton
-          title='Зареєструватись як покупець'
+          title="Зареєструватись як покупець"
           onPress={handleLogin}
           customStyles={{
             marginTop: 70,

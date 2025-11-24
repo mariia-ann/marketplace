@@ -14,10 +14,7 @@ export default function Answers({ answers }: AnswersProps) {
         <View key={index}>
           <View style={styles.blockDataSeller}>
             <View style={styles.arrowSeller}>
-              <ArrowBendDownRight
-                size={32}
-                weight='thin'
-              />
+              <ArrowBendDownRight size={32} weight="thin" />
               <Text style={styles.sellerName}>{answer.author}</Text>
             </View>
             <Text style={styles.dateComment}>{answer.date}</Text>

@@ -1,5 +1,5 @@
-import React from 'react';
-import Svg, { G, Path } from 'react-native-svg';
+import React from "react";
+import Svg, { G, Path } from "react-native-svg";
 
 const GoogleIcon = () => (
   <Svg width="100%" height="100%" viewBox="-0.5 0 48 48">

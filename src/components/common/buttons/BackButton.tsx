@@ -26,11 +26,7 @@ export default function BackButton(props: BackButtonProps) {
             },
           ]}
         >
-          <CaretLeft
-            size={18}
-            color={Colors.white}
-            weight='bold'
-          />
+          <CaretLeft size={18} color={Colors.white} weight="bold" />
         </View>
       )}
     </Pressable>

@@ -30,10 +30,7 @@ const SelectOrder = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView contentContainerStyle={styles.container}>
         {orders.map((order, index) => (
-          <View
-            key={index}
-            style={styles.orderRow}
-          >
+          <View key={index} style={styles.orderRow}>
             <TouchableOpacity
               onPress={() =>
                 setSelectedIndex(selectedIndex === index ? null : index)

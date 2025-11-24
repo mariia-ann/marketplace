@@ -30,7 +30,7 @@ export default function PaymentCardCard({
       <Image
         source={type === "Visa" ? logoVisa : logoMasterCard}
         style={styles.logo}
-        resizeMode='contain'
+        resizeMode="contain"
       />
       <View style={[styles.textBox, { flex: 1 }]}>
         <Text style={styles.cardText}>{cardNumber}</Text>
@@ -39,10 +39,7 @@ export default function PaymentCardCard({
         </Text>
       </View>
       <Pressable onPress={onDelete}>
-        <Trash
-          style={styles.trashIcon}
-          size={32}
-        />
+        <Trash style={styles.trashIcon} size={32} />
       </Pressable>
     </View>
   );
