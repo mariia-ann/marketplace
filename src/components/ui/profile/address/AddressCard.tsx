@@ -43,29 +43,16 @@ export default function AddressCard({
           {logo}
           <Text style={styles.title}>{title}</Text>
         </View>
-        <CustomSwitch
-          value={isSwitchEnabled}
-          onToggle={onToggleSwitch}
-        />
+        <CustomSwitch value={isSwitchEnabled} onToggle={onToggleSwitch} />
       </View>
 
       <View style={styles.address}>
-        <Text
-          numberOfLines={3}
-          style={styles.addressText}
-        >
+        <Text numberOfLines={3} style={styles.addressText}>
           {address}
         </Text>
-        <Link
-          href='/(tabs)/profile/addresses/changeAddress'
-          asChild
-        >
+        <Link href="/(tabs)/profile/addresses/changeAddress" asChild>
           <Pressable>
-            <PencilSimple
-              size={24}
-              color='#170F2B'
-              style={styles.pencilIcon}
-            />
+            <PencilSimple size={24} color="#170F2B" style={styles.pencilIcon} />
           </Pressable>
         </Link>
       </View>

@@ -1,21 +1,21 @@
-import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
-import CartForView from '../forYou/CartForView';
+import React from "react";
+import { FlatList, StyleSheet } from "react-native";
+import CartForView from "../forYou/CartForView";
 // import CartForView from '@/components/ui/home_page/forYou/CartForView';
 
 const products = [
   {
-    id: '1',
-    image: require('@/assets/images/productInCatalog/image.png'),
-    title: 'Nike Gym Club Training Bag: Black/College Grey/',
-    price: 53.00,
+    id: "1",
+    image: require("@/assets/images/productInCatalog/image.png"),
+    title: "Nike Gym Club Training Bag: Black/College Grey/",
+    price: 53.0,
     rating: 4.5,
   },
   {
-    id: '2',
-    image: require('@/assets/images/productInCatalog/image2.png'),
-    title: 'Nike Gym Club Training Bag: Gray Edition',
-    price: 53.00,
+    id: "2",
+    image: require("@/assets/images/productInCatalog/image2.png"),
+    title: "Nike Gym Club Training Bag: Gray Edition",
+    price: 53.0,
     rating: 4.5,
   },
   /*
@@ -84,7 +84,10 @@ export default function HorizontalProductList() {
       data={products}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <CartForView item={item} onPress={() => console.log('Pressed', item.title)} />
+        <CartForView
+          item={item}
+          onPress={() => console.log("Pressed", item.title)}
+        />
       )}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.scrollContainer}

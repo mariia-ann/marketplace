@@ -9,13 +9,20 @@ import ChangeCurrencyModal from "./ChangeCurrencyModal";
 import ChangeLanguageModal from "./ChangeLanguageModal";
 
 export default function GeneralSettings() {
- const [selectedCountry, setSelectedCountry] = useState({id: 0, country: "Ukraine", isoCode: "ua"});
-  const [selectedLanguage, setSelectedLanguage] = useState({ id: 0, type: "Українська" });
+  const [selectedCountry, setSelectedCountry] = useState({
+    id: 0,
+    country: "Ukraine",
+    isoCode: "ua",
+  });
+  const [selectedLanguage, setSelectedLanguage] = useState({
+    id: 0,
+    type: "Українська",
+  });
   const [selectedCurrency, setSelectedCurrency] = useState({
-  id: 0,
-  type: "Українська гривня",
-  value: "грн",
-});
+    id: 0,
+    type: "Українська гривня",
+    value: "грн",
+  });
 
   const [modalType, setModalType] = useState<
     "country" | "language" | "currency" | null
@@ -73,12 +80,13 @@ export default function GeneralSettings() {
         buttonText="Застосувати"
         onConfirm={closeModal}
       >
-        <ChangeCountryModal initialSelectedId={selectedCountry.id}
+        <ChangeCountryModal
+          initialSelectedId={selectedCountry.id}
           onSelect={(country) => {
             setSelectedCountry(country);
             // TODO: зберегти у redux/zustand
           }}
-          />
+        />
       </ModalWrapper>
 
       {/* Вибір мови модалка */}
@@ -90,11 +98,13 @@ export default function GeneralSettings() {
         buttonText="Застосувати"
         onConfirm={closeModal}
       >
-        <ChangeLanguageModal initialSelectedId={selectedLanguage.id}
+        <ChangeLanguageModal
+          initialSelectedId={selectedLanguage.id}
           onSelect={(language) => {
             setSelectedLanguage(language);
             // TODO: зберегти у redux/zustand
-          }} />
+          }}
+        />
       </ModalWrapper>
 
       {/* Вибір валюти модалка */}
@@ -107,7 +117,7 @@ export default function GeneralSettings() {
         onConfirm={closeModal}
       >
         <ChangeCurrencyModal
-        initialSelectedId={selectedCurrency.id}
+          initialSelectedId={selectedCurrency.id}
           onSelect={(currency) => {
             setSelectedCurrency(currency);
             // TODO: зберегти у redux/zustand

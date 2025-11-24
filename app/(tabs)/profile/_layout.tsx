@@ -51,7 +51,7 @@ export default function ProfileStackLayout() {
       }}
     >
       <Stack.Screen
-        name='index'
+        name="index"
         options={{
           headerShown: false,
         }}

@@ -18,12 +18,12 @@ interface CommentsProps {
 
 export default function Comments({ comments }: CommentsProps) {
   const [isAnswersVisible, setIsAnswersVisible] = useState<boolean[]>(
-    comments.map(() => false)
+    comments.map(() => false),
   );
 
   const handleToggleAnswers = (index: number) => {
     setIsAnswersVisible((prev) =>
-      prev.map((item, i) => (i === index ? !item : item))
+      prev.map((item, i) => (i === index ? !item : item)),
     );
   };
   return (
@@ -32,10 +32,7 @@ export default function Comments({ comments }: CommentsProps) {
         <View key={index}>
           <View style={styles.blockDataSeller}>
             <View style={styles.arrowSeller}>
-              <ArrowBendDownRight
-                size={32}
-                weight='thin'
-              />
+              <ArrowBendDownRight size={32} weight="thin" />
               <Text style={styles.sellerName}>{comment.author}</Text>
             </View>
             <Text style={styles.dateComment}>{comment.date}</Text>
@@ -44,15 +41,9 @@ export default function Comments({ comments }: CommentsProps) {
           <View style={styles.blockComment}>
             <Text style={styles.textComment}>{comment.comment}</Text>
             <View style={styles.blockAnswers}>
-              <Link
-                href='/profile/reviews/addAnswer'
-                asChild
-              >
+              <Link href="/profile/reviews/addAnswer" asChild>
                 <Pressable>
-                  <Chat
-                    size={32}
-                    weight='thin'
-                  />
+                  <Chat size={32} weight="thin" />
                 </Pressable>
               </Link>
               <TouchableOpacity onPress={() => handleToggleAnswers(index)}>

@@ -55,7 +55,7 @@ export default function MyCards() {
             onPress={() => setSelectedId(card.id)}
           >
             <View style={styles.radioWrapper}>
-              <View style={[selectedId === card.id && styles.radioCircle]} />
+              <View style={selectedId === card.id && styles.radioCircle} />
             </View>
             <PaymentCardCard
               {...card}
@@ -65,10 +65,7 @@ export default function MyCards() {
           </TouchableOpacity>
         ))}
         <View style={{ flex: 1 }} />
-        <Link
-          href='/(tabs)/profile/cards/addCards'
-          asChild
-        >
+        <Link href="/(tabs)/profile/cards/addCards" asChild>
           <TouchableOpacity style={styles.addButton}>
             <Text style={styles.addButtonText}>Додати нову картку</Text>
           </TouchableOpacity>

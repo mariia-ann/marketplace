@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type ChangeCurrencyModalProps = {
-  onSelect: (currency: typeof currencies[number]) => void;
+  onSelect: (currency: (typeof currencies)[number]) => void;
   initialSelectedId: number;
 };
 
-const ChangeCurrencyModal: React.FC<ChangeCurrencyModalProps> = ({ onSelect, initialSelectedId }) => {
+const ChangeCurrencyModal: React.FC<ChangeCurrencyModalProps> = ({
+  onSelect,
+  initialSelectedId,
+}) => {
   const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
 
   useEffect(() => {
@@ -28,11 +31,10 @@ const ChangeCurrencyModal: React.FC<ChangeCurrencyModalProps> = ({ onSelect, ini
           onPress={() => handleSelect(currency)}
         >
           <View style={styles.radioWrapper}>
-            <View style={[selectedId === currency.id && styles.radioCircle]} />
+            <View style={selectedId === currency.id && styles.radioCircle} />
           </View>
-        
-            <Text style={styles.countryText}>{currency.type}</Text>
-          
+
+          <Text style={styles.countryText}>{currency.type}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     alignItems: "center",
     width: "100%",
-    paddingVertical: 10
+    paddingVertical: 10,
   },
 
   radioWrapper: {
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   countryText: {
     fontFamily: "Manrope",

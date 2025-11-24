@@ -9,10 +9,7 @@ export default function MyReviews() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView contentContainerStyle={styles.container}>
-        <ReviewTabs
-          activeTab={tab}
-          onTabChange={setTab}
-        />
+        <ReviewTabs activeTab={tab} onTabChange={setTab} />
         {tab === "products" ? <ProductReviews /> : <SellerReviews />}
       </ScrollView>
     </SafeAreaView>

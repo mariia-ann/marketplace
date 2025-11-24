@@ -49,29 +49,14 @@ export default function RootLayout() {
         <RestoreGate>
           <Stack>
             {/* Welcome page screens */}
-            <Stack.Screen
-              name='(main)'
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="(main)" options={{ headerShown: false }} />
             {/* Auth screens */}
-            <Stack.Screen
-              name='auth/login'
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='auth/signup'
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+            <Stack.Screen name="auth/signup" options={{ headerShown: false }} />
             {/* Main app after login */}
-            <Stack.Screen
-              name='(tabs)'
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             {/* 404 page */}
-            <Stack.Screen
-              name='+not-found'
-              options={{}}
-            />
+            <Stack.Screen name="+not-found" options={{}} />
           </Stack>
         </RestoreGate>
       </PersistQueryClientProvider>

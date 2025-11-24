@@ -17,11 +17,7 @@ export default function BackArrow() {
             },
           ]}
         >
-          <CaretLeft
-            size={18}
-            color={Colors.white}
-            weight='bold'
-          />
+          <CaretLeft size={18} color={Colors.white} weight="bold" />
         </View>
       )}
     </Pressable>

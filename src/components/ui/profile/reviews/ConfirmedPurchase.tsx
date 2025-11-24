@@ -10,16 +10,15 @@ export default function ConfirmedPurchase() {
   );
 }
 
-
 const styles = StyleSheet.create({
   confirmationRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginBottom: 8
+    marginBottom: 8,
   },
   confirmationText: {
     fontFamily: "Manrope",
     color: "#666666",
   },
-})
+});

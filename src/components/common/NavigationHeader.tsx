@@ -46,19 +46,13 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   const resolvedTitle = title ?? options?.title ?? route?.name ?? "";
 
   return (
-    <SafeAreaView
-      edges={["top"]}
-      style={{ ...customStyles, ...styles.header }}
-    >
+    <SafeAreaView edges={["top"]} style={{ ...customStyles, ...styles.header }}>
       {/* Left */}
       <View style={styles.side}>
         <BackButton onClick={handleBack} />
       </View>
       {/* Center */}
-      <Text
-        style={styles.title}
-        accessibilityRole='header'
-      >
+      <Text style={styles.title} accessibilityRole="header">
         {resolvedTitle}
       </Text>
       {/* Right - spacer */}
