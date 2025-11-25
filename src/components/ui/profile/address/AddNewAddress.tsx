@@ -4,7 +4,7 @@ import Colors from '@/constants/Colors';
 import CustomSwitch from '@/src/components/common/CustomSwitch';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { CaretRight } from "phosphor-react-native";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const AddNewAddress = () => {
@@ -43,16 +43,11 @@ const AddNewAddress = () => {
         }
     };
 
-    // Додаємо лог для відстеження змін selectedDeliveryMethod
-    useEffect(() => {
-        console.log('AddNewAddress - selectedDeliveryMethod changed to:', selectedDeliveryMethod);
-    }, [selectedDeliveryMethod]);
+    
 
-    // Обробляємо параметри з навігації
     useEffect(() => {
-        console.log('AddNewAddress - received params:', { title, paramCity });
+
         if (title) {
-            console.log('Setting delivery method to:', title);
             setSelectedDeliveryMethod(title);
         }
         if (paramCity) {
@@ -78,7 +73,6 @@ const AddNewAddress = () => {
 
     // Визначаємо назву поля та placeholder залежно від методу доставки
     const getThirdFieldConfig = () => {
-        console.log('getThirdFieldConfig - selectedDeliveryMethod:', selectedDeliveryMethod);
 
         if (selectedDeliveryMethod.includes('Відділення')) {
             return {
@@ -119,7 +113,6 @@ const AddNewAddress = () => {
     const handleSaveAddress = () => {
         // Перевіряємо чи заповнені обов'язкові поля
         if (!city || !selectedDeliveryMethod) {
-            console.log('Потрібно заповнити місто та спосіб доставки');
             return;
         }
 

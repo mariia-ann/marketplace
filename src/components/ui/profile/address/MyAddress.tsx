@@ -2,7 +2,7 @@ import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
 import logoUkrposhta from '@/assets/images/profile/address/logoUkrposhta.png';
 import Colors from "@/constants/Colors";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AddressCard from './AddressCard';
 ;
@@ -87,15 +87,13 @@ export default function MyAddress() {
     }
   }, [updatedId, updatedTitle, updatedLogo, updatedAddress]);
 
-  // додавання нової адреси
+
   useEffect(() => {
     if (newAddress) {
       try {
         const addressData = JSON.parse(newAddress);
-        console.log('Додаємо нову адресу:', addressData);
         setAddresses(prev => [...prev, addressData]);
       } catch (error) {
-        console.error('Помилка парсингу нової адреси:', error);
       }
     }
   }, [newAddress]);

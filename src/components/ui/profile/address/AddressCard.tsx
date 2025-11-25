@@ -32,7 +32,7 @@ export default function AddressCard({ id, title, address, city, codePostal, logo
     >
       <View style={styles.header}>
         <View style={styles.logoTitle}>
-          <Image source={logo} style={{ width: 26, height: 26 }} />
+          <Image source={logo} style={{ width: 26, height: 26 }} resizeMode="contain" />
           <Text style={styles.title}>{title}</Text>
         </View>
         <CustomSwitch value={isSwitchEnabled} onToggle={onToggleSwitch} />

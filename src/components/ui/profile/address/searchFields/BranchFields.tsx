@@ -17,7 +17,7 @@ export default function BranchFields() {
     const { source, carrier, type, city, id, title, address, codePostal } = useLocalSearchParams<{
         source?: SourceType;
         carrier?: CarrierType;
-        type?: SelectorType; 
+        type?: SelectorType;
         city?: string;
         id?: string;
         title?: string;
@@ -77,8 +77,8 @@ export default function BranchFields() {
         if (source === 'add') {
             router.replace({
                 pathname: "/(tabs)/profile/addresses/addNewAddress",
-                params: { 
-                    city: city || '', 
+                params: {
+                    city: city || '',
                     third: selectedId,
                     title: title || '',
                     codePostal: codePostal || ''
@@ -130,7 +130,7 @@ export default function BranchFields() {
                                 key={value}
                                 style={[
                                     styles.itemContainer,
-                                    selectedId === value && { backgroundColor: '#F5F4FE', borderRadius: 12 }
+                                    selectedId === value && { backgroundColor: '#F5F4FE' }
                                 ]}
                                 onPress={() => selectItem(value)}
                             >
@@ -218,11 +218,13 @@ const styles = StyleSheet.create({
     saveButton: {
         backgroundColor: "#8E6CEF",
         height: 52,
+        marginRight: 20,
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 24,
         marginBottom: 40,
+        marginLeft: 20,
     },
     saveButtonText: {
         color: "white",

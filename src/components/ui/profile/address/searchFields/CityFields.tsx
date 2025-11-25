@@ -1,10 +1,10 @@
 import search from "@/assets/images/profile/search/search.png";
 import Colors from "@/constants/Colors";
 import cityList from "@/src/components/ui/profile/address/searchFields/city";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { XCircle } from 'phosphor-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useLocalSearchParams, useRouter } from "expo-router";
 
 
 export default function SellerMessages() {
@@ -58,9 +58,9 @@ export default function SellerMessages() {
         if (source === 'add') {
             router.replace({
                 pathname: "/(tabs)/profile/addresses/addNewAddress",
-                params: { 
-                    city: selectedId, 
-                    title: title || '', 
+                params: {
+                    city: selectedId,
+                    title: title || '',
                     third: third || '',
                     codePostal: codePostal || ''
                 }
@@ -114,7 +114,7 @@ export default function SellerMessages() {
                             key={city}
                             style={[
                                 styles.cityContainer,
-                                selectedId === city && { backgroundColor: '#F5F4FE', borderRadius: 12 }
+                                selectedId === city && { backgroundColor: '#F5F4FE' }
                             ]}
                             onPress={() => selectCity(city)}
                         >
@@ -193,11 +193,13 @@ const styles = StyleSheet.create({
     saveButton: {
         backgroundColor: "#8E6CEF",
         height: 52,
+        marginRight: 20,
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 24,
         marginBottom: 40,
+        marginLeft: 20,
     },
     saveButtonText: {
         color: "white",

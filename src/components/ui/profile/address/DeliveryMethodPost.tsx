@@ -33,7 +33,7 @@ export default function DeliveryMethodPost() {
 
     const handleSelectOption = (option: typeof deliveryOptions[0]) => {
         setSelectedId(option.id);
-        console.log('Selected delivery method:', option.title);
+
         // Передаємо вибраний спосіб доставки назад до AddNewAddress з оновленими даними
         router.push({
             pathname: "/(tabs)/profile/addresses/addNewAddress",

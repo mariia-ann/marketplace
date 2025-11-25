@@ -50,15 +50,6 @@ export default function ChangeAddress() {
   };
 
   const handleSave = () => {
-    console.log('Зберігаємо зміни адреси:', {
-      id,
-      title: currentTitle,
-      logo: currentLogo,
-      address: currentAddress,
-      city,
-      codePostal
-    });
-
     // Передаємо оновлену адресу назад до MyAddress
     router.replace(`/(tabs)/profile/addresses?updatedId=${id}&updatedTitle=${encodeURIComponent(currentTitle)}&updatedLogo=${currentLogo}&updatedAddress=${encodeURIComponent(currentAddress)}`);
   };
