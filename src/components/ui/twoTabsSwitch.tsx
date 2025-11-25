@@ -22,10 +22,10 @@ const TwoTabsSwitch = ({
   option2,
 }: TwoTabsProps) => {
   const leftAnim = useRef(
-    new Animated.Value(activeTab === "option1" ? 1 : 0)
+    new Animated.Value(activeTab === "option1" ? 1 : 0),
   ).current;
   const rightAnim = useRef(
-    new Animated.Value(activeTab === "option2" ? 1 : 0)
+    new Animated.Value(activeTab === "option2" ? 1 : 0),
   ).current;
 
   useEffect(() => {

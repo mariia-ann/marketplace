@@ -14,7 +14,8 @@
         "NSCameraUsageDescription": "The app needs access to the camera",
         "NSPhotoLibraryUsageDescription": "The app needs access to photos",
         "NSPhotoLibraryAddUsageDescription": "The app needs permission to save photos"
-      }
+      },
+      "bundleIdentifier": "com.anonymous.StickerSmash"
     },
     "android": {
       "adaptiveIcon": {

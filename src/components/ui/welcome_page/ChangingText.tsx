@@ -108,8 +108,10 @@ const CrossfadeTexts = forwardRef<CrossfadeTextsHandle, Props>(
         </Animated.Text>
       </View>
     );
-  }
+  },
 );
+
+CrossfadeTexts.displayName = "CrossfadeTexts";
 
 export default CrossfadeTexts;
 

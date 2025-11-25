@@ -1,4 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 type ReviewTabsProps = {
   activeTab: "products" | "sellers";
@@ -9,25 +15,27 @@ const ReviewTabs = ({ activeTab, onTabChange }: ReviewTabsProps) => {
   return (
     <SafeAreaView>
       <View style={styles.tabs}>
-      <TouchableOpacity
-        style={[styles.tabLeft, activeTab === "products" && styles.activeTab]}
-        onPress={() => onTabChange("products")}
-      >
-        <Text
-          style={[styles.text, activeTab === "products" && styles.activeText]}
+        <TouchableOpacity
+          style={[styles.tabLeft, activeTab === "products" && styles.activeTab]}
+          onPress={() => onTabChange("products")}
         >
-          Про товари
-        </Text>
-      </TouchableOpacity>
+          <Text
+            style={[styles.text, activeTab === "products" && styles.activeText]}
+          >
+            Про товари
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.tabRight, activeTab === "sellers" && styles.activeTab]}
-        onPress={() => onTabChange("sellers")}
-      >
-        <Text style={[styles.text, activeTab === "sellers" && styles.activeText]}>
-          Про продавців
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tabRight, activeTab === "sellers" && styles.activeTab]}
+          onPress={() => onTabChange("sellers")}
+        >
+          <Text
+            style={[styles.text, activeTab === "sellers" && styles.activeText]}
+          >
+            Про продавців
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -63,13 +71,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: 700,
-    textAlign: 'center',
+    textAlign: "center",
     color: "#170F2B",
   },
   activeText: {
     fontSize: 16,
     fontWeight: 700,
-    textAlign: 'center',
+    textAlign: "center",
     color: "#FFFFFF",
   },
 });

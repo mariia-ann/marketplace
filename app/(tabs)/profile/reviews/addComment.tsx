@@ -18,10 +18,7 @@ export default function AddComment() {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView contentContainerStyle={styles.container}>
         <AddCommentInputs />
-        <CustomButton
-          title='Опублікувати коментар'
-          onPress={handleSubmit}
-        />
+        <CustomButton title="Опублікувати коментар" onPress={handleSubmit} />
       </ScrollView>
     </SafeAreaView>
   );

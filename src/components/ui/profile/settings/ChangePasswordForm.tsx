@@ -155,7 +155,7 @@ export default function ChangePasswordForm() {
                 {/* {showConfirmErrorIcon ? (
                   <WarningCircle size={24} color="#D30004" />
                 ) : */}
-                 {showConfirm ? ( 
+                {showConfirm ? (
                   <Eye size={32} weight="thin" color="#999999" />
                 ) : (
                   <EyeClosed size={32} weight="thin" color="#999999" />

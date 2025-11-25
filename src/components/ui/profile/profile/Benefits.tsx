@@ -24,7 +24,9 @@ export default function Benefits() {
       </View>
       <View style={styles.benefits}>
         <UsersThree size={32} weight="thin" color="#8E6CEF" />
-        <Text style={styles.text}>Підписки ({formatCount(subscriptionsCount)})</Text>
+        <Text style={styles.text}>
+          Підписки ({formatCount(subscriptionsCount)})
+        </Text>
       </View>
     </View>
   );

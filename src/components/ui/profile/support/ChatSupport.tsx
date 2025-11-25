@@ -1,13 +1,21 @@
-import Colors from '@/constants/Colors';
-import dayjs from 'dayjs';
-import 'dayjs/locale/uk';
-import { useRouter } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { v4 as uuidv4 } from 'uuid';
+import Colors from "@/constants/Colors";
+import dayjs from "dayjs";
+import "dayjs/locale/uk";
+import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { v4 as uuidv4 } from "uuid";
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get("window").width;
 
 interface Message {
   id: string;
@@ -17,9 +25,9 @@ interface Message {
 }
 
 export default function ChatSupport() {
-  const [currentDate, setCurrentDate] = useState('');
-  const [openTime, setOpenTime] = useState('');
-  const [supportMessageTime, setSupportMessageTime] = useState('');
+  const [currentDate, setCurrentDate] = useState("");
+  const [openTime, setOpenTime] = useState("");
+  const [supportMessageTime, setSupportMessageTime] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [showSupportMessage, setShowSupportMessage] = useState(false);
   const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
@@ -27,24 +35,23 @@ export default function ChatSupport() {
   const router = useRouter();
 
   useEffect(() => {
-    dayjs.locale('uk');
-    setCurrentDate(dayjs().format('DD MMMM YYYY р.'));
-    setOpenTime(dayjs().format('HH:mm'));
+    dayjs.locale("uk");
+    setCurrentDate(dayjs().format("DD MMMM YYYY р."));
+    setOpenTime(dayjs().format("HH:mm"));
   }, []);
-
 
   const addOrderMessage = (orderNumber: number) => {
     const newMessage: Message = {
       id: uuidv4(),
       text: `№ ${orderNumber}`,
-      time: dayjs().format('HH:mm'),
+      time: dayjs().format("HH:mm"),
       isUser: true,
     };
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
     setHasSelectedOrder(true);
 
     setTimeout(() => {
-      setSupportMessageTime(dayjs().format('HH:mm'));
+      setSupportMessageTime(dayjs().format("HH:mm"));
       setShowSupportMessage(true);
 
       setTimeout(() => {
@@ -72,25 +79,27 @@ export default function ChatSupport() {
 
         <View style={styles.chatBubble}>
           <Text style={styles.chatText}>
-            Вітаємо!{'\n'}
-            {'\n'}
-            - Якщо хочете задати питання щодо конкретного замовлення - натисніть кнопку “Питання щодо товару або посилки”{'\n'}
-            {'\n'}
-            - Якщо ви не бачите у профілі свої замовлення - натисніть кнопку “Замовлення не відображаються у профілі”{'\n'}
-            {'\n'}
-            - Якщо маєте інші питання - натисніть кнопку “Інші питання”
+            Вітаємо!{"\n"}
+            {"\n"}- Якщо хочете задати питання щодо конкретного замовлення -
+            натисніть кнопку “Питання щодо товару або посилки”{"\n"}
+            {"\n"}- Якщо ви не бачите у профілі свої замовлення - натисніть
+            кнопку “Замовлення не відображаються у профілі”{"\n"}
+            {"\n"}- Якщо маєте інші питання - натисніть кнопку “Інші питання”
           </Text>
           <Text style={styles.time}>{openTime}</Text>
         </View>
 
-
         {messages.map((message) => (
-          <View key={message.id} style={[styles.chatBubble, styles.userMessage]}>
-            <Text style={[styles.chatText, styles.userMessageText]}>{message.text}</Text>
-            <Text style={[styles.time]}>{message.time}</Text>
+          <View
+            key={message.id}
+            style={[styles.chatBubble, styles.userMessage]}
+          >
+            <Text style={[styles.chatText, styles.userMessageText]}>
+              {message.text}
+            </Text>
+            <Text style={styles.time}>{message.time}</Text>
           </View>
         ))}
-
 
         {showSupportMessage && (
           <>
@@ -106,8 +115,6 @@ export default function ChatSupport() {
           </>
         )}
 
-
-
         {!hasSelectedOrder && (
           <View style={styles.buttonWrapper}>
             <TouchableOpacity
@@ -122,7 +129,9 @@ export default function ChatSupport() {
             <TouchableOpacity
               style={[styles.button, { height: 56, marginTop: 12 }]}
               accessibilityRole="button"
-              onPress={() => router.push("/(tabs)/profile/support/chat/selectOrder")}
+              onPress={() =>
+                router.push("/(tabs)/profile/support/chat/selectOrder")
+              }
             >
               <Text style={styles.buttonText}>
                 Питання щодо товару або посилки
@@ -133,29 +142,44 @@ export default function ChatSupport() {
               style={[styles.button, { height: 38, marginTop: 12 }]}
               accessibilityRole="button"
             >
-              <Text style={styles.buttonText}>
-                Інші питання
-              </Text>
+              <Text style={styles.buttonText}>Інші питання</Text>
             </TouchableOpacity>
           </View>
         )}
 
-
         {showAdditionalButtons && (
           <View style={[styles.buttonWrapper, { marginTop: 24 }]}>
-            <TouchableOpacity style={[styles.button, { height: 56 }]} accessibilityRole="button">
-              <Text style={styles.buttonText}>Питання щодо доставки або відправки</Text>
+            <TouchableOpacity
+              style={[styles.button, { height: 56 }]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.buttonText}>
+                Питання щодо доставки або відправки
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]} accessibilityRole="button">
-              <Text style={styles.buttonText}>Питання щодо якості та комплектації товару</Text>
+            <TouchableOpacity
+              style={[styles.button, { height: 56, marginTop: 12 }]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.buttonText}>
+                Питання щодо якості та комплектації товару
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 56, marginTop: 12 }]} accessibilityRole="button">
-              <Text style={styles.buttonText}>Зміна адреси доставки замовлення до відправки</Text>
+            <TouchableOpacity
+              style={[styles.button, { height: 56, marginTop: 12 }]}
+              accessibilityRole="button"
+            >
+              <Text style={styles.buttonText}>
+                Зміна адреси доставки замовлення до відправки
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { height: 38, marginTop: 12 }]} accessibilityRole="button">
+            <TouchableOpacity
+              style={[styles.button, { height: 38, marginTop: 12 }]}
+              accessibilityRole="button"
+            >
               <Text style={styles.buttonText}>Інше питання</Text>
             </TouchableOpacity>
           </View>
@@ -170,22 +194,22 @@ export default function ChatSupport() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
   },
   date: {
     fontSize: 16,
-    fontFamily: 'Manrope',
+    fontFamily: "Manrope",
     color: Colors.grey500,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 16,
   },
   support: {
     fontSize: 14,
-    fontFamily: 'Manrope',
+    fontFamily: "Manrope",
     color: Colors.grey500,
   },
   chatBubble: {
-    backgroundColor: '#f4f4f4',
+    backgroundColor: "#f4f4f4",
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingTop: 10,
@@ -194,18 +218,18 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     maxWidth: screenWidth * 0.7,
     minWidth: 120,
-    width: 'auto',
+    width: "auto",
   },
   chatText: {
     fontSize: 16,
-    fontFamily: 'Manrope',
+    fontFamily: "Manrope",
     color: Colors.blackMain,
   },
   time: {
     fontSize: 14,
-    fontFamily: 'Manrope',
+    fontFamily: "Manrope",
     color: Colors.grey500,
-    textAlign: 'right',
+    textAlign: "right",
     marginTop: 8,
   },
   buttonWrapper: {
@@ -216,29 +240,29 @@ const styles = StyleSheet.create({
     borderColor: Colors.softPurple,
     borderWidth: 1,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 50,
   },
   buttonText: {
     fontSize: 14,
-    fontFamily: 'ManropeBold',
+    fontFamily: "ManropeBold",
     color: Colors.softPurple,
-    textAlign: 'center',
+    textAlign: "center",
   },
   userMessage: {
     backgroundColor: Colors.purple200,
-    alignSelf: 'flex-end',
-    marginLeft: 'auto',
+    alignSelf: "flex-end",
+    marginLeft: "auto",
     marginRight: 20,
     maxWidth: screenWidth * 0.7,
     minWidth: 120,
-    width: 'auto',
+    width: "auto",
   },
   userMessageText: {
     color: Colors.blackMain,
-    fontFamily: 'ManropeBold',
+    fontFamily: "ManropeBold",
     fontSize: 16,
   },
 });

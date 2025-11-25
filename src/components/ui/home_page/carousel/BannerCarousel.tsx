@@ -1,13 +1,13 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { View, FlatList, Image, Dimensions, StyleSheet } from 'react-native';
+import React, { useRef, useEffect, useState } from "react";
+import { View, FlatList, Image, Dimensions, StyleSheet } from "react-native";
 
 const banners = [
-  require('@/assets/images/home_page/bannerCarousel/baner1.png'),
-  require('@/assets/images/home_page/bannerCarousel/baner2.png'),
-  require('@/assets/images/home_page/bannerCarousel/baner1.png'),
+  require("@/assets/images/home_page/bannerCarousel/baner1.png"),
+  require("@/assets/images/home_page/bannerCarousel/baner2.png"),
+  require("@/assets/images/home_page/bannerCarousel/baner1.png"),
 ];
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const BANNER_HORIZONTAL_MARGIN = 16;
 const BANNER_WIDTH = width - BANNER_HORIZONTAL_MARGIN * 2;
@@ -77,36 +77,36 @@ const styles = StyleSheet.create({
   bannerWrapper: {
     width: BANNER_WIDTH,
     height: 180,
-    position: 'relative',
+    position: "relative",
     marginHorizontal: BANNER_HORIZONTAL_MARGIN,
   },
   image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   dotsContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 8,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   dot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginHorizontal: 4,
   },
   activeDot: {
     width: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 2,
   },
 });

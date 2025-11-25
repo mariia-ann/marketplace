@@ -1,11 +1,16 @@
 import Benefits from "@/src/components/ui/profile/profile/Benefits";
 import DashBoard from "@/src/components/ui/profile/profile/DashBoard";
 import User from "@/src/components/ui/profile/profile/User";
-import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Colors from "@/constants/Colors";
 
 export default function ProfilePage() {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView
+      edges={["top", "bottom"]}
+      style={{ flex: 1, backgroundColor: Colors.white }}
+    >
       <ScrollView contentContainerStyle={styles.container}>
         <User />
         <Benefits />
@@ -17,8 +22,6 @@ export default function ProfilePage() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 54,
     paddingHorizontal: 20,
-    paddingBottom: 56,
   },
 });
