@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { defineConfig } from "eslint/config";
-import js from "@eslint/js";
+// import js from "@eslint/js";
 import ts from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import reactHooks from "eslint-plugin-react-hooks";
+// import reactHooks from "eslint-plugin-react-hooks";
 import reactNative from "eslint-plugin-react-native";
 import prettier from "eslint-plugin-prettier";
 import prettierConfig from "eslint-config-prettier";
@@ -27,7 +27,7 @@ export default defineConfig([
     plugins: {
       "@typescript-eslint": ts,
       "react-native": reactNative,
-      prettier: prettier,
+      // prettier: prettier,
     },
     rules: {
       /* React Hooks — which are VERY important for RN */
@@ -40,11 +40,20 @@ export default defineConfig([
       "react-native/no-single-element-style-arrays": "warn",
 
       /* TypeScript rules — safe defaults */
-      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
       "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-function-return-type": "off",
+
+      /* single quotes are common in TS/JS, so we turn off base rules in favor of Prettier */
+      "jsx-quotes": "off",
+      "quote-props": "off",
+      quotes: "off",
 
       /* Prettier integration */
-      "prettier/prettier": "warn",
+      // "prettier/prettier": "warn",
     },
   },
 

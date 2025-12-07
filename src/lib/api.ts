@@ -51,6 +51,13 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (error) => {
+    const cfg = error?.config || {};
+    const triedWithAuth =
+      cfg.requireAuth ||
+      (!!cfg.headers &&
+        "Authorization" in cfg.headers &&
+        !!cfg.headers.Authorization);
+
     // Swallow our deliberate cancel cleanly
     if (isCancel(error) && error.message === "AUTH_REQUIRED") {
       // Optionally signal UI: show login modal/toast
@@ -58,7 +65,7 @@ api.interceptors.response.use(
     }
 
     // Central 401 handling for calls that attempted auth but failed (expired token)
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 && triedWithAuth) {
       // You can softly sign out or trigger a refresh flow here
       console.warn("Token expired or invalid. Clearing auth...");
       useAuthStore.getState().signOut();

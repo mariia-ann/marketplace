@@ -1,21 +1,29 @@
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/constants/Colors";
 import { NavigationHeader } from "@/src/components/common/NavigationHeader";
 import { router } from "expo-router";
-import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
-import BasicFormInput from "@/src/components/common/customInput/BasicFormInput";
 import { useLogin } from "@/src/features/auth/hooks";
 import { isAxiosError } from "axios";
 import { RequireGuest } from "@/src/features/auth/guards";
+import { Formik } from "formik";
+import {
+  LoginFormValues,
+  loginSchema,
+} from "@/src/features/auth/schemas/login.schema";
+import BasicFormInput from "@/src/components/common/customInput/BasicFormInput";
+import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
+import LinkButton from "@/src/components/common/buttons/LinkButton";
 
 const Login = () => {
-  const { mutate: doLogin, isPending, error, isSuccess } = useLogin();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { mutate: doLogin, isPending, error, isSuccess, reset } = useLogin();
+  const initialValues: LoginFormValues = {
+    email: "",
+    password: "",
+  };
 
   const loginErrorMsg = (() => {
     if (!error) return undefined;
@@ -26,10 +34,6 @@ const Login = () => {
     }
     return "Сталася несподівана помилка.";
   })();
-
-  const handleSubmit = () => {
-    doLogin({ email, password });
-  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -48,35 +52,85 @@ const Login = () => {
         <Text style={{ ...styles.fontTheme, ...styles.heading }}>
           Вітаємо у нашому Маркетплейсі!
         </Text>
-        <View style={{ gap: 20 }}>
-          <BasicFormInput
-            label="email/телефон"
-            placeholder="email@gmail.com"
-            value={email}
-            onChangeText={setEmail}
-            // errorMessage='Невірний формат email'
-          />
-          <BasicFormInput
-            label="Введіть пароль"
-            placeholder="Пароль"
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-            errorMessage={loginErrorMsg}
-          />
-          <PrimaryButton
-            title={isPending ? "Входимо..." : "Увійти"}
-            onPress={handleSubmit}
-            size="L"
-            active={!isPending && !!email && !!password}
-          />
-        </View>
-        {/* <AntIcons name={"google"} size={30} /> */}
+        <Formik
+          initialValues={initialValues}
+          validationSchema={loginSchema}
+          validateOnMount
+          onSubmit={(values) => {
+            doLogin(values);
+          }}
+        >
+          {({
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            isValid,
+            dirty,
+            setFieldValue,
+          }) => {
+            const isFormValid = isValid && dirty;
 
+            return (
+              <View>
+                <BasicFormInput
+                  label="email/телефон"
+                  placeholder="email@gmail.com"
+                  value={values.email}
+                  onChangeText={(text) => {
+                    if (error) reset();
+                    setFieldValue("email", text);
+                  }}
+                  onBlur={handleBlur("email")}
+                  errorMessage={
+                    touched.email && errors.email ? errors.email : undefined
+                  }
+                />
+
+                <BasicFormInput
+                  label="Введіть пароль"
+                  placeholder="Пароль"
+                  secureTextEntry
+                  onChangeText={(text) => {
+                    if (error) reset(); // clear server error when user edits credentials
+                    setFieldValue("password", text); // Formik state only
+                  }}
+                  onBlur={handleBlur("password")}
+                  errorMessage={
+                    (touched.password && errors.password) || loginErrorMsg
+                  }
+                />
+
+                <LinkButton
+                  title="Забули пароль?"
+                  onPress={() => {
+                    router.push("/auth/forgot-password");
+                  }}
+                  underline={false}
+                  color={loginErrorMsg ? Colors.red : Colors.grey400}
+                  style={{ alignSelf: "flex-end", paddingTop: 8 }}
+                  textStyle={{ fontWeight: "400" }}
+                />
+
+                <PrimaryButton
+                  title={isPending ? "Входимо..." : "Увійти"}
+                  onPress={() => {
+                    if (isFormValid) handleSubmit();
+                  }}
+                  size="L"
+                  active={!isPending && isFormValid}
+                  disabled={isPending || !isFormValid}
+                  style={{ marginTop: 32 }}
+                />
+              </View>
+            );
+          }}
+        </Formik>
+        {/* <AntIcons name={"google"} size={30} /> */}
         <Text style={styles.socialmediatextloginstyle}>
           або увійдіть за допомогою
         </Text>
-
         <View
           style={{
             display: "flex",
@@ -99,21 +153,24 @@ const Login = () => {
             baseStyle={styles.socialMediaiconStyle}
           />
         </View>
-
         <View
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
+            alignItems: "center",
             paddingTop: 30,
           }}
         >
           <Text style={styles.ifsignedin}>Ще не маєте акаунт?</Text>
-          <Text
-            style={{ color: "#8E6CEF", paddingLeft: 10, fontFamily: "Manrope" }}
-          >
-            Зареєструйтесь!
-          </Text>
+          <LinkButton
+            title="Зареєструйтесь!"
+            onPress={() => {
+              router.push("/auth/signup");
+            }}
+            underline={true}
+            style={{ paddingLeft: 10 }}
+          />
         </View>
       </SafeAreaView>
     </RequireGuest>
@@ -136,13 +193,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginBottom: 18,
     textAlign: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: Colors.grey400,
-    marginBottom: 15,
-    padding: 12,
   },
   socialmediatextloginstyle: {
     fontSize: 14,
