@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import { CaretRight, Lock } from "phosphor-react-native";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -7,6 +7,7 @@ import ModalWrapper from "../../ModalWrapper";
 import ChangeCountryModal from "./ChangeCountryModal";
 import ChangeCurrencyModal from "./ChangeCurrencyModal";
 import ChangeLanguageModal from "./ChangeLanguageModal";
+import Colors from "@/constants/Colors";
 
 export default function GeneralSettings() {
   const [selectedCountry, setSelectedCountry] = useState({
@@ -33,44 +34,45 @@ export default function GeneralSettings() {
   const closeModal = () => setModalType(null);
 
   return (
-    <View style={styles.block}>
-      <Pressable onPress={() => openModal("country")}>
-        <View style={styles.link}>
-          <Text style={styles.text}>Країна</Text>
-          <CountryFlag isoCode={selectedCountry.isoCode} size={32} />
-        </View>
+    <View style={styles.container}>
+      <Pressable
+        style={[styles.link, { paddingVertical: 10 }]}
+        onPress={() => openModal("country")}
+      >
+        <Text style={styles.text}>Країна</Text>
+        <CountryFlag isoCode={selectedCountry.isoCode} size={28} />
       </Pressable>
-
-      <Pressable onPress={() => openModal("language")}>
-        <View style={styles.link}>
-          <Text style={styles.text}>Мова</Text>
-          <Text style={styles.textTr}>{selectedLanguage.type}</Text>
-        </View>
+      <Pressable
+        style={[styles.link, { paddingVertical: 13 }]}
+        onPress={() => openModal("language")}
+      >
+        <Text style={styles.text}>Мова</Text>
+        <Text style={styles.textTr}>{selectedLanguage.type}</Text>
       </Pressable>
-
-      <Pressable onPress={() => openModal("currency")}>
-        <View style={styles.link}>
-          <Text style={styles.text}>Валюта</Text>
-          <Text style={styles.textTr}>{selectedCurrency.value}</Text>
-        </View>
+      <Pressable
+        style={[styles.link, { paddingVertical: 13 }]}
+        onPress={() => openModal("currency")}
+      >
+        <Text style={styles.text}>Валюта</Text>
+        <Text style={styles.textTr}>{selectedCurrency.value}</Text>
       </Pressable>
-
-      <Link href={{ pathname: "/profile/settings/notificationSettings" }}>
-        <View style={styles.link}>
-          <Text style={styles.text}>Налаштування сповіщень</Text>
-          <CaretRight size={18} weight="bold" />
+      <Pressable
+        onPress={() => router.push("/profile/settings/notificationSettings")}
+        style={[styles.link, { paddingVertical: 13 }]}
+      >
+        <Text style={styles.text}>Налаштування сповіщень</Text>
+        <CaretRight size={18} weight="bold" />
+      </Pressable>
+      <Pressable
+        onPress={() => router.push("/profile/settings/changePassword")}
+        style={[styles.link, { paddingVertical: 8 }]}
+      >
+        <View style={styles.changePassword}>
+          <Lock size={32} weight="thin" />
+          <Text style={styles.text}>Змінити пароль</Text>
         </View>
-      </Link>
-      <Link href={{ pathname: "/profile/settings/changePassword" }}>
-        <View style={styles.link}>
-          <View style={styles.changePassword}>
-            <Lock size={32} weight="thin" />
-            <Text style={styles.text}>Змінити пароль</Text>
-          </View>
-          <CaretRight size={18} weight="bold" />
-        </View>
-      </Link>
-
+        <CaretRight size={18} weight="bold" />
+      </Pressable>
       {/* Країна модалка */}
       <ModalWrapper
         isVisible={modalType === "country"}
@@ -88,7 +90,6 @@ export default function GeneralSettings() {
           }}
         />
       </ModalWrapper>
-
       {/* Вибір мови модалка */}
       <ModalWrapper
         isVisible={modalType === "language"}
@@ -106,7 +107,6 @@ export default function GeneralSettings() {
           }}
         />
       </ModalWrapper>
-
       {/* Вибір валюти модалка */}
       <ModalWrapper
         isVisible={modalType === "currency"}
@@ -129,16 +129,19 @@ export default function GeneralSettings() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
+    display: "flex",
+    flexDirection: "column",
     gap: 16,
+    paddingTop: 32,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 20,
   },
   link: {
-    width: "100%",
     borderRadius: 12,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     paddingHorizontal: 10,
-    paddingVertical: 12,
-    shadowColor: "#000",
+    shadowColor: Colors.blackMain,
     shadowOffset: {
       width: 0,
       height: 0,
@@ -146,7 +149,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 15,
     elevation: 4,
-
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -163,6 +165,6 @@ const styles = StyleSheet.create({
   textTr: {
     fontFamily: "Manrope",
     fontSize: 16,
-    color: "#999999",
+    color: Colors.grey400,
   },
 });
