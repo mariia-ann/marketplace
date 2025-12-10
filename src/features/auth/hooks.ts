@@ -32,6 +32,7 @@ export function useLogin() {
   const qc = useQueryClient();
   const setToken = useAuthStore((s) => s.setToken);
   const setUserId = useAuthStore((s) => s.setUserId);
+  const signOut = useAuthStore((s) => s.signOut);
 
   const parseJwt = (t: string) => {
     try {
@@ -57,6 +58,12 @@ export function useLogin() {
       const uid = p?.userId ?? p?.uid ?? p?.sub ?? null;
       setUserId(uid);
       qc.invalidateQueries({ queryKey: ["me"] });
+    },
+    onError: () => {
+      console.warn("Login failed");
+      // Ensure any stale auth is cleared so guards treat the user as a guest
+      signOut();
+      qc.removeQueries({ queryKey: ["me"] });
     },
   });
 }

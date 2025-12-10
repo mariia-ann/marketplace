@@ -4,7 +4,6 @@ import { CaretRight, EnvelopeSimple, Phone } from "phosphor-react-native";
 import React, { useState } from "react";
 import {
   Modal,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -27,68 +26,69 @@ export default function SupportScreen() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.sectionTitle}>Актуальні теми</Text>
+    <ScrollView
+      style={{ flex: 1, backgroundColor: Colors.white }}
+      contentContainerStyle={styles.container}
+    >
+      <Text style={styles.sectionTitle}>Актуальні теми</Text>
 
-        <View style={{ marginTop: 16 }}>
-          {topics.map((item) => (
-            <Link href={item.path as any} asChild key={item.path}>
-              <TouchableOpacity style={styles.topicBlock}>
-                <Text style={styles.topicText}>{item.title}</Text>
-                <CaretRight size={18} weight="bold" color={Colors.blackMain} />
-              </TouchableOpacity>
-            </Link>
-          ))}
-        </View>
+      <View style={{ marginTop: 16 }}>
+        {topics.map((item) => (
+          <Link href={item.path as any} asChild key={item.path}>
+            <TouchableOpacity style={styles.topicBlock}>
+              <Text style={styles.topicText}>{item.title}</Text>
+              <CaretRight size={18} weight="bold" color={Colors.blackMain} />
+            </TouchableOpacity>
+          </Link>
+        ))}
+      </View>
 
-        <Text style={styles.questionText}>
-          Не знайшли інформації щодо своїх питань?
-        </Text>
+      <Text style={styles.questionText}>
+        Не знайшли інформації щодо своїх питань?
+      </Text>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setModalVisible(true)}
-        >
-          <Phone size={32} color="#8e6cef" />
-          <Text style={styles.buttonText}>Замовити дзвінок</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setModalVisible(true)}
+      >
+        <Phone size={32} color="#8e6cef" />
+        <Text style={styles.buttonText}>Замовити дзвінок</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.button, { marginTop: 16 }]}
-          onPress={() => router.push("/(tabs)/profile/support/chat")}
-        >
-          <EnvelopeSimple size={32} color="#8e6cef" />
-          <Text style={styles.buttonText}>Написати у чат-підтримку</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, { marginTop: 16 }]}
+        onPress={() => router.push("/(tabs)/profile/support/chat")}
+      >
+        <EnvelopeSimple size={32} color="#8e6cef" />
+        <Text style={styles.buttonText}>Написати у чат-підтримку</Text>
+      </TouchableOpacity>
 
-        <View style={{ height: 66 }} />
+      <View style={{ height: 66 }} />
 
-        {/* Popup Modal */}
-        <Modal visible={modalVisible} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalBox}>
-              <Text style={styles.modaltitle}>Ми отримали ваш запит!</Text>
-              <Text style={styles.modalText}>
-                Наш спеціаліст зателефонує вам протягом найближчої години
-              </Text>
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={{ alignSelf: "stretch" }}
-              >
-                <Text style={styles.modalButtonText}>ОК</Text>
-              </TouchableOpacity>
-            </View>
+      {/* Popup Modal */}
+      <Modal visible={modalVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modaltitle}>Ми отримали ваш запит!</Text>
+            <Text style={styles.modalText}>
+              Наш спеціаліст зателефонує вам протягом найближчої години
+            </Text>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={{ alignSelf: "stretch" }}
+            >
+              <Text style={styles.modalButtonText}>ОК</Text>
+            </TouchableOpacity>
           </View>
-        </Modal>
-      </ScrollView>
-    </SafeAreaView>
+        </View>
+      </Modal>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 0,
+    marginTop: 24,
     paddingBottom: 20,
     backgroundColor: "#fff",
   },

@@ -1,10 +1,4 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type ReviewTabsProps = {
   activeTab: "products" | "sellers";
@@ -13,31 +7,29 @@ type ReviewTabsProps = {
 
 const ReviewTabs = ({ activeTab, onTabChange }: ReviewTabsProps) => {
   return (
-    <SafeAreaView>
-      <View style={styles.tabs}>
-        <TouchableOpacity
-          style={[styles.tabLeft, activeTab === "products" && styles.activeTab]}
-          onPress={() => onTabChange("products")}
+    <View style={styles.tabs}>
+      <TouchableOpacity
+        style={[styles.tabLeft, activeTab === "products" && styles.activeTab]}
+        onPress={() => onTabChange("products")}
+      >
+        <Text
+          style={[styles.text, activeTab === "products" && styles.activeText]}
         >
-          <Text
-            style={[styles.text, activeTab === "products" && styles.activeText]}
-          >
-            Про товари
-          </Text>
-        </TouchableOpacity>
+          Про товари
+        </Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.tabRight, activeTab === "sellers" && styles.activeTab]}
-          onPress={() => onTabChange("sellers")}
+      <TouchableOpacity
+        style={[styles.tabRight, activeTab === "sellers" && styles.activeTab]}
+        onPress={() => onTabChange("sellers")}
+      >
+        <Text
+          style={[styles.text, activeTab === "sellers" && styles.activeText]}
         >
-          <Text
-            style={[styles.text, activeTab === "sellers" && styles.activeText]}
-          >
-            Про продавців
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          Про продавців
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -45,6 +37,7 @@ const styles = StyleSheet.create({
   tabs: {
     flexDirection: "row",
     paddingHorizontal: 20,
+    marginTop: 24,
   },
   tabLeft: {
     width: "50%",

@@ -48,15 +48,17 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   return (
     <SafeAreaView edges={["top"]} style={{ ...customStyles, ...styles.header }}>
       {/* Left */}
-      <View style={styles.side}>
+      <View style={styles.sideLeft}>
         <BackButton onClick={handleBack} />
       </View>
       {/* Center */}
-      <Text style={styles.title} accessibilityRole="header">
-        {resolvedTitle}
-      </Text>
+      <View style={styles.center}>
+        <Text style={styles.title} accessibilityRole="header">
+          {resolvedTitle}
+        </Text>
+      </View>
       {/* Right - spacer */}
-      <View style={styles.side} />
+      <View style={styles.sideRight} />
     </SafeAreaView>
   );
 };
@@ -66,14 +68,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  side: {
+  sideLeft: {
+    height: 40,
+    width: 48,
+    justifyContent: "center",
+    paddingRight: 8,
+  },
+  sideRight: {
     width: 40,
     height: 40,
-    alignItems: "flex-start",
     justifyContent: "center",
+    paddingLeft: 8,
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
-    flex: 1,
     fontSize: 22,
     fontFamily: "Manrope",
     textAlign: "center",
