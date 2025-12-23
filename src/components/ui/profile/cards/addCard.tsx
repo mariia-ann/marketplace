@@ -42,9 +42,9 @@ export default function AddCard() {
             <Text style={styles.label}>Номер картки</Text>
             <TextInput
               style={styles.input}
-              placeholder='0000 0000 0000 0000'
-              placeholderTextColor='#999999'
-              keyboardType='number-pad'
+              placeholder="0000 0000 0000 0000"
+              placeholderTextColor="#999999"
+              keyboardType="number-pad"
               value={cardNumber}
               onChangeText={handleCardNumberChange}
               maxLength={19}
@@ -58,9 +58,9 @@ export default function AddCard() {
                   style={[styles.input, styles.expiryDate]}
                   value={expiry}
                   onChangeText={handleExpiryDateChange}
-                  placeholder='mm/yy'
-                  keyboardType='number-pad'
-                  placeholderTextColor='#999999'
+                  placeholder="mm/yy"
+                  keyboardType="number-pad"
+                  placeholderTextColor="#999999"
                   maxLength={5}
                 />
               </View>
@@ -68,10 +68,10 @@ export default function AddCard() {
                 <Text style={styles.label}>CVV</Text>
                 <TextInput
                   style={[styles.input, styles.cvv]}
-                  placeholder='***'
-                  keyboardType='number-pad'
+                  placeholder="***"
+                  keyboardType="number-pad"
                   maxLength={3}
-                  placeholderTextColor='#999999'
+                  placeholderTextColor="#999999"
                 />
               </View>
             </View>

@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type ReviewTabsProps = {
   activeTab: "products" | "sellers";
@@ -7,8 +7,7 @@ type ReviewTabsProps = {
 
 const ReviewTabs = ({ activeTab, onTabChange }: ReviewTabsProps) => {
   return (
-    <SafeAreaView>
-      <View style={styles.tabs}>
+    <View style={styles.tabs}>
       <TouchableOpacity
         style={[styles.tabLeft, activeTab === "products" && styles.activeTab]}
         onPress={() => onTabChange("products")}
@@ -24,12 +23,13 @@ const ReviewTabs = ({ activeTab, onTabChange }: ReviewTabsProps) => {
         style={[styles.tabRight, activeTab === "sellers" && styles.activeTab]}
         onPress={() => onTabChange("sellers")}
       >
-        <Text style={[styles.text, activeTab === "sellers" && styles.activeText]}>
+        <Text
+          style={[styles.text, activeTab === "sellers" && styles.activeText]}
+        >
           Про продавців
         </Text>
       </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   tabs: {
     flexDirection: "row",
     paddingHorizontal: 20,
+    marginTop: 24,
   },
   tabLeft: {
     width: "50%",
@@ -63,13 +64,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: 700,
-    textAlign: 'center',
+    textAlign: "center",
     color: "#170F2B",
   },
   activeText: {
     fontSize: 16,
     fontWeight: 700,
-    textAlign: 'center',
+    textAlign: "center",
     color: "#FFFFFF",
   },
 });

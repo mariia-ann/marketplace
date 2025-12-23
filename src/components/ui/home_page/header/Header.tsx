@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import BuyMe from './BuyMe';
-import Chat from './Chat';
-import Notification from './Notification';
-import SearchBar from './SearchBar';
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import BuyMe from "./BuyMe";
+import Chat from "./Chat";
+import Notification from "./Notification";
+import SearchBar from "./SearchBar";
 // import SearchBar from '@/components/ui/home_page/header/SearchBar';
 // import Chat from '@/components/ui/home_page/header/Chat';
 // import Notification from '@/components/ui/home_page/header/Notification';
@@ -21,7 +21,7 @@ export default function Header() {
           <Chat />
           <Notification />
           <SearchBar />
-        </ View >
+        </View>
       </View>
     </View>
   );
@@ -35,12 +35,12 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   logo: {
-    textAlign: 'center',
-    alignItems: 'center',
-  }
+    textAlign: "center",
+    alignItems: "center",
+  },
 });

@@ -24,31 +24,31 @@ export default function WelcomeScreen() {
         </Text>
         <View style={styles.buttonBlock}>
           <PrimaryButton
-            title='Увійти'
+            title="Увійти"
             onPress={() => router.push("/auth/login")}
-            size='L'
+            size="L"
             active={true}
           />
           <SecondaryButton
-            title='Зареєструватись'
+            title="Зареєструватись"
             onPress={() => router.push("/auth/signup")}
-            size='L'
+            size="L"
           />
           <SecondaryButton
-            title='Продовжити як гість'
+            title="Продовжити як гість"
             active={true}
-            size='L'
+            size="L"
             onPress={() => router.push("/(tabs)/profile")}
           />
         </View>
         <View style={styles.linkBlock}>
           <TextLink
-            title='Мова застосунку українська'
+            title="Мова застосунку українська"
             onPress={() => router.push("/(main)/choose-language")}
             decorated={true}
           />
           <TextLink
-            title='Країна вашого перебування Україна'
+            title="Країна вашого перебування Україна"
             onPress={() => router.push("/(main)/choose-country")}
             decorated={true}
           />

@@ -10,10 +10,17 @@ export default function ProfileStackLayout() {
     { name: "cards/index", title: "Мої картки" },
     { name: "cards/addCards", title: "Додати картку" },
     { name: "addresses/index", title: "Мої адреси" },
+    { name: "addresses/addNewAddress", title: "Додати нову адресу" },
     { name: "addresses/changeAddress", title: "Редагування адреси" },
     {
       name: "addresses/changeAddress/deliveryMethod",
       title: "Спосіб доставки",
+    },
+    { name: "addresses/changeAddress/parcelFields", title: "Поштомат" },
+    { name: "addresses/changeAddress/departmentFields", title: "Відділення" },
+    {
+      name: "addresses/changeAddress/cityFields",
+      title: "Місто",
     },
     {
       name: "notification/offersNotifications",
@@ -51,7 +58,7 @@ export default function ProfileStackLayout() {
       }}
     >
       <Stack.Screen
-        name='index'
+        name="index"
         options={{
           headerShown: false,
         }}

@@ -1,3 +1,9 @@
+/* This is a primary button component with animated feedback for press interactions.
+As per figma designs, it changes color and scale when pressed, and has different styles based on size and active state. 
+It has: 
+3 sizes: L, M, S
+States: active, inactive and pressed */
+
 import Colors from "@/constants/Colors";
 import React, { FC, useEffect, useRef } from "react";
 import {
@@ -13,8 +19,9 @@ type ButtonSize = "L" | "M" | "S";
 
 type PrimaryButtonProps = {
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
   size?: ButtonSize;
+  disabled?: boolean;
   active?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;

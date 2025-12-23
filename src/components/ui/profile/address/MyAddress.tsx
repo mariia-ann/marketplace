@@ -1,10 +1,102 @@
 import logoNovaPoshta from '@/assets/images/profile/address/logoNovaPoshta.png';
+import logoUkrposhta from '@/assets/images/profile/address/logoUkrposhta.png';
 import Colors from "@/constants/Colors";
-import React, { useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AddressCard from './AddressCard';
+;
+
+type Address = {
+  id: number;
+  title: string;
+  address: string;
+  city: string;
+  codePostal: number;
+  logoKey: string;
+};
+
+const logos: Record<string, any> = {
+  novaPoshta: logoNovaPoshta,
+  ukrposhta: logoUkrposhta,
+};
+
+const INITIAL_ADDRESSES: Address[] = [
+  {
+    id: 1,
+    title: "Відділення Нова Пошта",
+    address: "Нова Пошта №131: проспект академіка Палладіна, б. 36",
+    city: "Київ",
+    codePostal: 3131,
+    logoKey: "novaPoshta",
+  },
+  {
+    id: 2,
+    title: "Нова Пошта",
+    address: "проспект Вернадського, б. 36",
+    city: "Київ",
+    codePostal: 4211,
+    logoKey: "novaPoshta",
+  },
+  {
+    id: 3,
+    title: "Кур'єр Нова Пошта",
+    address: "проспект Вернадського, б. 36",
+    city: "Київ",
+    codePostal: 4211,
+    logoKey: "novaPoshta",
+  },
+];
+
 export default function MyAddress() {
+  const { deletedId, updatedId, updatedTitle, updatedLogo, updatedAddress, newAddress } = useLocalSearchParams<{
+    deletedId?: string;
+    updatedId?: string;
+    updatedTitle?: string;
+    updatedLogo?: string;
+    updatedAddress?: string;
+    newAddress?: string;
+  }>();
+  const router = useRouter();
+
+  const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
   const [activeSwitchIndex, setActiveSwitchIndex] = useState<number | null>(null);
+
+  // видалення по id
+  useEffect(() => {
+    if (deletedId) {
+      setAddresses(prev => prev.filter((item) => item.id !== Number(deletedId)));
+    }
+  }, [deletedId]);
+
+  // оновлення адреси при зміні способу доставки або адреси
+  useEffect(() => {
+    if (updatedId && updatedTitle && updatedLogo) {
+      setAddresses(prev =>
+        prev.map(item =>
+          item.id === Number(updatedId)
+            ? {
+              ...item,
+              title: decodeURIComponent(updatedTitle),
+              logoKey: updatedLogo,
+              ...(updatedAddress && { address: decodeURIComponent(updatedAddress) })
+            }
+            : item
+        )
+      );
+    }
+  }, [updatedId, updatedTitle, updatedLogo, updatedAddress]);
+
+
+  useEffect(() => {
+    if (newAddress) {
+      try {
+        const addressData = JSON.parse(newAddress);
+        setAddresses(prev => [...prev, addressData]);
+      } catch (error) {
+      }
+    }
+  }, [newAddress]);
 
   const handleSwitchToggle = (index: number) => {
     setActiveSwitchIndex(prev => (prev === index ? null : index));
@@ -12,29 +104,27 @@ export default function MyAddress() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <ScrollView style={{ flex: 1 }}contentContainerStyle={styles.container}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.container}>
+        {addresses.map((addr, index) => (
+          <AddressCard
+            key={addr.id}
+            id={addr.id}
+            title={addr.title}
+            address={addr.address}
+            city={addr.city}
+            codePostal={addr.codePostal}
+            logo={logos[addr.logoKey]}
+            active={activeSwitchIndex === index}
+            onPress={() => handleSwitchToggle(index)}
+            isSwitchEnabled={activeSwitchIndex === index}
+            onToggleSwitch={() => handleSwitchToggle(index)}
+          />
+        ))}
 
-        <AddressCard
-          title="Відділення Нова Пошта"
-          address="Нова Пошта №131: проспект академіка Палладіна, б. 36, Київ, 03131"
-          logo={<Image source={logoNovaPoshta} style={{ width: 26, height: 26 }} />}
-          active={activeSwitchIndex === 0}
-          onPress={() => handleSwitchToggle(0)}
-          isSwitchEnabled={activeSwitchIndex === 0}
-          onToggleSwitch={() => handleSwitchToggle(0)}
-        />
-
-        <AddressCard
-          title="Кур’єр Нова Пошта"
-          address="проспект Вернадського, б. 36, Київ, 03131"
-          logo={<Image source={logoNovaPoshta} style={{ width: 26, height: 26 }} />}
-          active={activeSwitchIndex === 1}
-          onPress={() => handleSwitchToggle(1)}
-          isSwitchEnabled={activeSwitchIndex === 1}
-          onToggleSwitch={() => handleSwitchToggle(1)}
-        />
-
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => router.push("/(tabs)/profile/addresses/addNewAddress")}
+        >
           <Text style={styles.saveButtonText}>Додати нову адресу</Text>
         </TouchableOpacity>
 
@@ -42,18 +132,16 @@ export default function MyAddress() {
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
   },
-
   saveButton: {
     backgroundColor: Colors.softPurple,
     height: 52,
     borderRadius: 10,
     marginHorizontal: 20,
-    marginTop: 220,
+    marginTop: 120,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 40,
@@ -61,7 +149,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: 'white',
     fontSize: 16,
-    //fontFamily: 'OutfitBold',
+    fontFamily: 'ManropeBold',
     fontWeight: 700,
   },
 })

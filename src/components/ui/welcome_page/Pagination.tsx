@@ -124,9 +124,9 @@ const PaginationIndicator = forwardRef<PaginationIndicatorHandle>(
       if (kind === "dash") {
         return (
           <View
-            key='dash'
+            key="dash"
             style={[styles.slot, { width: DASH_W, marginHorizontal: GAP / 2 }]}
-            pointerEvents='none'
+            pointerEvents="none"
           >
             <Animated.View
               style={[
@@ -146,7 +146,7 @@ const PaginationIndicator = forwardRef<PaginationIndicatorHandle>(
         <View
           key={kind}
           style={[styles.slot, { width: DOT_W, marginHorizontal: GAP / 2 }]}
-          pointerEvents='none'
+          pointerEvents="none"
         >
           <Animated.View style={[styles.dot, { opacity }]} />
         </View>
@@ -154,8 +154,10 @@ const PaginationIndicator = forwardRef<PaginationIndicatorHandle>(
     };
 
     return <View style={styles.row}>{order.map(renderItem)}</View>;
-  }
+  },
 );
+
+PaginationIndicator.displayName = "PaginationIndicator";
 
 export default PaginationIndicator;
 

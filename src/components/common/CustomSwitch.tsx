@@ -7,10 +7,21 @@ interface CustomSwitchProps {
 }
 
 const CustomSwitch: React.FC<CustomSwitchProps> = ({ value, onToggle }) => {
-
   return (
-    <TouchableOpacity onPress={onToggle} style={[styles.switchContainer, { backgroundColor: value ? "#8E6CEF" : "#fff" }]}>
-      <View style={[styles.circle, value && styles.activeCircle, { backgroundColor: value ? "#fff" : "#8E6CEF" }]} />
+    <TouchableOpacity
+      onPress={onToggle}
+      style={[
+        styles.switchContainer,
+        { backgroundColor: value ? "#8E6CEF" : "#fff" },
+      ]}
+    >
+      <View
+        style={[
+          styles.circle,
+          value && styles.activeCircle,
+          { backgroundColor: value ? "#fff" : "#8E6CEF" },
+        ]}
+      />
     </TouchableOpacity>
   );
 };

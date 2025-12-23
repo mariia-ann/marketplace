@@ -1,62 +1,154 @@
-# Welcome to your Expo app 👋
+# Marketplace Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A cross-platform (iOS / Android ) marketplace application built with **Expo**, **React Native**, and **Expo Router**.  
+The project uses **TypeScript**, **TanStack React Query**, **Zustand**, **Formik + Yup**, and modern Expo SDK 54 modules.
 
-## Get started
+---
 
-1. Clone the repository using the following command: git clone or Open with GitHub Desktop or download the zip file.
+## 🚀 Features
 
-2. Install dependencies
+- **Expo Router** with file-based navigation  
+- **Authentication flow** (Zustand for local state + TanStack Query for server data)  
+- **Image uploading** using Expo Image Picker  
+- **Form management** using Formik + Yup  
+- **Masked inputs** (phone number, date)  
+- **Animations** (Reanimated & Worklets)  
+- **Safe area and gesture support**  
+- **Async-storage persistence** for React Query  
+- **Consistent UI** with Expo vector icons and custom fonts  
 
-   ```bash
-   npm install
-   ```
+---
 
-3. Start the app
+## 📦 Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+### Core
+- expo ~54  
+- react-native 0.81  
+- expo-router 6  
+- react 19  
 
-## What we use
-npm install expo-router (installing a router for navigation)
-npm install phosphor-react-native (install icons)
-npm install @react-native-community/datetimepicker (the ability to select a date from a calendar and display it in a specific format)
-npm install react-native-image-picker (the ability to open the camera and gallery)
-npm install react-native-masked-text (input mask: phone numbers, a date)
-npm install formik (for handling forms)
-npm install yup (a tool for simple and flexible form validation)
-npm install expo-image-picker
-npm install react-native-keyboard-aware-scroll-view
+### State & Data
+- @tanstack/react-query  
+- @tanstack/query-async-storage-persister  
+- zustand  
+- axios  
 
+### UI & Interaction
+- @expo/vector-icons  
+- react-native-gesture-handler  
+- react-native-reanimated  
+- react-native-safe-area-context  
+- react-native-screens  
+- expo-image / expo-image-picker  
+- react-native-masked-text  
+- react-native-keyboard-aware-scroll-view  
 
+### Forms & Validation
+- formik  
+- yup  
 
-In the output, you'll find options to open the app in a
+### Utilities
+- dayjs  
+- uuid  
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Dev Tools
+- TypeScript  
+- ESLint + Prettier  
+- Jest + Testing Library  
+- Husky + lint-staged  
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
+## 🛠 Setup & Installation
 
-## Learn more
+1. **Clone the repository**
+```bash
+git clone <your-repo-url>
+cd marketplace
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+2. **Install dependencies**
+```bash
+npm install
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+3. **Start the development server**
+```bash
+npm start
+```
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## ▶️ Running the App
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+You can run the app in different environments:
 
+| Platform | Command |
+|----------|----------|
+| iOS Simulator | `npm run ios` |
+| Android Emulator | `npm run android` |
+| Web | `npm run web` |
 
+---
 
-## Keyboard
-package react-native-keyboard-aware-scroll-view
-use <KeyboardAwareLayout> so that keyboard does not cover the screen. Example in edit.tsx
+## 📁 Project Structure
+
+```
+app/
+  (auth)/
+  (main)/
+  (tabs)/
+  ...
+src/
+  components/
+  features/
+  state/
+  api/
+package.json
+README.md
+```
+
+- Navigation uses **file-based routing** inside the `app/` directory.  
+- Shared UI components live in `src/components/`.  
+- Global state lives in `src/state/`.  
+- Backend API helpers live in `src/features/`.  
+
+---
+
+## 🧪 Testing
+
+Run tests:
+
+```bash
+npm test
+```
+
+Powered by **jest** and **@testing-library/react-native**.
+
+---
+
+## 🧹 Maintenance Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run lint` | Check code style |
+| `npm run lint:fix` | Fix linting errors |
+| `npm run fix-deps` | Auto-fix Expo dependency versions |
+| `npm run doctor` | Expo doctor checks |
+| `npm run reset-project` | Clean & reset dev environment |
+
+---
+
+## 📚 Learn More
+
+- Expo documentation: https://docs.expo.dev/  
+- Expo Router docs: https://expo.github.io/router/docs  
+- React Query docs: https://tanstack.com/query/latest  
+- React Native docs: https://reactnative.dev/  
+
+---
+
+## 🤝 Contributing
+
+Pull requests and issues are welcome.  
+Please run linting and tests before submitting any changes.

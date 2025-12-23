@@ -17,6 +17,7 @@ interface BasicFormInputProps extends TextInputProps {
 const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
   ({ label, errorMessage, style, onFocus, onBlur, ...rest }, ref) => {
     const [isFocused, setIsFocused] = useState(false);
+    const ERROR_HEIGHT = 12;
 
     // Handlers for focus and blur events
     const handleFocus = (e: FocusEvent) => {
@@ -30,7 +31,7 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
     };
 
     return (
-      <View style={[styles.container, errorMessage && { marginBottom: -8 }]}>
+      <View style={styles.container}>
         <Text style={styles.label}>{label}</Text>
         <TextInput
           ref={ref}
@@ -43,15 +44,17 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
           placeholderTextColor={Colors.grey400}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          autoCapitalize='none'
+          autoCapitalize="none"
           {...rest}
         />
-        {errorMessage ? (
-          <Text style={styles.errorText}>{errorMessage}</Text>
-        ) : null}
+        <View style={{ minHeight: ERROR_HEIGHT, marginTop: 8 }}>
+          <Text style={[styles.errorText, !errorMessage && styles.errorHidden]}>
+            {errorMessage ?? " "}
+          </Text>
+        </View>
       </View>
     );
-  }
+  },
 );
 
 BasicFormInput.displayName = "BasicFormInput";
@@ -85,8 +88,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.red,
     borderWidth: 2,
   },
+  errorHidden: { opacity: 0 },
   errorText: {
-    marginTop: 6,
     fontSize: 12,
     fontFamily: "Manrope",
     color: Colors.red,

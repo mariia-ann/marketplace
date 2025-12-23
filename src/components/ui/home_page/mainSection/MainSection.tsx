@@ -179,7 +179,6 @@ export default function MainSection() {
           onPress={() => handleTabPress("easter")}
         >
           <Text
-            
             style={[
               styles.tabText,
               selectedTab === "easter" && styles.activeText,
@@ -195,7 +194,6 @@ export default function MainSection() {
           onPress={() => handleTabPress("bestsellers")}
         >
           <Text
-            
             style={[
               styles.tabText,
               selectedTab === "bestsellers" && styles.activeText,
@@ -213,7 +211,6 @@ export default function MainSection() {
           onPress={() => handleTabPress("sales")}
         >
           <Text
-           
             style={[
               styles.tabText,
               selectedTab === "sales" && styles.activeText,
@@ -229,7 +226,6 @@ export default function MainSection() {
           onPress={() => handleTabPress("history")}
         >
           <Text
-            
             style={[
               styles.tabText,
               selectedTab === "history" && styles.activeText,
