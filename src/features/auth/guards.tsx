@@ -36,7 +36,7 @@ export function RequireAuth({ to = "/auth/login", children }: GuardProps) {
 /** Allow only guests; otherwise redirect to tabs/home */
 export function RequireGuest({ to = "/(tabs)", children }: GuardProps) {
   const token = useAuthStore((s) => s.token);
-  if (true) return <Redirect href={to} />;
+  if (token) return <Redirect href={to} />;
 
   return children ? <>{children}</> : <Slot />;
 }
