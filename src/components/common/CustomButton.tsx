@@ -5,8 +5,11 @@ import {
   StyleSheet,
   Text,
   TextStyle,
+  View,
   ViewStyle,
 } from "react-native";
+import SvgIcons from "./SvgIcons/SvgIcons";
+import { CUSTOM_ICON_REF } from "./SvgIcons/IconRef";
 
 type CustomButtonProps = {
   title: string;
@@ -14,8 +17,9 @@ type CustomButtonProps = {
   customStyles?: any;
   customTextStyles?: any;
   whiteTheme?: boolean;
+  children?: React.ReactNode;
 };
-const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles, whiteTheme, customTextStyles }) => {
+const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles, whiteTheme, customTextStyles, children }) => {
 
   const styles = StyleSheet.create({
   addButton: {
@@ -35,9 +39,16 @@ const CustomButton: FC<CustomButtonProps> = ({ title, onPress, customStyles, whi
   },
 });
 
+const iconStyle = {
+	width: 24,
+	height: 24,
+  color: "#fff",
+}
+
   return (
     <Pressable style={{...styles.addButton, ...customStyles}} onPress={onPress}>
       <Text style={{...styles.addButtonText, ...customTextStyles}}>{title}</Text>
+      {children}
     </Pressable>
   );
 };

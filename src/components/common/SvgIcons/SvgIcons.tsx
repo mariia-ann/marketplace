@@ -15,7 +15,7 @@ function SvgIcons(props: Props) {
 	if (!CustomIcon) return null;
 	return (
 		<View style={baseStyle}>
-			<CustomIcon />
+			<CustomIcon color={baseStyle?.color} />
 		</View>
 	)
 }

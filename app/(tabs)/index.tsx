@@ -6,7 +6,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Text style={styles.text}>Home screen</Text>
       <Link
-        href='/(main)'
+        href='/(main)/write-to-seller'
         style={styles.button}
       >
         Go to Onboarding screen
