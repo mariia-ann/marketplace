@@ -1,6 +1,8 @@
-import { ProfileHeader } from "@/src/components/common/ProfileHeader";
+import { NavigationHeader } from "@/src/components/common/NavigationHeader";
 import { Stack } from "expo-router";
 import React from "react";
+import Colors from "../../../constants/Colors";
+import { useAuthStore } from "../../../src/state/useAuthStore";
 
 export default function ProfileStackLayout() {
   const profileScreens = [
@@ -8,10 +10,17 @@ export default function ProfileStackLayout() {
     { name: "cards/index", title: "Мої картки" },
     { name: "cards/addCards", title: "Додати картку" },
     { name: "addresses/index", title: "Мої адреси" },
+    { name: "addresses/addNewAddress", title: "Додати нову адресу" },
     { name: "addresses/changeAddress", title: "Редагування адреси" },
     {
       name: "addresses/changeAddress/deliveryMethod",
       title: "Спосіб доставки",
+    },
+    { name: "addresses/changeAddress/parcelFields", title: "Поштомат" },
+    { name: "addresses/changeAddress/departmentFields", title: "Відділення" },
+    {
+      name: "addresses/changeAddress/cityFields",
+      title: "Місто",
     },
     {
       name: "notification/offersNotifications",
@@ -37,17 +46,19 @@ export default function ProfileStackLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
-        header: (props) => <ProfileHeader {...props} />,
-        headerTitleAlign: "center",
-        headerTitleStyle: {
-          fontSize: 22,
-          fontFamily: "Manrope",
-          color: "#170F2B",
-        },
+        header: (props) => (
+          <NavigationHeader
+            {...props}
+            customStyles={{
+              paddingHorizontal: 20,
+              backgroundColor: Colors.white,
+            }}
+          />
+        ),
       }}
     >
       <Stack.Screen
-        name='index'
+        name="index"
         options={{
           headerShown: false,
         }}
@@ -58,7 +69,6 @@ export default function ProfileStackLayout() {
           name={name}
           options={{
             title: title,
-            // headerLeft: null,
           }}
         />
       ))}

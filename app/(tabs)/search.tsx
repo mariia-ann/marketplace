@@ -1,5 +1,5 @@
-import { Link } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Link } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function SearchScreen() {
   return (
@@ -15,16 +15,16 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
-    color: '#25292e',
+    color: "#25292e",
   },
   button: {
     fontSize: 20,
-    textDecorationLine: 'underline',
-    color: '#25292e',
+    textDecorationLine: "underline",
+    color: "#25292e",
   },
 });

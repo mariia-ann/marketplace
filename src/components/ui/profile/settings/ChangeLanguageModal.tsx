@@ -3,21 +3,24 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type ChangeLanguageModalProps = {
-  onSelect: (language: typeof languages[number]) => void;
+  onSelect: (language: (typeof languages)[number]) => void;
   initialSelectedId: number;
 };
 
-const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({ onSelect, initialSelectedId }) => {
-    const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
-  
-    useEffect(() => {
-      setSelectedId(initialSelectedId);
-    }, [initialSelectedId]);
-  
-    const handleSelect = (language: LanguageType) => {
-      setSelectedId(language.id);
-      onSelect(language);
-    };
+const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({
+  onSelect,
+  initialSelectedId,
+}) => {
+  const [selectedId, setSelectedId] = useState<number>(initialSelectedId);
+
+  useEffect(() => {
+    setSelectedId(initialSelectedId);
+  }, [initialSelectedId]);
+
+  const handleSelect = (language: LanguageType) => {
+    setSelectedId(language.id);
+    onSelect(language);
+  };
 
   return (
     <View>
@@ -28,7 +31,7 @@ const ChangeLanguageModal: React.FC<ChangeLanguageModalProps> = ({ onSelect, ini
           onPress={() => handleSelect(language)}
         >
           <View style={styles.radioWrapper}>
-            <View style={[selectedId === language.id && styles.radioCircle]} />
+            <View style={selectedId === language.id && styles.radioCircle} />
           </View>
 
           <Text style={styles.languageText}>{language.type}</Text>

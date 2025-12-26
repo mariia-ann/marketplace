@@ -2,14 +2,8 @@ import dummyImage from "@/assets/images/dummy_image_delete_onprod.png";
 import Colors from "@/constants/Colors";
 import TwoTabsSwitch from "@/src/components/ui/twoTabsSwitch";
 import React, { useState } from "react";
-import {
-  FlatList,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const offers = [
   {
@@ -115,37 +109,42 @@ export default function OffersAndNotificationsList() {
   const data = activeTab === "option1" ? offers : notifications;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TwoTabsSwitch
-        option1='Пропозиції'
-        option2='Сповіщення'
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <View style={{ flex: 1, flexDirection: "row" }}>
-              <Image
-                style={styles.image}
-                source={item.image}
-                // Placeholder image
-              />
-              <View style={{ flex: 1 }}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
+    <SafeAreaView
+      edges={["left", "right", "bottom"]}
+      style={{ flex: 1, backgroundColor: "#fff" }}
+    >
+      <View style={styles.container}>
+        <TwoTabsSwitch
+          option1="Пропозиції"
+          option2="Сповіщення"
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.list}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <View style={{ flex: 1, flexDirection: "row" }}>
+                <Image
+                  style={styles.image}
+                  source={item.image}
+                  // Placeholder image
+                />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.description}>{item.description}</Text>
+                </View>
               </View>
+              {/*TODO: Separate Date and time according to object received /Demidas/ */}
+              <Text style={styles.datetime}>
+                {item.date} {item.time}
+              </Text>
             </View>
-            {/*TODO: Separate Date and time according to object received /Demidas/ */}
-            <Text style={styles.datetime}>
-              {item.date} {item.time}
-            </Text>
-          </View>
-        )}
-      />
+          )}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", paddingTop: 20 },
   list: {
     paddingHorizontal: 20,
-    marginTop: 20,
+    marginTop: 24,
     gap: 16,
   },
   card: {

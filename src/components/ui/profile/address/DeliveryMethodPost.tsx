@@ -1,17 +1,49 @@
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const deliveryOptions = [
-    { id: 1, title: 'Відділення Нова Пошта', price: '60 грн' },
-    { id: 2, title: 'Кур’єр Нова Пошта', price: '60 грн' },
-    { id: 3, title: 'Поштомат Нова Пошта', price: '60 грн' },
-    { id: 4, title: 'Відділення Укрпошта', price: '40 грн' },
+    { id: 1, title: 'Відділення Нова Пошта', price: '60 грн', logoKey: 'novaPoshta' },
+    { id: 2, title: 'Кур\'єр Нова Пошта', price: '60 грн', logoKey: 'novaPoshta' },
+    { id: 3, title: 'Поштомат Нова Пошта', price: '60 грн', logoKey: 'novaPoshta' },
+    { id: 4, title: 'Відділення Укрпошта', price: '40 грн', logoKey: 'ukrposhta' },
 ];
 
-
 export default function DeliveryMethodPost() {
+    const router = useRouter();
+    const { id, title, address, city, codePostal } = useLocalSearchParams<{
+        id: string;
+        title: string;
+        address: string;
+        city: string;
+        codePostal: string;
+    }>();
 
-    const [selectedId, setSelectedId] = useState(1);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+
+    // Визначаємо початковий обраний варіант на основі переданого title
+    React.useEffect(() => {
+        if (title) {
+            const matchingOption = deliveryOptions.find(option => option.title === title);
+            if (matchingOption) {
+                setSelectedId(matchingOption.id);
+            }
+        }
+    }, [title]);
+
+    const handleSelectOption = (option: typeof deliveryOptions[0]) => {
+        setSelectedId(option.id);
+
+        // Передаємо вибраний спосіб доставки назад до AddNewAddress з оновленими даними
+        router.push({
+            pathname: "/(tabs)/profile/addresses/addNewAddress",
+            params: {
+                title: option.title,
+                logo: option.logoKey,
+                city: city,
+            },
+        });
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -20,7 +52,7 @@ export default function DeliveryMethodPost() {
                     <TouchableOpacity
                         key={option.id}
                         style={[styles.optionContainer, index === 0 && { marginTop: 32 }]}
-                        onPress={() => setSelectedId(option.id)}
+                        onPress={() => handleSelectOption(option)}
                     >
                         <View style={styles.radioWrapper}>
                             <View

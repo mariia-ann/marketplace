@@ -1,10 +1,19 @@
+import Colors from "@/constants/Colors";
 import GeneralSettings from "@/src/components/ui/profile/settings/GeneralSettings";
-import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Settings() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView
+      edges={["left", "right", "bottom"]}
+      style={{ flex: 1, backgroundColor: Colors.white }}
+    >
+      <ScrollView
+        bounces={false}
+        overScrollMode="never"
+        contentContainerStyle={styles.container}
+      >
         <GeneralSettings />
       </ScrollView>
     </SafeAreaView>
@@ -13,10 +22,7 @@ export default function Settings() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     flex: 1,
-    paddingTop: 19,
-    paddingHorizontal: 20,
-    paddingBottom: 56,
   },
 });

@@ -1,29 +1,21 @@
 import KeyboardAwareLayout from "@/src/components/common/KeyboardAwareLayout";
 import EditPhoto from "@/src/components/ui/profile/edit/EditPhoto";
 import FormFields from "@/src/components/ui/profile/edit/formFields/FormFields";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function EditProfile() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAwareLayout>
-        <EditPhoto />
+    <KeyboardAwareLayout>
+      <EditPhoto />
 
-        <View style={styles.divider} />
+      <View style={styles.divider} />
 
-        <FormFields />
+      <FormFields />
 
-        <TouchableOpacity style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>Зберегти зміни</Text>
-        </TouchableOpacity>
-      </KeyboardAwareLayout>
-    </SafeAreaView>
+      <TouchableOpacity style={styles.saveButton}>
+        <Text style={styles.saveButtonText}>Зберегти зміни</Text>
+      </TouchableOpacity>
+    </KeyboardAwareLayout>
   );
 }
 

@@ -65,20 +65,16 @@ const TextLink: FC<TextLinkProps> = ({
       : undefined) || styles.text.color;
 
   return (
-    <Animated.View style={[{ transform: [{ scale }], opacity }]}>
+    <Animated.View style={{ transform: [{ scale }], opacity }}>
       <Pressable
         style={[styles.container, style]}
         onPress={onPress}
         onPressIn={() => animateTo(pressScale, pressOpacity)}
         onPressOut={() => animateTo(1, 1)}
-        accessibilityRole='button'
+        accessibilityRole="button"
       >
         <Text style={textStyles}>{title}</Text>
-        <AntDesign
-          name='right'
-          size={fontSize}
-          color={textColor as string}
-        />
+        <AntDesign name="right" size={fontSize} color={textColor as string} />
       </Pressable>
     </Animated.View>
   );

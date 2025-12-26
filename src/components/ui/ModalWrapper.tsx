@@ -26,7 +26,6 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({
   return (
     <Modal isVisible={isVisible}>
       <View style={styles.modal}>
-        
         <TouchableOpacity onPress={onClose} style={styles.closeModal}>
           <XCircle size={32} weight="thin" />
         </TouchableOpacity>
@@ -107,7 +106,8 @@ const styles = StyleSheet.create({
 });
 
 // Використання:
-{ /* 
+{
+  /* 
 
 // Кнопка з бордером
 <ModalWrapper

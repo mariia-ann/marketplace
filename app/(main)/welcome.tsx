@@ -1,9 +1,10 @@
 import Colors from "@/constants/Colors";
 import { router } from "expo-router";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import SecondaryButton from "@/src/components/common/ SecondaryButton.";
-import PrimaryButton from "@/src/components/common/PrimaryButton";
+import SecondaryButton from "@/src/components/common/buttons/SecondaryButton";
+import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
 import TextLink from "@/src/components/common/TextLink_w_arrow";
 import WelcomeBackground from "@/src/components/ui/welcome_page/WelcomeBackground";
 
@@ -23,31 +24,31 @@ export default function WelcomeScreen() {
         </Text>
         <View style={styles.buttonBlock}>
           <PrimaryButton
-            title='Увійти'
+            title="Увійти"
+            onPress={() => router.push("/auth/login")}
+            size="L"
+            active={true}
+          />
+          <SecondaryButton
+            title="Зареєструватись"
+            onPress={() => router.push("/auth/signup")}
+            size="L"
+          />
+          <SecondaryButton
+            title="Продовжити як гість"
+            active={true}
+            size="L"
             onPress={() => router.push("/(tabs)/profile")}
-            size='L'
-            active={true}
-          />
-          <SecondaryButton
-            title='Зареєструватись'
-            size='L'
-            onPress={() => {}}
-          />
-          <SecondaryButton
-            title='Продовжити як гість'
-            active={true}
-            size='L'
-            onPress={() => {}}
           />
         </View>
         <View style={styles.linkBlock}>
           <TextLink
-            title='Мова застосунку українська'
+            title="Мова застосунку українська"
             onPress={() => router.push("/(main)/choose-language")}
             decorated={true}
           />
           <TextLink
-            title='Країна вашого перебування Україна'
+            title="Країна вашого перебування Україна"
             onPress={() => router.push("/(main)/choose-country")}
             decorated={true}
           />

@@ -12,7 +12,7 @@ const banners = [
   require('@/assets/images/home_page/bannerCarousel/baner1.png'),
 ];
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const BANNER_HORIZONTAL_MARGIN = 16;
 const BANNER_WIDTH = width - BANNER_HORIZONTAL_MARGIN * 2;
@@ -91,21 +91,21 @@ const styles = StyleSheet.create({
     marginHorizontal: BANNER_HORIZONTAL_MARGIN,
   },
   image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   dotsContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 8,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   dot: {
     width: 10,

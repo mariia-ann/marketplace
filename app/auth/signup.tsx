@@ -5,6 +5,7 @@ import CheckBox from "@/src/components/common/customInput/Checkbox";
 import CustomInput from "@/src/components/common/customInput/Input";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -16,23 +17,6 @@ const Signup = () => {
     console.log("Logging in with:", email, password);
   };
 
-  const style = {
-    backArrowWrapper: {
-      // position: 'absolute',
-      // left: 20,
-      // top: 70,
-      // zIndex: 1,
-    },
-    backIconCircle: {
-      backgroundColor: "#AC94E8",
-      borderRadius: 20,
-      width: 40,
-      height: 40,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  };
-
   const inactivebtncss = {
     borderColor: "#999999",
     color: "#170F2B",
@@ -40,207 +24,209 @@ const Signup = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{ textAlign: "center", fontSize: 22, ...styles.fontTheme }}
+    <SafeAreaView edges={["top", "bottom"]}>
+      <ScrollView style={styles.container}>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
         >
-          Створити акаунт
-        </Text>
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          paddingTop: 20,
-        }}
-      >
+          <Text
+            style={{ textAlign: "center", fontSize: 22, ...styles.fontTheme }}
+          >
+            Створити акаунт
+          </Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            paddingTop: 20,
+          }}
+        >
+          <CustomButton
+            title="Покупця"
+            customStyles={{
+              padding: 10,
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+              width: "50%",
+              ...(siginAs === "Продавця" && inactivebtncss),
+            }}
+            customTextStyles={{
+              ...(siginAs === "Продавця" && { color: "#170F2B" }),
+            }}
+            onPress={() => {
+              setSigninAs("Покупця");
+            }}
+          />
+          <CustomButton
+            title="Продавця"
+            customStyles={{
+              padding: 10,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              width: "50%",
+              ...(siginAs === "Покупця" && inactivebtncss),
+            }}
+            customTextStyles={{
+              ...(siginAs === "Покупця"
+                ? { color: "#170F2B" }
+                : { color: "#fff" }),
+            }}
+            onPress={() => {
+              setSigninAs("Продавця");
+            }}
+          />
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            paddingTop: 30,
+            paddingBottom: 20,
+          }}
+        >
+          <Text
+            style={{ fontSize: 15, textAlign: "center", ...styles.fontTheme }}
+          >
+            Заповніть вашу інформацію нижче або зареєструйтесь за допомогою
+            свого облікового запису в соціальних мережах{" "}
+          </Text>
+        </View>
+        <CustomInput
+          textStyle={styles.label}
+          directionRow
+          label="email/телефон"
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          customStyle={{ ...styles.input, ...styles.fontTheme }}
+        />
+        <CustomInput
+          textStyle={styles.label}
+          directionRow
+          label="email/телефон"
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          customStyle={{ ...styles.input, ...styles.fontTheme }}
+        />
+        <CustomInput
+          textStyle={styles.label}
+          directionRow
+          label="Телефон"
+          placeholder="+38(0XX)-XXX-XXXX"
+          value={email}
+          onChangeText={setEmail}
+          customStyle={{ ...styles.input, ...styles.fontTheme }}
+        />
+        <CustomInput
+          label="Введіть пароль"
+          textStyle={styles.label}
+          directionRow
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          othertextprops={{
+            secureTextEntry: true,
+          }}
+          // errors={{isError: true, errorMessage: "Пароль не співпадає!"}}
+          passwordInput
+          passwordIconBaseStyle={{ width: 25 }}
+          customStyle={styles.input}
+        />
+        <CustomInput
+          label="Введіть пароль"
+          textStyle={styles.label}
+          directionRow
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          othertextprops={{
+            secureTextEntry: true,
+          }}
+          // errors={{isError: true, errorMessage: "Пароль не співпадає!"}} uncomment this when you want to add api call and pagination
+          passwordInput
+          passwordIconBaseStyle={{ width: 25 }}
+          customStyle={styles.input}
+        />
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <CheckBox
+            title="Я погоджуюсь з"
+            isChecked={checked}
+            onPress={() => setChecked((prev) => !prev)}
+            titleStyle={styles.checkboxTitleStyle}
+          />
+          <Text style={{ color: "#8E6CEF" }}>Умовами та положеннями</Text>
+        </View>
+        {/** Awaiting the functionality of login from backend when done, change false with the conditional variable */}
+        {/* {true && <Text style={{color: "#D30004", textAlign: "right", paddingTop: 10}}>Пароль не співпадає!</Text>} */}
         <CustomButton
-          title='Покупця'
+          title="Зареєструватись як покупець"
+          onPress={handleLogin}
           customStyles={{
-            padding: 10,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-            width: "50%",
-            ...(siginAs === "Продавця" && inactivebtncss),
-          }}
-          customTextStyles={{
-            ...(siginAs === "Продавця" && { color: "#170F2B" }),
-          }}
-          onPress={() => {
-            setSigninAs("Покупця");
+            marginTop: 70,
+            ...(true ? { backgroundColor: "#E3DBF7", color: "#AC94E8" } : {}),
           }}
         />
-        <CustomButton
-          title='Продавця'
-          customStyles={{
-            padding: 10,
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
-            width: "50%",
-            ...(siginAs === "Покупця" && inactivebtncss),
-          }}
-          customTextStyles={{
-            ...(siginAs === "Покупця"
-              ? { color: "#170F2B" }
-              : { color: "#fff" }),
-          }}
-          onPress={() => {
-            setSigninAs("Продавця");
-          }}
-        />
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          paddingTop: 30,
-          paddingBottom: 20,
-        }}
-      >
-        <Text
-          style={{ fontSize: 15, textAlign: "center", ...styles.fontTheme }}
-        >
-          Заповніть вашу інформацію нижче або зареєструйтесь за допомогою свого
-          облікового запису в соціальних мережах{" "}
+        {/* <AntIcons name={"google"} size={30} /> */}
+
+        <Text style={styles.socialmediatextloginstyle}>
+          або увійдіть за допомогою
         </Text>
-      </View>
-      <CustomInput
-        textStyle={styles.label}
-        directionRow
-        label='email/телефон'
-        placeholder='Email'
-        value={email}
-        onChangeText={setEmail}
-        customStyle={{ ...styles.input, ...styles.fontTheme }}
-      />
-      <CustomInput
-        textStyle={styles.label}
-        directionRow
-        label='email/телефон'
-        placeholder='Email'
-        value={email}
-        onChangeText={setEmail}
-        customStyle={{ ...styles.input, ...styles.fontTheme }}
-      />
-      <CustomInput
-        textStyle={styles.label}
-        directionRow
-        label='Телефон'
-        placeholder='+38(0XX)-XXX-XXXX'
-        value={email}
-        onChangeText={setEmail}
-        customStyle={{ ...styles.input, ...styles.fontTheme }}
-      />
-      <CustomInput
-        label='Введіть пароль'
-        textStyle={styles.label}
-        directionRow
-        placeholder='Password'
-        value={password}
-        onChangeText={setPassword}
-        othertextprops={{
-          secureTextEntry: true,
-        }}
-        // errors={{isError: true, errorMessage: "Пароль не співпадає!"}}
-        passwordInput
-        passwordIconBaseStyle={{ width: 25 }}
-        customStyle={styles.input}
-      />
-      <CustomInput
-        label='Введіть пароль'
-        textStyle={styles.label}
-        directionRow
-        placeholder='Password'
-        value={password}
-        onChangeText={setPassword}
-        othertextprops={{
-          secureTextEntry: true,
-        }}
-        // errors={{isError: true, errorMessage: "Пароль не співпадає!"}} uncomment this when you want to add api call and pagination
-        passwordInput
-        passwordIconBaseStyle={{ width: 25 }}
-        customStyle={styles.input}
-      />
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <CheckBox
-          title='Я погоджуюсь з'
-          isChecked={checked}
-          onPress={() => setChecked((prev) => !prev)}
-          titleStyle={styles.checkboxTitleStyle}
-        />
-        <Text style={{ color: "#8E6CEF" }}>Умовами та положеннями</Text>
-      </View>
-      {/** Awaiting the functionality of login from backend when done, change false with the conditional variable */}
-      {/* {true && <Text style={{color: "#D30004", textAlign: "right", paddingTop: 10}}>Пароль не співпадає!</Text>} */}
-      <CustomButton
-        title='Зареєструватись як покупець'
-        onPress={handleLogin}
-        customStyles={{
-          marginTop: 70,
-          ...(true ? { backgroundColor: "#E3DBF7", color: "#AC94E8" } : {}),
-        }}
-      />
-      {/* <AntIcons name={"google"} size={30} /> */}
 
-      <Text style={styles.socialmediatextloginstyle}>
-        або увійдіть за допомогою
-      </Text>
-
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: 40,
-          paddingTop: 50,
-        }}
-      >
-        <SvgIcons
-          name={CUSTOM_ICON_REF.Google}
-          baseStyle={styles.socialMediaiconStyle}
-        />
-        <SvgIcons
-          name={CUSTOM_ICON_REF.Facebook}
-          baseStyle={styles.socialMediaiconStyle}
-        />
-        <SvgIcons
-          name={CUSTOM_ICON_REF.Apple}
-          baseStyle={styles.socialMediaiconStyle}
-        />
-      </View>
-
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          paddingTop: 30,
-          paddingBottom: 70,
-        }}
-      >
-        <Text style={styles.ifsignedin}>вже маєте акаунт?</Text>
-        <Text
-          style={{ color: "#8E6CEF", paddingLeft: 10, fontFamily: "Manrope" }}
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 40,
+            paddingTop: 50,
+          }}
         >
-          Увійдіть
-        </Text>
-      </View>
-    </ScrollView>
+          <SvgIcons
+            name={CUSTOM_ICON_REF.Google}
+            baseStyle={styles.socialMediaiconStyle}
+          />
+          <SvgIcons
+            name={CUSTOM_ICON_REF.Facebook}
+            baseStyle={styles.socialMediaiconStyle}
+          />
+          <SvgIcons
+            name={CUSTOM_ICON_REF.Apple}
+            baseStyle={styles.socialMediaiconStyle}
+          />
+        </View>
+
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            paddingTop: 30,
+            paddingBottom: 70,
+          }}
+        >
+          <Text style={styles.ifsignedin}>вже маєте акаунт?</Text>
+          <Text
+            style={{ color: "#8E6CEF", paddingLeft: 10, fontFamily: "Manrope" }}
+          >
+            Увійдіть
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
