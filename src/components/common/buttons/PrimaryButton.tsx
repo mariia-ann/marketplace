@@ -87,6 +87,7 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
   return (
     <AnimatedPressable
       onPress={onPress}
+      disabled={!active}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={[
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
 });
 
 const sizeStyles: Record<ButtonSize, ViewStyle> = {
-  L: { minWidth: 350 },
+  L: { minWidth: 350, maxWidth: 420 },
   M: { minWidth: 320 },
   S: { minWidth: 252 },
 };

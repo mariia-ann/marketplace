@@ -26,6 +26,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   title,
   onBack,
   customStyles,
+  showBack = true,
 }) => {
   const router = useRouter();
 
@@ -49,7 +50,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
     <SafeAreaView edges={["top"]} style={{ ...customStyles, ...styles.header }}>
       {/* Left */}
       <View style={styles.sideLeft}>
-        <BackButton onClick={handleBack} />
+        {showBack ? <BackButton onClick={handleBack} /> : null}
       </View>
       {/* Center */}
       <View style={styles.center}>
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   sideRight: {
-    width: 40,
+    width: 48,
     height: 40,
     justifyContent: "center",
     paddingLeft: 8,

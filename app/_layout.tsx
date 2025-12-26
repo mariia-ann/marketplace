@@ -6,7 +6,6 @@ import { RestoreGate } from "@/src/features/auth/guards";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { queryClient } from "@/src/lib/queryClient";
 import { asyncStoragePersister } from "@/src/lib/persistor";
-import { useAuthStore } from "../src/state/useAuthStore";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -53,6 +52,14 @@ export default function RootLayout() {
             {/* Auth screens */}
             <Stack.Screen name="auth/login" options={{ headerShown: false }} />
             <Stack.Screen name="auth/signup" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="auth/signupOtp"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="auth/verification"
+              options={{ headerShown: false }}
+            />
             {/* Main app after login */}
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             {/* 404 page */}

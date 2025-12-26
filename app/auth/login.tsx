@@ -17,6 +17,7 @@ import {
 import BasicFormInput from "@/src/components/common/customInput/BasicFormInput";
 import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
 import LinkButton from "@/src/components/common/buttons/LinkButton";
+import PasswordInput from "@/src/components/common/customInput/PasswordInput";
 
 const Login = () => {
   const { mutate: doLogin, isPending, error, isSuccess, reset } = useLogin();
@@ -88,17 +89,18 @@ const Login = () => {
                   }
                 />
 
-                <BasicFormInput
+                <PasswordInput
                   label="Введіть пароль"
                   placeholder="Пароль"
-                  secureTextEntry
                   onChangeText={(text) => {
                     if (error) reset(); // clear server error when user edits credentials
                     setFieldValue("password", text); // Formik state only
                   }}
                   onBlur={handleBlur("password")}
                   errorMessage={
-                    (touched.password && errors.password) || loginErrorMsg
+                    touched.password && errors.password
+                      ? errors.password
+                      : undefined
                   }
                 />
 
@@ -112,6 +114,17 @@ const Login = () => {
                   style={{ alignSelf: "flex-end", paddingTop: 8 }}
                   textStyle={{ fontWeight: "400" }}
                 />
+                {loginErrorMsg && (
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: "red",
+                      fontSize: 10,
+                    }}
+                  >
+                    {loginErrorMsg ?? " "}
+                  </Text>
+                )}
 
                 <PrimaryButton
                   title={isPending ? "Входимо..." : "Увійти"}
@@ -121,8 +134,20 @@ const Login = () => {
                   size="L"
                   active={!isPending && isFormValid}
                   disabled={isPending || !isFormValid}
-                  style={{ marginTop: 32 }}
+                  style={{ marginTop: 14 }}
                 />
+                {loginErrorMsg && (
+                  <Text
+                    style={{
+                      marginTop: 14,
+                      textAlign: "center",
+                      color: "red",
+                      fontSize: 10,
+                    }}
+                  >
+                    {loginErrorMsg ?? " "}
+                  </Text>
+                )}
               </View>
             );
           }}
@@ -136,8 +161,8 @@ const Login = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
-            gap: 40,
-            paddingTop: 50,
+            gap: 35,
+            paddingTop: 24,
           }}
         >
           <SvgIcons
@@ -159,7 +184,7 @@ const Login = () => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            paddingTop: 30,
+            paddingTop: 24,
           }}
         >
           <Text style={styles.ifsignedin}>Ще не маєте акаунт?</Text>
@@ -169,7 +194,7 @@ const Login = () => {
               router.push("/auth/signup");
             }}
             underline={true}
-            style={{ paddingLeft: 10 }}
+            style={{ paddingLeft: 8 }}
           />
         </View>
       </SafeAreaView>
@@ -198,7 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     fontFamily: "Manrope",
-    paddingTop: 30,
+    paddingTop: 24,
     color: Colors.grey400,
   },
   ifsignedin: {
@@ -206,7 +231,7 @@ const styles = StyleSheet.create({
     fontFamily: "Manrope",
   },
   socialMediaiconStyle: {
-    width: 45,
-    height: 45,
+    width: 48,
+    height: 48,
   },
 });

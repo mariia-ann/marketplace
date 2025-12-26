@@ -1,3 +1,5 @@
+// this component is a basic form input which accepts label, errorMessage and other TextInputProps
+// It also supports an optional right icon with press functionality
 import React, { useState, forwardRef } from "react";
 import {
   TextInput,
@@ -6,18 +8,37 @@ import {
   StyleSheet,
   TextInputProps,
   FocusEvent,
+  Pressable,
 } from "react-native";
 import Colors from "@/constants/Colors";
 
 interface BasicFormInputProps extends TextInputProps {
   label: string;
   errorMessage?: string;
+  rightIcon?: {
+    render: React.ReactNode;
+    onPress?: () => void;
+  };
 }
 // this component is a basic form input which accepts label, errorMessage and other TextInputProps
 const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
-  ({ label, errorMessage, style, onFocus, onBlur, ...rest }, ref) => {
+  (
+    {
+      label,
+      errorMessage,
+      rightIcon,
+      style,
+      onFocus,
+      onBlur,
+      textContentType,
+      autoComplete,
+      importantForAutofill,
+      ...rest
+    },
+    ref,
+  ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const ERROR_HEIGHT = 12;
+    const ERROR_HEIGHT = 10;
 
     // Handlers for focus and blur events
     const handleFocus = (e: FocusEvent) => {
@@ -33,21 +54,37 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
     return (
       <View style={styles.container}>
         <Text style={styles.label}>{label}</Text>
-        <TextInput
-          ref={ref}
-          style={[
-            styles.input,
-            isFocused && styles.focused,
-            errorMessage && styles.errorInput,
-            style,
-          ]}
-          placeholderTextColor={Colors.grey400}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          autoCapitalize="none"
-          {...rest}
-        />
-        <View style={{ minHeight: ERROR_HEIGHT, marginTop: 8 }}>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            ref={ref}
+            style={[
+              styles.input,
+              rightIcon && styles.inputWithIcon,
+              isFocused && styles.focused,
+              errorMessage && styles.errorInput,
+              style,
+            ]}
+            placeholderTextColor={Colors.grey400}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            autoCapitalize="none"
+            autoCorrect={false}
+            textContentType={textContentType ?? "none"}
+            autoComplete={autoComplete ?? "off"}
+            importantForAutofill={importantForAutofill ?? "no"}
+            {...rest}
+          />
+          {rightIcon && (
+            <Pressable
+              onPress={rightIcon.onPress}
+              style={styles.iconRight}
+              hitSlop={8}
+            >
+              {rightIcon.render}
+            </Pressable>
+          )}
+        </View>
+        <View style={{ minHeight: ERROR_HEIGHT, marginTop: 4 }}>
           <Text style={[styles.errorText, !errorMessage && styles.errorHidden]}>
             {errorMessage ?? " "}
           </Text>
@@ -71,6 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
+    height: 48,
     borderWidth: 1,
     borderColor: Colors.grey400,
     borderRadius: 10,
@@ -79,6 +117,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Manrope",
     color: Colors.blackMain,
+  },
+  inputWrapper: {
+    position: "relative",
+    justifyContent: "center",
+  },
+  inputWithIcon: {
+    paddingRight: 40,
+  },
+  iconRight: {
+    position: "absolute",
+    right: 12,
+    height: "100%",
+    justifyContent: "center",
   },
   focused: {
     borderColor: Colors.softPurple,
@@ -90,8 +141,9 @@ const styles = StyleSheet.create({
   },
   errorHidden: { opacity: 0 },
   errorText: {
-    fontSize: 12,
+    fontSize: 10,
     fontFamily: "Manrope",
+    letterSpacing: 0.5,
     color: Colors.red,
   },
 });

@@ -10,14 +10,26 @@ declare module "axios" {
 }
 
 export const api = axios.create({
-  baseURL: "http://34.227.53.16:3000/",
+  // baseURL: "http://34.227.53.16:3000/",
+  baseURL: "http://localhost:3000/",
   timeout: 15_000,
 });
 
 // REQUEST INTERCEPTOR
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
-
+  if (__DEV__) {
+    console.warn(
+      `[${config.method?.toUpperCase()}] ${config.baseURL}${config.url} ` +
+        (config.skipAuth
+          ? "(skipAuth)"
+          : config.requireAuth
+            ? "(requireAuth)"
+            : token
+              ? "(with token)"
+              : "(guest)"),
+    );
+  }
   // 1) Hard opt-out (e.g., login/register)
   if (config.skipAuth) return config;
 
@@ -33,7 +45,7 @@ api.interceptors.request.use((config) => {
   }
   // TODO /by Demidas/ Delete before deploy below is for log purpose only
   if (__DEV__) {
-    console.log(
+    console.warn(
       `[${config.method?.toUpperCase()}] ${config.baseURL}${config.url} ` +
         (config.skipAuth
           ? "(skipAuth)"
