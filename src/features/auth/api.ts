@@ -75,6 +75,7 @@ export async function sendOTP(dto: sendOTPDto): Promise<OTPResponse> {
 }
 
 export async function verifyOTP(dto: verifyOTPDto) {
+  console.warn("verifyOTP called with DTO:", dto);
   const { data } = await api.post("auth/phone/verify", dto, {
     requireAuth: false,
   });

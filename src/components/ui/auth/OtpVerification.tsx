@@ -4,33 +4,42 @@
 import OptionToggle from "@/src/components/common/OptionToggle/OptionToggle";
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import type { SignupDto } from "@/src/features/auth/api";
 import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import SecondaryButton from "@/src/components/common/buttons/SecondaryButton";
 import { useSendOtp } from "@/src/features/auth/hooks/useSendOtp";
 
 export default function OtpVerification() {
+  const { email, phone } = useLocalSearchParams<{
+    email?: string;
+    phone?: string;
+  }>();
   const [method, setMethod] = useState<"sms" | "email">("sms");
 
-  const qc = useQueryClient();
-  const { data: signupDto } = useQuery({
-    queryKey: ["signupDto"],
-    queryFn: async () => qc.getQueryData<SignupDto>(["signupDto"]),
-    enabled: false,
-    initialData: () => qc.getQueryData<SignupDto>(["signupDto"]),
-  });
-  const { mutate: sendOtp, isPending } = useSendOtp();
+  const { mutate: sendOtp } = useSendOtp();
 
   const handleSend = () => {
-    if (signupDto?.phone) {
+    if (method === "sms" && phone) {
       sendOtp(
-        { phone: signupDto.phone },
-        { onSuccess: () => router.push("/auth/verification") },
+        { phone },
+        {
+          onSuccess: () =>
+            router.push({
+              pathname: "/auth/otp-code-verification",
+              params: { method, phone },
+            }),
+        },
       );
+      return;
+    }
+
+    if (method === "email" && email) {
+      router.push({
+        pathname: "/auth/otp-code-verification",
+        params: { method, email },
+      });
     }
   };
 
@@ -62,9 +71,7 @@ export default function OtpVerification() {
       {/* Info */}
       <View style={styles.infoWrapper}>
         <Text style={styles.infoText}>Код буде надіслано на:</Text>
-        <Text style={styles.infoEmail}>
-          {method === "sms" ? signupDto?.phone : signupDto?.email}
-        </Text>
+        <Text style={styles.infoEmail}>{method === "sms" ? phone : email}</Text>
       </View>
 
       {/* Buttons */}

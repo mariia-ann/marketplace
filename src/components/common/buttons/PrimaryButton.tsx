@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
 
 const sizeStyles: Record<ButtonSize, ViewStyle> = {
   L: { minWidth: 350, maxWidth: 420 },
-  M: { minWidth: 320 },
+  M: { minWidth: 330 },
   S: { minWidth: 252 },
 };
 

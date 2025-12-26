@@ -53,11 +53,11 @@ export default function RootLayout() {
             <Stack.Screen name="auth/login" options={{ headerShown: false }} />
             <Stack.Screen name="auth/signup" options={{ headerShown: false }} />
             <Stack.Screen
-              name="auth/signupOtp"
+              name="auth/signup-otp"
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="auth/verification"
+              name="auth/otp-code-verification"
               options={{ headerShown: false }}
             />
             {/* Main app after login */}

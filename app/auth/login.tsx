@@ -103,29 +103,39 @@ const Login = () => {
                       : undefined
                   }
                 />
-
-                <LinkButton
-                  title="Забули пароль?"
-                  onPress={() => {
-                    router.push("/auth/forgot-password");
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: loginErrorMsg
+                      ? "space-between"
+                      : "flex-end",
+                    alignItems: "center",
                   }}
-                  underline={false}
-                  color={loginErrorMsg ? Colors.red : Colors.grey400}
-                  style={{ alignSelf: "flex-end", paddingTop: 8 }}
-                  textStyle={{ fontWeight: "400" }}
-                />
-                {loginErrorMsg && (
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      color: "red",
-                      fontSize: 10,
-                    }}
-                  >
-                    {loginErrorMsg ?? " "}
-                  </Text>
-                )}
+                >
+                  {loginErrorMsg && (
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        color: "red",
+                        fontSize: 12,
+                      }}
+                    >
+                      {loginErrorMsg ?? " "}
+                    </Text>
+                  )}
 
+                  <LinkButton
+                    title="Забули пароль?"
+                    onPress={() => {
+                      router.push("/auth/forgot-password");
+                    }}
+                    underline={loginErrorMsg ? true : false}
+                    color={loginErrorMsg ? Colors.softPurple : Colors.grey400}
+                    style={{ alignSelf: "flex-end", paddingTop: 8 }}
+                    textStyle={{ fontWeight: "600" }}
+                  />
+                </View>
                 <PrimaryButton
                   title={isPending ? "Входимо..." : "Увійти"}
                   onPress={() => {
@@ -136,18 +146,6 @@ const Login = () => {
                   disabled={isPending || !isFormValid}
                   style={{ marginTop: 14 }}
                 />
-                {loginErrorMsg && (
-                  <Text
-                    style={{
-                      marginTop: 14,
-                      textAlign: "center",
-                      color: "red",
-                      fontSize: 10,
-                    }}
-                  >
-                    {loginErrorMsg ?? " "}
-                  </Text>
-                )}
               </View>
             );
           }}

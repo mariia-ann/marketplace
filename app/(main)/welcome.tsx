@@ -38,7 +38,7 @@ export default function WelcomeScreen() {
             title="Продовжити як гість"
             active={true}
             size="L"
-            onPress={() => router.push("/(tabs)/profile")}
+            onPress={() => router.push("/auth/otp-code-verification")}
           />
         </View>
         <View style={styles.linkBlock}>

@@ -20,7 +20,7 @@ import {
   signUpSchema,
 } from "@/src/features/auth/schemas/signup.schema";
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SignupDto } from "@/src/features/auth/api";
@@ -29,7 +29,7 @@ import PasswordInput from "@/src/components/common/customInput/PasswordInput";
 
 const Signup = () => {
   const [accountType, setAccountType] = useState<"buyer" | "seller">("buyer");
-  const { mutate: doSignUp, isPending, error, isSuccess, reset } = useSignup();
+  const { mutate: doSignUp, isPending, error, reset } = useSignup();
 
   const initialValues: SignupFormValues = {
     firstName: "",
@@ -42,12 +42,22 @@ const Signup = () => {
 
   const handleSignup = (values: SignupFormValues) => {
     const { acceptTerms, repeatPassword, ...rest } = values;
+    // below is just to silent the unused variable warnings
+    void acceptTerms;
+    void repeatPassword;
     const dto: SignupDto = {
       ...rest,
       isPhoneValidated: true,
     };
     console.log("Signing up with:", dto);
-    doSignUp(dto);
+    doSignUp(dto, {
+      onSuccess: () => {
+        router.replace({
+          pathname: "/auth/signup-otp",
+          params: { email: dto.email, phone: dto.phone },
+        });
+      },
+    });
   };
 
   const signUpErrorMsg = (() => {
@@ -64,12 +74,6 @@ const Signup = () => {
   const clearSignupError = () => {
     if (error) reset();
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      router.replace("/auth/signupOtp");
-    }
-  }, [isSuccess]);
 
   return (
     <RequireGuest to="/(tabs)">
