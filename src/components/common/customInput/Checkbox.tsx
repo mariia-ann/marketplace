@@ -1,3 +1,4 @@
+import Colors from "@/constants/Colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -23,7 +24,7 @@ const CheckBox = (props: Props) => {
         <MaterialCommunityIcons
           name={iconName}
           size={24}
-          color="#000"
+          color={Colors.softPurple}
           {...checkboxStyle}
         />
       </Pressable>
@@ -39,8 +40,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "row",
-    width: 150,
-    marginTop: 5,
-    marginHorizontal: 5,
+    gap: 8,
   },
 });

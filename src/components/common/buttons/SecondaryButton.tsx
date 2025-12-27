@@ -113,9 +113,9 @@ const styles = StyleSheet.create({
 });
 
 const sizeStyles: Record<ButtonSize, ViewStyle> = {
-  L: { width: 350 },
-  M: { width: 320 },
-  S: { width: 252 },
+  L: { minWidth: 350, maxWidth: 420 },
+  M: { minWidth: 330 },
+  S: { minWidth: 165 },
 };
 
 export default SecondaryButton;

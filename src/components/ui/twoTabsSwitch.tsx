@@ -2,10 +2,12 @@ import Colors from "@/constants/Colors";
 import React, { useEffect, useRef } from "react";
 import {
   Animated,
-  SafeAreaView,
   StyleSheet,
+  StyleProp,
+  TextStyle,
   TouchableWithoutFeedback,
   View,
+  ViewStyle,
 } from "react-native";
 
 export type TwoTabsProps = {
@@ -13,6 +15,10 @@ export type TwoTabsProps = {
   option1: string;
   option2: string;
   onTabChange: (tab: "option1" | "option2") => void;
+  containerStyle?: StyleProp<ViewStyle>;
+  tabLeftStyle?: StyleProp<ViewStyle>;
+  tabRightStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 };
 
 const TwoTabsSwitch = ({
@@ -20,6 +26,10 @@ const TwoTabsSwitch = ({
   onTabChange,
   option1,
   option2,
+  containerStyle,
+  tabLeftStyle,
+  tabRightStyle,
+  textStyle,
 }: TwoTabsProps) => {
   const leftAnim = useRef(
     new Animated.Value(activeTab === "option1" ? 1 : 0),
@@ -56,40 +66,45 @@ const TwoTabsSwitch = ({
     });
 
   return (
-    <SafeAreaView>
-      <View style={styles.tabs}>
-        <TouchableWithoutFeedback onPress={() => onTabChange("option1")}>
-          <Animated.View
-            style={[styles.tabLeft, { backgroundColor: bgColor(leftAnim) }]}
+    <View style={[styles.tabs, containerStyle]}>
+      <TouchableWithoutFeedback onPress={() => onTabChange("option1")}>
+        <Animated.View
+          style={[
+            styles.tabLeft,
+            { backgroundColor: bgColor(leftAnim) },
+            tabLeftStyle,
+          ]}
+        >
+          <Animated.Text
+            style={[styles.text, { color: textColor(leftAnim) }, textStyle]}
           >
-            <Animated.Text
-              style={[styles.text, { color: textColor(leftAnim) }]}
-            >
-              {option1}
-            </Animated.Text>
-          </Animated.View>
-        </TouchableWithoutFeedback>
+            {option1}
+          </Animated.Text>
+        </Animated.View>
+      </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={() => onTabChange("option2")}>
-          <Animated.View
-            style={[styles.tabRight, { backgroundColor: bgColor(rightAnim) }]}
+      <TouchableWithoutFeedback onPress={() => onTabChange("option2")}>
+        <Animated.View
+          style={[
+            styles.tabRight,
+            { backgroundColor: bgColor(rightAnim) },
+            tabRightStyle,
+          ]}
+        >
+          <Animated.Text
+            style={[styles.text, { color: textColor(rightAnim) }, textStyle]}
           >
-            <Animated.Text
-              style={[styles.text, { color: textColor(rightAnim) }]}
-            >
-              {option2}
-            </Animated.Text>
-          </Animated.View>
-        </TouchableWithoutFeedback>
-      </View>
-    </SafeAreaView>
+            {option2}
+          </Animated.Text>
+        </Animated.View>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   tabs: {
     flexDirection: "row",
-    paddingHorizontal: 20,
   },
   tabLeft: {
     width: "50%",
