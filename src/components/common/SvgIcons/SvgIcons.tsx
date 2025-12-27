@@ -10,13 +10,13 @@ interface Props {
 function SvgIcons(props: Props) {
   const { name, baseStyle } = props;
 
-  const CustomIcon = CustomIconRef[name];
-  if (!CustomIcon) return null;
-  return (
-    <View style={baseStyle}>
-      <CustomIcon />
-    </View>
-  );
+	const CustomIcon = CustomIconRef[name];
+	if (!CustomIcon) return null;
+	return (
+		<View style={baseStyle}>
+			<CustomIcon color={baseStyle?.color} />
+		</View>
+	)
 }
 
 export default SvgIcons;

@@ -13,13 +13,12 @@ interface Props {
 }
 
 const CheckBox = (props: Props) => {
-  const { checkboxStyle, titleStyle } = props;
-  const iconName = props.isChecked
-    ? "checkbox-marked"
-    : "checkbox-blank-outline";
+  const { checkboxStyle, titleStyle, containerStyle } = props;
+  const iconName = props.isChecked ?
+    "checkbox-marked" : "checkbox-blank-outline";
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...containerStyle}}>
       <Pressable onPress={props.onPress}>
         <MaterialCommunityIcons
           name={iconName}
