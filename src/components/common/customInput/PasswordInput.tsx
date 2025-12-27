@@ -34,6 +34,7 @@ const PasswordInput = forwardRef<TextInput, PasswordInputProps>(
         errorMessage={errorMessage}
         secureTextEntry={!isPasswordVisible}
         textContentType={textContentType}
+        passwordRules=""
         autoComplete={autoComplete}
         importantForAutofill={importantForAutofill}
         rightIcon={{

@@ -92,6 +92,7 @@ const Login = () => {
                 <PasswordInput
                   label="Введіть пароль"
                   placeholder="Пароль"
+                  textContentType="none"
                   onChangeText={(text) => {
                     if (error) reset(); // clear server error when user edits credentials
                     setFieldValue("password", text); // Formik state only

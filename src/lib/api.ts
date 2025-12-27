@@ -10,8 +10,8 @@ declare module "axios" {
 }
 
 export const api = axios.create({
-  // baseURL: "http://34.227.53.16:3000/",
-  baseURL: "http://localhost:3000/",
+  baseURL: "http://34.227.53.16:3000/",
+  // baseURL: "http://localhost:3000/",
   timeout: 15_000,
 });
 
