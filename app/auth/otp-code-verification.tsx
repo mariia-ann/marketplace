@@ -2,13 +2,23 @@ import Colors from "@/constants/Colors";
 import { NavigationHeader } from "@/src/components/common/NavigationHeader";
 import { RequireGuest } from "@/src/features/auth/guards";
 import React from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
 import SecondaryButton from "@/src/components/common/buttons/SecondaryButton";
 import LinkButton from "@/src/components/common/buttons/LinkButton";
 import { useSendOtp, useVerifyOtp } from "@/src/features/auth/hooks/useSendOtp";
+import { Loader } from "@/src/components/common/Loader";
+import { ShieldCheck } from "phosphor-react-native";
 
 export default function OtpCodeVerification() {
   const { method, phone, email } = useLocalSearchParams<{
@@ -16,18 +26,29 @@ export default function OtpCodeVerification() {
     email?: string;
     phone?: string;
   }>();
+  const [modalVisible, setModalVisible] = React.useState(false);
+
   console.warn(phone);
 
-  const { mutate: sendCode } = useVerifyOtp();
-  const { mutate: sendOtp } = useSendOtp();
+  const { mutate: sendCode, isPending } = useVerifyOtp();
+  const { mutate: sendOtp, error } = useSendOtp();
 
   // Function to handle sending the OTP code for verification
   const handleSend = () => {
-    if (phone) {
-      console.warn("Sending OTP verification code", phone, 'code: "000000"');
-
-      sendCode({ phone: phone, code: "000000" });
-    }
+    if (!phone) return;
+    console.warn("Sending OTP verification code", phone, 'code: "000000"');
+    sendCode(
+      { phone: phone, code: "000000" },
+      {
+        onSuccess: () => {
+          setModalVisible(true);
+          setTimeout(() => {
+            setModalVisible(false);
+            router.push("/(tabs)");
+          }, 10000);
+        },
+      },
+    );
   };
 
   const handleResend = () => {
@@ -108,6 +129,39 @@ export default function OtpCodeVerification() {
           />
         </ScrollView>
       </SafeAreaView>
+      {/* Modal */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.backdrop}>
+          <View style={styles.card}>
+            {isPending ? (
+              <Pressable onPress={() => setModalVisible(false)}>
+                <Loader size="large" color={Colors.softPurple} />
+              </Pressable>
+            ) : (
+              <View style={styles.modalCardContent}>
+                <ShieldCheck
+                  size={45}
+                  weight="bold"
+                  color={Colors.softPurple}
+                  style={{ marginBottom: 27, alignSelf: "center" }}
+                />
+                <View style={styles.modalTextContainer}>
+                  <Text style={styles.modalText}>Верифікація</Text>
+                  <Text style={styles.modalText}>пройшла успішно</Text>
+                </View>
+                <Pressable onPress={() => setModalVisible(false)}>
+                  <Text style={styles.closeModalText}>Закрити</Text>
+                </Pressable>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
     </RequireGuest>
   );
 }
@@ -152,5 +206,37 @@ const styles = StyleSheet.create({
     fontFamily: "Manrope",
     fontWeight: "700",
     color: Colors.blackMain,
+  },
+  backdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  card: {
+    width: "80%",
+  },
+  modalCardContent: {
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    paddingHorizontal: 48,
+    paddingVertical: 32,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  modalTextContainer: {
+    marginBottom: 24,
+  },
+  modalText: {
+    textAlign: "center",
+    fontSize: 22,
+  },
+  closeModalText: {
+    textAlign: "right",
+    color: Colors.softPurple,
+    fontSize: 16,
+    fontFamily: "Manrope",
+    fontWeight: "700",
   },
 });

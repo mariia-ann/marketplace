@@ -4,8 +4,6 @@ import {
   verifyOTP,
   type sendOTPDto,
   type verifyOTPDto,
-  type OTPResponse,
-  type VerifyOTPResponse,
 } from "@/src/features/auth/api";
 
 // Hook to send OTP to a phone number

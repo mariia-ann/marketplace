@@ -1,7 +1,7 @@
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/constants/Colors";
 import { NavigationHeader } from "@/src/components/common/NavigationHeader";
@@ -196,6 +196,9 @@ const Login = () => {
             style={{ paddingLeft: 8 }}
           />
         </View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        ></View>
       </SafeAreaView>
     </RequireGuest>
   );
