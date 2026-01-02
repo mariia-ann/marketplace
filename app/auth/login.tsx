@@ -1,7 +1,7 @@
 import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
 import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "@/constants/Colors";
 import { NavigationHeader } from "@/src/components/common/NavigationHeader";
@@ -17,6 +17,7 @@ import {
 import BasicFormInput from "@/src/components/common/customInput/BasicFormInput";
 import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
 import LinkButton from "@/src/components/common/buttons/LinkButton";
+import PasswordInput from "@/src/components/common/customInput/PasswordInput";
 
 const Login = () => {
   const { mutate: doLogin, isPending, error, isSuccess, reset } = useLogin();
@@ -88,31 +89,54 @@ const Login = () => {
                   }
                 />
 
-                <BasicFormInput
+                <PasswordInput
                   label="Введіть пароль"
                   placeholder="Пароль"
-                  secureTextEntry
+                  textContentType="none"
                   onChangeText={(text) => {
                     if (error) reset(); // clear server error when user edits credentials
                     setFieldValue("password", text); // Formik state only
                   }}
                   onBlur={handleBlur("password")}
                   errorMessage={
-                    (touched.password && errors.password) || loginErrorMsg
+                    touched.password && errors.password
+                      ? errors.password
+                      : undefined
                   }
                 />
-
-                <LinkButton
-                  title="Забули пароль?"
-                  onPress={() => {
-                    router.push("/auth/forgot-password");
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: loginErrorMsg
+                      ? "space-between"
+                      : "flex-end",
+                    alignItems: "center",
                   }}
-                  underline={false}
-                  color={loginErrorMsg ? Colors.red : Colors.grey400}
-                  style={{ alignSelf: "flex-end", paddingTop: 8 }}
-                  textStyle={{ fontWeight: "400" }}
-                />
+                >
+                  {loginErrorMsg && (
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        color: "red",
+                        fontSize: 12,
+                      }}
+                    >
+                      {loginErrorMsg ?? " "}
+                    </Text>
+                  )}
 
+                  <LinkButton
+                    title="Забули пароль?"
+                    onPress={() => {
+                      router.push("/auth/forgot-password");
+                    }}
+                    underline={loginErrorMsg ? true : false}
+                    color={loginErrorMsg ? Colors.softPurple : Colors.grey400}
+                    style={{ alignSelf: "flex-end", paddingTop: 8 }}
+                    textStyle={{ fontWeight: "600" }}
+                  />
+                </View>
                 <PrimaryButton
                   title={isPending ? "Входимо..." : "Увійти"}
                   onPress={() => {
@@ -121,7 +145,7 @@ const Login = () => {
                   size="L"
                   active={!isPending && isFormValid}
                   disabled={isPending || !isFormValid}
-                  style={{ marginTop: 32 }}
+                  style={{ marginTop: 14 }}
                 />
               </View>
             );
@@ -136,8 +160,8 @@ const Login = () => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
-            gap: 40,
-            paddingTop: 50,
+            gap: 35,
+            paddingTop: 24,
           }}
         >
           <SvgIcons
@@ -159,7 +183,7 @@ const Login = () => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            paddingTop: 30,
+            paddingTop: 24,
           }}
         >
           <Text style={styles.ifsignedin}>Ще не маєте акаунт?</Text>
@@ -169,9 +193,12 @@ const Login = () => {
               router.push("/auth/signup");
             }}
             underline={true}
-            style={{ paddingLeft: 10 }}
+            style={{ paddingLeft: 8 }}
           />
         </View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        ></View>
       </SafeAreaView>
     </RequireGuest>
   );
@@ -198,7 +225,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     fontFamily: "Manrope",
-    paddingTop: 30,
+    paddingTop: 24,
     color: Colors.grey400,
   },
   ifsignedin: {
@@ -206,7 +233,7 @@ const styles = StyleSheet.create({
     fontFamily: "Manrope",
   },
   socialMediaiconStyle: {
-    width: 45,
-    height: 45,
+    width: 48,
+    height: 48,
   },
 });

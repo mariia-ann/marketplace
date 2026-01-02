@@ -5,8 +5,28 @@ import {
   getUserById,
   login as loginApi,
   logout as logoutApi,
+  signup as signupApi,
+  type SignupDto,
+  LoginDto,
 } from "@/src/features/auth/api";
 
+// Decode JWT payload to pull user id. Keep scope local to this module.
+const parseJwt = (t: string) => {
+  try {
+    const b = t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const j = decodeURIComponent(
+      atob(b)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(""),
+    );
+    return JSON.parse(j);
+  } catch {
+    return {};
+  }
+};
+
+// TODO: /by Demidas/ Move this hook to user hooks once we'll make this feature
 /* this hook is used to fetch the current user's data
 if it was already fecthed it should not make an api call and just return cached data */
 export function useMe() {
@@ -34,24 +54,8 @@ export function useLogin() {
   const setUserId = useAuthStore((s) => s.setUserId);
   const signOut = useAuthStore((s) => s.signOut);
 
-  const parseJwt = (t: string) => {
-    try {
-      const b = t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-      const j = decodeURIComponent(
-        atob(b)
-          .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join(""),
-      );
-      return JSON.parse(j);
-    } catch {
-      return {};
-    }
-  };
-
   return useMutation({
-    mutationFn: async (dto: { email: string; password: string }) =>
-      loginApi(dto),
+    mutationFn: async (dto: LoginDto) => loginApi(dto),
     onSuccess: ({ access_token }) => {
       setToken(access_token);
       const p = parseJwt(access_token);
@@ -62,7 +66,33 @@ export function useLogin() {
     onError: () => {
       console.warn("Login failed");
       // Ensure any stale auth is cleared so guards treat the user as a guest
-      signOut();
+      const token = useAuthStore.getState().token;
+      if (token) signOut();
+      qc.removeQueries({ queryKey: ["me"] });
+    },
+  });
+}
+
+/* This hook is used to perform sign up of user. Signup does not return a token; 
+after success we log the user in to obtain it. */
+export function useSignup() {
+  const qc = useQueryClient();
+  const signOut = useAuthStore((s) => s.signOut);
+
+  return useMutation({
+    mutationFn: async (dto: SignupDto) => {
+      const signupRes = await signupApi(dto);
+      return signupRes;
+    },
+
+    onSuccess: (signupRes, dto) => {
+      console.warn("signupRes", signupRes);
+      console.warn(dto);
+      qc.setQueryData(["signupDto"], dto);
+    },
+    onError: () => {
+      const token = useAuthStore.getState().token;
+      if (token) signOut();
       qc.removeQueries({ queryKey: ["me"] });
     },
   });

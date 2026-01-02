@@ -5,6 +5,7 @@ import CrossfadeTexts, {
 import PaginationIndicator, {
   PaginationIndicatorHandle,
 } from "@/src/components/ui/welcome_page/Pagination";
+import { RequireGuest } from "@/src/features/auth/guards";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -246,8 +247,6 @@ export default function LoadingScreen() {
     return images.map((img, index) => {
       // Calculate the target position for each image based on its index
       const angle = (2 * Math.PI * index) / images.length + angleOffset;
-      // (by Demidas)Really i could not understand why i needed to minus the radiusX and radiusY from
-      // the targetX and targetY but it works
       const targetX =
         centerX - radiusX + radiusX * Math.cos(angle) - imageSize / 2;
       const targetY =
@@ -505,85 +504,87 @@ export default function LoadingScreen() {
   }, [stage]);
 
   return (
-    <Animated.View style={[styles.container, { opacity: screenOpacity }]}>
-      <View
-        style={styles.imageContainer}
-        onLayout={(e) => {
-          const { width, height } = e.nativeEvent.layout;
-          if (
-            imageContainerSize.width === 0 &&
-            imageContainerSize.height === 0
-          ) {
-            setImageContainerSize({ width, height });
-            setStage(1);
-          }
-        }}
-      >
-        {imageContainerSize.width > 0 && imageContainerSize.height > 0 ? (
-          <>
-            {/* Animated images */}
-            {animationsReady &&
-              imageAnimations.current.length === images.length &&
-              imageAnimations.current.map((anim, i) => (
-                <Animated.Image
-                  key={i}
-                  source={anim.source}
-                  style={{
-                    position: "absolute",
-                    width: IMAGE_SIZE,
-                    height: IMAGE_SIZE,
-                    transform: [
-                      { translateX: anim.translateX },
-                      { translateY: anim.translateY },
-                      {
-                        rotate: anim.rotate
-                          ? anim.rotate.interpolate({
-                              inputRange: [0, 1],
-                              outputRange: ["0deg", "360deg"],
-                            })
-                          : "0deg",
-                      },
-                      { scale: anim.scale ?? 1 },
-                    ],
-                  }}
-                />
-              ))}
-            <Animated.Text
-              style={[styles.title, { fontSize: animatedFontSize }]}
-            >
-              Market
-            </Animated.Text>
-            <Animated.Text
-              style={[styles.title, { fontSize: animatedFontSize }]}
-            >
-              Hub
-            </Animated.Text>
-          </>
-        ) : (
-          // Fallback content until layout is ready
-          <ActivityIndicator size="large" color={Colors.blackMain} />
-        )}
-      </View>
-      <View style={styles.bottomContainer}>
-        {stage !== 1 ? (
-          <>
-            <CrossfadeTexts
-              ref={crossfadeRef}
-              messages={[
-                "Це спільнота розумних покупок та якісних послуг!",
-                "Знайди все, що тобі потрібно, в одному місці!",
-                "Твій маркетплейс починається тут!",
-              ]}
-              textStyle={styles.text}
-              duration={500}
-            />
-            <PaginationIndicator ref={paginationRef} />
-          </>
-        ) : (
-          <View style={styles.placeholder} />
-        )}
-      </View>
-    </Animated.View>
+    <RequireGuest to="/(tabs)">
+      <Animated.View style={[styles.container, { opacity: screenOpacity }]}>
+        <View
+          style={styles.imageContainer}
+          onLayout={(e) => {
+            const { width, height } = e.nativeEvent.layout;
+            if (
+              imageContainerSize.width === 0 &&
+              imageContainerSize.height === 0
+            ) {
+              setImageContainerSize({ width, height });
+              setStage(1);
+            }
+          }}
+        >
+          {imageContainerSize.width > 0 && imageContainerSize.height > 0 ? (
+            <>
+              {/* Animated images */}
+              {animationsReady &&
+                imageAnimations.current.length === images.length &&
+                imageAnimations.current.map((anim, i) => (
+                  <Animated.Image
+                    key={i}
+                    source={anim.source}
+                    style={{
+                      position: "absolute",
+                      width: IMAGE_SIZE,
+                      height: IMAGE_SIZE,
+                      transform: [
+                        { translateX: anim.translateX },
+                        { translateY: anim.translateY },
+                        {
+                          rotate: anim.rotate
+                            ? anim.rotate.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: ["0deg", "360deg"],
+                              })
+                            : "0deg",
+                        },
+                        { scale: anim.scale ?? 1 },
+                      ],
+                    }}
+                  />
+                ))}
+              <Animated.Text
+                style={[styles.title, { fontSize: animatedFontSize }]}
+              >
+                Market
+              </Animated.Text>
+              <Animated.Text
+                style={[styles.title, { fontSize: animatedFontSize }]}
+              >
+                Hub
+              </Animated.Text>
+            </>
+          ) : (
+            // Fallback content until layout is ready
+            <ActivityIndicator size="large" color={Colors.blackMain} />
+          )}
+        </View>
+        <View style={styles.bottomContainer}>
+          {stage !== 1 ? (
+            <>
+              <CrossfadeTexts
+                ref={crossfadeRef}
+                messages={[
+                  "Це спільнота розумних покупок та якісних послуг!",
+                  "Знайди все, що тобі потрібно, в одному місці!",
+                  "Твій маркетплейс починається тут!",
+                ]}
+                textStyle={styles.text}
+                duration={500}
+              />
+              <PaginationIndicator ref={paginationRef} />
+            </>
+          ) : (
+            <View style={styles.placeholder} />
+          )}
+        </View>
+      </Animated.View>
+    </RequireGuest>
   );
 }
 
