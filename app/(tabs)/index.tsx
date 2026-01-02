@@ -3,6 +3,7 @@ import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef';
 import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
 import ItemCard from '@/src/components/ui/home_page/ItemCard';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Colors from '@/constants/Colors';
 import bagpic from "../../assets/images/bagpic.png";
 import whitedress from "../../assets/images/productInCatalog/whitedress.png";
 import toaster from "../../assets/images/productInCatalog/toaster.png";
@@ -10,7 +11,7 @@ import shoes from "../../assets/images/productInCatalog/shoes.png";
 import shoesgold from "../../assets/images/productInCatalog/shoesgold.png";
 import reddress from "../../assets/images/productInCatalog/reddress.png";
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import BannerCarousel from '@/src/components/ui/home_page/carousel/BannerCarousel';
 
 export interface Product {
@@ -27,9 +28,7 @@ export interface Product {
 export default function HomeScreen() {
 
   const [selectedIndex, setSelectedIndex] = useState<any>(null);
-  const [selectedPillIndex, setSelectedPillIndex] = useState<any>(null);
-  const ref =  useRef<any>(null);
-
+  const [selectedPillIndex, setSelectedPillIndex] = useState<number | null>(null);
   const arrowRightIconSize: number = 30;
 
   const categoryData = [
@@ -158,14 +157,14 @@ export default function HomeScreen() {
       }
     }
 
-    const selectedBorderColor: string = isSelected ? "#8E6CEF" : "white";
+    const selectedBorderColor: string = isSelected ? Colors.softPurple : Colors.white;
 
     return (
-      <Pressable key={index} style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: 15, marginBottom: 15, padding: 8 }} onPress={() => handleSelectedIndex(index)}>
-        <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", width: circleSize, height: circleSize, borderRadius: "100%", boxShadow: "0 0 15px #00000026", borderColor: selectedBorderColor, borderWidth: 1 }}>
-          <SvgIcons name={item.icon} baseStyle={{ width: iconSize, height: iconSize, color: "#AC94E8" }} />
+      <Pressable key={index} style={styles.categoryPressable} onPress={() => handleSelectedIndex(index)}>
+        <View style={[styles.categoryCircle, { width: circleSize, height: circleSize, borderRadius: circleSize / 2, borderColor: selectedBorderColor }]}>
+          <SvgIcons name={item.icon} baseStyle={[styles.categoryIcon, { width: iconSize, height: iconSize }]} />
         </View>
-        <Text style={{ fontSize: 16 }}>{item.name}</Text>
+        <Text style={styles.categoryLabel}>{item.name}</Text>
       </Pressable>
     )
   }
@@ -195,10 +194,10 @@ export default function HomeScreen() {
         setSelectedPillIndex(indexSelected);
       }
     }
-    const pillTextColor: string = isSelected ? "#8E6CEF" : "#170F2B";
+    const pillTextColor: string = isSelected ? Colors.softPurple : Colors.blackMain;
     return (
-      <Pressable key={index} style={{paddingRight:15}} onPress={() => handleSelectedPillIndex(index)}>
-        <Text style={{fontSize: 16, fontWeight: "bold", color: pillTextColor}}>{pill}</Text>
+      <Pressable key={index} style={styles.pillPressable} onPress={() => handleSelectedPillIndex(index)}>
+        <Text style={[styles.pillText, { color: pillTextColor }]}>{pill}</Text>
       </Pressable>
     )
   }
@@ -218,28 +217,28 @@ export default function HomeScreen() {
   return (
     <ScrollView style={styles.container}>
       <MarketPlaceHeader showSearchBar  />
-      <BannerCarousel baseStyle={{paddingBottom: 20, paddingTop: 20}} />
-      <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 10, paddingRight: 0, paddingLeft: 0 }}>
-        <Text style={{ ...styles.categoriesText, fontWeight: "bold" }}>Категорії</Text>
-        <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-          <Text style={{ ...styles.categoriesText, fontSize: 16 }}>Усі</Text>
-          <SvgIcons name={CUSTOM_ICON_REF.Arrowright} baseStyle={{ width: 25, height: 25 }} />
+      <BannerCarousel baseStyle={styles.bannerCarousel} containerHorizontalPadding={styles.container.padding as number} />
+      <View style={styles.sectionHeaderRow}>
+        <Text style={[styles.categoriesText, styles.sectionHeaderTitle]}>Категорії</Text>
+        <View style={styles.sectionHeaderRight}>
+          <Text style={styles.sectionHeaderLinkText}>Усі</Text>
+          <SvgIcons name={CUSTOM_ICON_REF.Arrowright} baseStyle={styles.sectionHeaderLinkIcon} />
         </View>
       </View>
-      <ScrollView horizontal style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap", paddingBottom: 20 }}>{categoryData.map(renderCategorydata)}</ScrollView>
-      <View style={{ display: "flex", flexDirection: "row" }}></View>
-      <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ ...styles.categoriesText, fontSize: 20, fontWeight: "bold" }}>Для Вас</Text>
-        <SvgIcons name={CUSTOM_ICON_REF.Arrowright} baseStyle={{ width: arrowRightIconSize, height: arrowRightIconSize, fontWeight: "bold", color: "#170F2B" }} />
+      <ScrollView horizontal style={styles.categoriesScroll}>{categoryData.map(renderCategorydata)}</ScrollView>
+      <View style={styles.rowSpacer} />
+      <View style={styles.forYouHeaderRow}>
+        <Text style={styles.forYouTitle}>Для Вас</Text>
+        <SvgIcons name={CUSTOM_ICON_REF.Arrowright} baseStyle={[styles.forYouArrowIcon, { width: arrowRightIconSize, height: arrowRightIconSize }]} />
       </View>
-      <View style={{ display: "flex", flexWrap: "wrap", flexDirection: "row", paddingTop: 20, justifyContent: "space-between" }}>
+      <View style={styles.recommendedGrid}>
         {recommendedProducts.map(renderRecommendedProducts)}
         {/* <ItemCard itemName='Чоботи Марсала жіночі осінні ' addedTowishlist rating={4.5} handleSetWishlist={handleSetWishlist} imageSrc={bagpic} discountedPrice={3000} mrpPrice={4199} /> */}
       </View>
-      <ScrollView horizontal style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap" }}>
+      <ScrollView horizontal style={styles.pillsScroll}>
         {pillsOptions.map(renderOptionPills)}
       </ScrollView>
-      <View style={{ display: "flex", flexWrap: "wrap", flexDirection: "row", paddingTop: 20, justifyContent: "space-between", paddingBottom: 30 }}>
+      <View style={styles.productsGrid}>
         {products.map(renderproducts)}
         {/* <ItemCard itemName='Чоботи Марсала жіночі осінні ' addedTowishlist rating={4.5} handleSetWishlist={handleSetWishlist} imageSrc={bagpic} discountedPrice={3000} mrpPrice={4199} /> */}
       </View>
@@ -251,18 +250,118 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
-  text: {
-    color: "#25292e",
-  },
-  button: {
-    fontSize: 20,
-    textDecorationLine: "underline",
-    color: "#25292e",
+  bannerCarousel: {
+    paddingBottom: 20,
+    paddingTop: 20,
   },
   categoriesText: {
     fontSize: 20,
-    color: '#170F2B'
-  }
+    color: Colors.blackMain,
+  },
+  sectionHeaderRow: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    paddingRight: 0,
+    paddingLeft: 0,
+  },
+  sectionHeaderTitle: {
+    fontWeight: "bold",
+  },
+  sectionHeaderRight: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  sectionHeaderLinkText: {
+    fontSize: 16,
+    color: Colors.blackMain,
+  },
+  sectionHeaderLinkIcon: {
+    width: 25,
+    height: 25,
+  },
+  categoriesScroll: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    paddingBottom: 20,
+  },
+  rowSpacer: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  forYouHeaderRow: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  forYouTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: Colors.blackMain,
+  },
+  forYouArrowIcon: {
+    fontWeight: "bold",
+    color: Colors.blackMain,
+  },
+  recommendedGrid: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    paddingTop: 20,
+    justifyContent: "space-between",
+  },
+  pillsScroll: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+  },
+  productsGrid: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    paddingTop: 20,
+    justifyContent: "space-between",
+    paddingBottom: 30,
+  },
+  categoryPressable: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginRight: 15,
+    marginBottom: 15,
+    padding: 8,
+  },
+  categoryCircle: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.white,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+    borderWidth: 1,
+  },
+  categoryIcon: {
+    color: Colors.purple400,
+  },
+  categoryLabel: {
+    fontSize: 16,
+  },
+  pillPressable: {
+    paddingRight: 15,
+  },
+  pillText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
