@@ -27,7 +27,7 @@ export interface Product {
 
 export default function HomeScreen() {
 
-  const [selectedIndex, setSelectedIndex] = useState<any>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedPillIndex, setSelectedPillIndex] = useState<number | null>(null);
   const arrowRightIconSize: number = 30;
 
