@@ -1,8 +1,8 @@
-import axios, { CanceledError, isCancel } from "axios";
-import { useAuthStore } from "@/src/state/useAuthStore";
-import { router } from "expo-router";
+import axios, { CanceledError, isCancel } from 'axios';
+import { useAuthStore } from '@/src/state/useAuthStore';
+import { router } from 'expo-router';
 
-declare module "axios" {
+declare module 'axios' {
   export interface AxiosRequestConfig {
     skipAuth?: boolean;
     requireAuth?: boolean;
@@ -10,7 +10,7 @@ declare module "axios" {
 }
 
 export const api = axios.create({
-  baseURL: "http://34.227.53.16:3000/",
+  baseURL: 'http://34.227.53.16:3000/',
   // baseURL: "http://localhost:3000/",
   timeout: 15_000,
 });
@@ -22,12 +22,12 @@ api.interceptors.request.use((config) => {
     console.warn(
       `[${config.method?.toUpperCase()}] ${config.baseURL}${config.url} ` +
         (config.skipAuth
-          ? "(skipAuth)"
+          ? '(skipAuth)'
           : config.requireAuth
-            ? "(requireAuth)"
+            ? '(requireAuth)'
             : token
-              ? "(with token)"
-              : "(guest)"),
+              ? '(with token)'
+              : '(guest)'),
     );
   }
   // 1) Hard opt-out (e.g., login/register)
@@ -39,7 +39,7 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   } else if (config.requireAuth) {
     // 3) Hard opt-in: this call MUST have auth → abort early
-    const err = new CanceledError("AUTH_REQUIRED");
+    const err = new CanceledError('AUTH_REQUIRED');
     // You can also throw a custom error object if you prefer
     throw err;
   }
@@ -48,12 +48,12 @@ api.interceptors.request.use((config) => {
     console.warn(
       `[${config.method?.toUpperCase()}] ${config.baseURL}${config.url} ` +
         (config.skipAuth
-          ? "(skipAuth)"
+          ? '(skipAuth)'
           : config.requireAuth
-            ? "(requireAuth)"
+            ? '(requireAuth)'
             : token
-              ? "(with token)"
-              : "(guest)"),
+              ? '(with token)'
+              : '(guest)'),
     );
   }
   return config;
@@ -67,23 +67,26 @@ api.interceptors.response.use(
     const triedWithAuth =
       cfg.requireAuth ||
       (!!cfg.headers &&
-        "Authorization" in cfg.headers &&
+        'Authorization' in cfg.headers &&
         !!cfg.headers.Authorization);
 
     // Swallow our deliberate cancel cleanly
-    if (isCancel(error) && error.message === "AUTH_REQUIRED") {
+    if (isCancel(error) && error.message === 'AUTH_REQUIRED') {
       // Optionally signal UI: show login modal/toast
-      return Promise.reject({ code: "AUTH_REQUIRED" });
+      return Promise.reject({ code: 'AUTH_REQUIRED' });
     }
 
     // Central 401 handling for calls that attempted auth but failed (expired token)
     if (error?.response?.status === 401 && triedWithAuth) {
       // You can softly sign out or trigger a refresh flow here
-      console.warn("Token expired or invalid. Clearing auth...");
+      console.warn('Token expired or invalid. Clearing auth...');
       useAuthStore.getState().signOut();
       try {
-        router.replace("/"); // or "/auth/login"
-      } catch {}
+        router.replace('/'); // or "/auth/login"
+      } catch {
+        console.warn('inside api error with epired token');
+        router.replace('/');
+      }
       // Optional: prevent axios from retrying infinite loop
       return Promise.reject(error);
     }

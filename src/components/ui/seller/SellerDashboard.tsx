@@ -1,20 +1,19 @@
 import { Link, router } from 'expo-router';
 import {
   Bell,
-  CaretDown,
   ChartLineUp,
   Gear,
   Question,
   SignOut,
-  Storefront,
   UserList,
   UserSwitch,
 } from 'phosphor-react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useLogout } from '@/src/features/auth/hooks';
-import ShopPickerDropDown from '@/src/components/ui/seller/ShopPickerDropDown';
+import ShopPickerDropDown, {
+  ShopData,
+} from '@/src/components/ui/seller/ShopPickerDropDown';
 import Colors from '@/constants/Colors';
-import { Entypo } from '@expo/vector-icons';
 
 export default function SellerDashBoard() {
   const { mutate: doLogout, isPending } = useLogout();
@@ -27,18 +26,32 @@ export default function SellerDashBoard() {
     });
   };
 
+  // TODO: /by Demidas/ Replace with real shops data
+  const shops: ShopData[] = [
+    {
+      title: 'MALETSKIY',
+      image: require('@/assets/images/dummy_image_delete_onprod.png'),
+      confirmed: true,
+    },
+    {
+      title: 'Магазин 2',
+      image: require('@/assets/images/dummy_image_delete_onprod.png'),
+      confirmed: false,
+    },
+    {
+      title: 'Магазин 3',
+      image: require('@/assets/images/dummy_image_delete_onprod.png'),
+      confirmed: false,
+    },
+  ];
+
   return (
     <View style={styles.dashboardBlock}>
-      <Link href='/profile/cards' asChild>
-        <Pressable>
-          <ShopPickerDropDown
-            backgroundColor={Colors.purple50}
-            title='Мої магазини'
-            leftIcon={<Storefront size={32} weight='thin' />}
-            rightIcon={<Entypo name='chevron-down' size={24} color='black' />}
-          />
-        </Pressable>
-      </Link>
+      <ShopPickerDropDown
+        backgroundColor={Colors.purple50}
+        shops={shops}
+        title='Мої магазини'
+      />
       <View style={styles.dashboardList}>
         <Link href='/profile/addresses' asChild>
           <Pressable style={styles.dashboard}>
