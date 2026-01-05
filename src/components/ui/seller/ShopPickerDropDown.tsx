@@ -10,6 +10,13 @@ import React from 'react';
 import { Check, HourglassLow, Storefront } from 'phosphor-react-native';
 import { Entypo } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 export type ShopPickerDropDownProps = {
   title: string;
@@ -23,18 +30,66 @@ export interface ShopData {
   confirmed: boolean;
 }
 
+function DropdownContent({ shops }: { shops?: ShopData[] }) {
+  return (
+    <View>
+      <View style={styles.line} />
+      {shops?.map((shop, index) => (
+        <View key={index} style={styles.shopContainer}>
+          <View style={styles.side}>
+            {shop.image ? (
+              <Image source={shop.image} style={styles.shopImage} />
+            ) : null}
+          </View>
+          <Text style={styles.title}>{shop.title}</Text>
+          <View style={styles.side}>
+            {shop.confirmed ? (
+              <View style={styles.conformedIconStyle}>
+                <Check size={14} weight='bold' color={Colors.white} />
+              </View>
+            ) : (
+              <HourglassLow size={24} color={Colors.grey500} />
+            )}
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 export default function ShopPickerDropDown(props: ShopPickerDropDownProps) {
   const [menuVisible, setMenuVisible] = React.useState(false);
+  const [contentHeight, setContentHeight] = React.useState(0);
+
+  const progress = useSharedValue(0); // 0 closed, 1 open
+
+  React.useEffect(() => {
+    progress.value = withTiming(menuVisible ? 1 : 0, { duration: 220 });
+  }, [menuVisible, progress]);
+
+  const animatedContainerStyle = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        progress.value,
+        [0, 1],
+        [0, contentHeight],
+        Extrapolation.CLAMP,
+      ),
+      opacity: interpolate(
+        progress.value,
+        [0, 0.2, 1],
+        [0, 1, 1],
+        Extrapolation.CLAMP,
+      ),
+    };
+  });
 
   return (
     <View>
       <View
         style={[styles.container, { backgroundColor: props.backgroundColor }]}
       >
-        <Pressable
-          style={styles.top}
-          onPress={() => setMenuVisible(!menuVisible)}
-        >
+        <Pressable style={styles.top} onPress={() => setMenuVisible((v) => !v)}>
           <View style={styles.side}>
             <Storefront size={32} weight='thin' />
           </View>
@@ -47,30 +102,25 @@ export default function ShopPickerDropDown(props: ShopPickerDropDownProps) {
             )}
           </View>
         </Pressable>
-        {menuVisible ? (
-          <View>
-            <View style={styles.line} />
-            {props.shops?.map((shop, index) => (
-              <View key={index} style={styles.shopContainer}>
-                <View style={styles.side}>
-                  {shop.image ? (
-                    <Image source={shop.image} style={styles.shopImage} />
-                  ) : null}
-                </View>
-                <Text style={styles.title}>{shop.title}</Text>
-                <View style={styles.side}>
-                  {shop.confirmed ? (
-                    <View style={styles.conformedIconStyle}>
-                      <Check size={14} weight='bold' color={Colors.white} />
-                    </View>
-                  ) : (
-                    <HourglassLow size={24} color={Colors.grey500} />
-                  )}
-                </View>
-              </View>
-            ))}
-          </View>
-        ) : null}
+        {/* 1) Hidden measurer (NOT clipped) */}
+        <View
+          style={styles.hiddenMeasurer}
+          pointerEvents='none'
+          onLayout={(e) => {
+            const h = e.nativeEvent.layout.height;
+            if (h && h !== contentHeight) setContentHeight(h);
+          }}
+        >
+          <DropdownContent shops={props.shops} />
+        </View>
+
+        {/* 2) Visible animated dropdown */}
+        <Animated.View
+          style={[styles.dropdownWrapper, animatedContainerStyle]}
+          pointerEvents={menuVisible ? 'auto' : 'none'}
+        >
+          <DropdownContent shops={props.shops} />
+        </Animated.View>
       </View>
     </View>
   );
@@ -85,6 +135,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     padding: 16,
+  },
+  dropdownWrapper: {
+    overflow: 'hidden',
+  },
+  hiddenMeasurer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    opacity: 0,
+    zIndex: -1,
   },
   side: {
     flexShrink: 0,
@@ -103,9 +163,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.line,
     marginHorizontal: 16,
+    marginBottom: 16,
   },
   shopContainer: {
-    margin: 16,
+    marginHorizontal: 16,
+    marginBottom: 16,
     padding: 8,
     backgroundColor: Colors.white,
     borderRadius: 10,
