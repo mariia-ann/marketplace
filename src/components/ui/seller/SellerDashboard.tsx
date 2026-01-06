@@ -14,6 +14,7 @@ import ShopPickerDropDown, {
   ShopData,
 } from '@/src/components/ui/seller/ShopPickerDropDown';
 import Colors from '@/constants/Colors';
+import LoaderfromFigma from '@/src/components/common/LoaderfromFigma';
 
 export default function SellerDashBoard() {
   const { mutate: doLogout, isPending } = useLogout();
@@ -95,6 +96,7 @@ export default function SellerDashBoard() {
             <Text style={styles.text}>Увійти в кабінет покупця</Text>
           </Pressable>
         </Link>
+        <LoaderfromFigma />
       </View>
 
       <View style={styles.dashboardList}>
