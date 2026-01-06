@@ -25,11 +25,14 @@ import WishlistIcon from "./Icons/WishlistIcon";
 import CartbagIcon from "./Icons/CartbagIcon";
 import Star from "./Icons/Star";
 import WishlistFillIcon from "./Icons/WishlistFillIcon";
+import Funnel from "./Icons/Funnel";
+import SlidersHorizontal from "./Icons/SlidersHorizontal";
 
 export enum CUSTOM_ICON_REF {
 	Google = 'Google',
 	Facebook = 'Facebook',
 	Apple = 'Apple',
+	Funnel = 'Funnel',
 	EyeIcon = 'EyeIcon',
 	Info = 'Info',
 	BellIcon = 'BellIcon',
@@ -50,7 +53,8 @@ export enum CUSTOM_ICON_REF {
 	WishlistIcon = 'WishlistIcon',
 	WishlistFillIcon = 'WishlistFillIcon',
 	CartBagIcon = 'CartBagIcon',
-	Star = 'Star'
+	Star = 'Star',
+	SlidersHorizontal = 'SlidersHorizontal',
 }
 
 export const CustomIconRef:any = {
@@ -77,6 +81,8 @@ export const CustomIconRef:any = {
 	[CUSTOM_ICON_REF.WishlistFillIcon]: WishlistFillIcon,
 	[CUSTOM_ICON_REF.CartBagIcon]: CartbagIcon,
 	[CUSTOM_ICON_REF.Star]: Star,
+	[CUSTOM_ICON_REF.Funnel]: Funnel,
+	[CUSTOM_ICON_REF.SlidersHorizontal]: SlidersHorizontal,
 
 	//Illustrations
 	[CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration

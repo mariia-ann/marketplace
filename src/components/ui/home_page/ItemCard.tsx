@@ -7,7 +7,7 @@ interface Props {
   itemName?: string;
   addedTowishlist?: boolean;
   rating?: number;
-  mrpPrice?: number;
+  mrpPrice?: number | null;
   discountedPrice?: number;
   imageSrc?: any;
   handleSetWishlist?: () => void;
