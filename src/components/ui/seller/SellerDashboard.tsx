@@ -1,20 +1,21 @@
 import { Link, router } from 'expo-router';
 import {
   Bell,
-  Cardholder,
-  Chat,
-  ChatsCircle,
+  ChartLineUp,
   Gear,
-  MapPin,
-  Package,
   Question,
   SignOut,
+  UserList,
   UserSwitch,
 } from 'phosphor-react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useLogout } from '@/src/features/auth/hooks';
+import ShopPickerDropDown, {
+  ShopData,
+} from '@/src/components/ui/seller/ShopPickerDropDown';
+import Colors from '@/constants/Colors';
 
-export default function DashBoard() {
+export default function SellerDashBoard() {
   const { mutate: doLogout, isPending } = useLogout();
 
   const handleLogout = () => {
@@ -25,19 +26,37 @@ export default function DashBoard() {
     });
   };
 
+  // TODO: /by Demidas/ Replace with real shops data
+  const shops: ShopData[] = [
+    {
+      title: 'MALETSKIY',
+      image: require('@/assets/images/dummy_image_delete_onprod.png'),
+      confirmed: true,
+    },
+    {
+      title: 'Магазин 2',
+      image: require('@/assets/images/dummy_image_delete_onprod.png'),
+      confirmed: false,
+    },
+    {
+      title: 'Магазин 3',
+      image: require('@/assets/images/dummy_image_delete_onprod.png'),
+      confirmed: false,
+    },
+  ];
+
   return (
     <View style={styles.dashboardBlock}>
+      <ShopPickerDropDown
+        backgroundColor={Colors.purple50}
+        shops={shops}
+        title='Мої магазини'
+      />
       <View style={styles.dashboardList}>
-        <Link href='/profile/cards' asChild>
-          <Pressable style={styles.dashboard}>
-            <Cardholder size={32} weight='thin' />
-            <Text style={styles.text}>Мої картки</Text>
-          </Pressable>
-        </Link>
         <Link href='/profile/addresses' asChild>
           <Pressable style={styles.dashboard}>
-            <MapPin size={32} weight='thin' />
-            <Text style={styles.text}>Мої адреси</Text>
+            <UserList size={32} weight='thin' />
+            <Text style={styles.text}>Мої дані</Text>
           </Pressable>
         </Link>
       </View>
@@ -45,27 +64,10 @@ export default function DashBoard() {
       <View style={styles.dashboardList}>
         <Link href='/profile/orderHistory' asChild>
           <Pressable style={styles.dashboard}>
-            <Package size={32} weight='thin' />
-            <Text style={styles.text}>Історія замовлень</Text>
+            <ChartLineUp size={32} weight='thin' />
+            <Text style={styles.text}>Загальна статистика</Text>
           </Pressable>
         </Link>
-
-        <Link href='/profile/reviews' asChild>
-          <Pressable style={styles.dashboard}>
-            <Chat size={32} weight='thin' />
-            <Text style={styles.text}>Мої відгуки</Text>
-          </Pressable>
-        </Link>
-
-        <Link href='/profile/sellerMessages' asChild>
-          <Pressable style={styles.dashboard}>
-            <ChatsCircle size={32} weight='thin' />
-            <Text style={styles.text}>Переписки з продавцями</Text>
-          </Pressable>
-        </Link>
-      </View>
-
-      <View style={styles.dashboardList}>
         <Link href='/profile/notification/offersNotifications' asChild>
           <Pressable style={styles.dashboard}>
             <Bell size={32} weight='thin' />
@@ -81,23 +83,18 @@ export default function DashBoard() {
             <Text style={styles.text}>Служба підтримки</Text>
           </Pressable>
         </Link>
-
         <Link href='/profile/settings' asChild>
           <Pressable style={styles.dashboard}>
             <Gear size={32} weight='thin' />
             <Text style={styles.text}>Налаштування</Text>
           </Pressable>
         </Link>
-        <Link href='/seller_profile' asChild>
+        <Link href='/(tabs)' asChild>
           <Pressable style={styles.dashboard}>
             <UserSwitch size={32} weight='thin' />
-            <Text style={styles.text}>Увійти в кабінет продавця</Text>
+            <Text style={styles.text}>Увійти в кабінет покупця</Text>
           </Pressable>
         </Link>
-      </View>
-
-      <View style={styles.dashboardList}>
-        <View style={styles.line}></View>
       </View>
 
       <View style={styles.dashboardList}>
@@ -123,14 +120,11 @@ const styles = StyleSheet.create({
   },
   dashboardList: {
     rowGap: 8,
+    paddingHorizontal: 16,
   },
   dashboard: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  line: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#8E6CEF',
   },
   text: {
     marginLeft: 20,

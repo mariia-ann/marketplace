@@ -1,20 +1,20 @@
-import Colors from "@/constants/Colors";
+import Colors from '@/constants/Colors';
 import CrossfadeTexts, {
   CrossfadeTextsHandle,
-} from "@/src/components/ui/welcome_page/ChangingText";
+} from '@/src/components/ui/welcome_page/ChangingText';
 import PaginationIndicator, {
   PaginationIndicatorHandle,
-} from "@/src/components/ui/welcome_page/Pagination";
-import { RequireGuest } from "@/src/features/auth/guards";
-import { router } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+} from '@/src/components/ui/welcome_page/Pagination';
+import { RequireGuest } from '@/src/features/auth/guards';
+import { router } from 'expo-router';
+import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
   Easing,
   StyleSheet,
   View,
-} from "react-native";
+} from 'react-native';
 
 export default function LoadingScreen() {
   // This type defines the structure of the animation data for each image
@@ -50,7 +50,7 @@ export default function LoadingScreen() {
   // Each image will animate to a position in a circular layout
   const images = [
     {
-      source: require("@/assets/images/welcome_page/img0.png"),
+      source: require('@/assets/images/welcome_page/img0.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -71,7 +71,7 @@ export default function LoadingScreen() {
       },
     },
     {
-      source: require("@/assets/images/welcome_page/img1.png"),
+      source: require('@/assets/images/welcome_page/img1.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -93,7 +93,7 @@ export default function LoadingScreen() {
       },
     },
     {
-      source: require("@/assets/images/welcome_page/img2.png"),
+      source: require('@/assets/images/welcome_page/img2.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -114,7 +114,7 @@ export default function LoadingScreen() {
       },
     },
     {
-      source: require("@/assets/images/welcome_page/img3.png"),
+      source: require('@/assets/images/welcome_page/img3.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -135,7 +135,7 @@ export default function LoadingScreen() {
       },
     },
     {
-      source: require("@/assets/images/welcome_page/img4.png"),
+      source: require('@/assets/images/welcome_page/img4.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -156,7 +156,7 @@ export default function LoadingScreen() {
       },
     },
     {
-      source: require("@/assets/images/welcome_page/img5.png"),
+      source: require('@/assets/images/welcome_page/img5.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -177,7 +177,7 @@ export default function LoadingScreen() {
       },
     },
     {
-      source: require("@/assets/images/welcome_page/img6.png"),
+      source: require('@/assets/images/welcome_page/img6.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -198,7 +198,7 @@ export default function LoadingScreen() {
       },
     },
     {
-      source: require("@/assets/images/welcome_page/img7.png"),
+      source: require('@/assets/images/welcome_page/img7.png'),
       animations: {
         stage1: {
           rotate: 0,
@@ -486,7 +486,6 @@ export default function LoadingScreen() {
   }, [stage]);
 
   // STAGE 5: Redirect to next page
-  //TODO: Insert correct redirect page / by Demidas/
   useEffect(() => {
     if (stage === 5 && !hasRedirected.current) {
       hasRedirected.current = true;
@@ -496,7 +495,7 @@ export default function LoadingScreen() {
           duration: 300,
           useNativeDriver: true,
         }).start(() => {
-          router.replace("/(main)/welcome");
+          router.replace('/(main)/welcome');
         });
       }, 1000);
       return () => clearTimeout(timeout);
@@ -504,7 +503,7 @@ export default function LoadingScreen() {
   }, [stage]);
 
   return (
-    <RequireGuest to="/(tabs)">
+    <RequireGuest to='/(tabs)'>
       <Animated.View style={[styles.container, { opacity: screenOpacity }]}>
         <View
           style={styles.imageContainer}
@@ -529,7 +528,7 @@ export default function LoadingScreen() {
                     key={i}
                     source={anim.source}
                     style={{
-                      position: "absolute",
+                      position: 'absolute',
                       width: IMAGE_SIZE,
                       height: IMAGE_SIZE,
                       transform: [
@@ -539,9 +538,9 @@ export default function LoadingScreen() {
                           rotate: anim.rotate
                             ? anim.rotate.interpolate({
                                 inputRange: [0, 1],
-                                outputRange: ["0deg", "360deg"],
+                                outputRange: ['0deg', '360deg'],
                               })
-                            : "0deg",
+                            : '0deg',
                         },
                         { scale: anim.scale ?? 1 },
                       ],
@@ -561,7 +560,7 @@ export default function LoadingScreen() {
             </>
           ) : (
             // Fallback content until layout is ready
-            <ActivityIndicator size="large" color={Colors.blackMain} />
+            <ActivityIndicator size='large' color={Colors.blackMain} />
           )}
         </View>
         <View style={styles.bottomContainer}>
@@ -570,9 +569,9 @@ export default function LoadingScreen() {
               <CrossfadeTexts
                 ref={crossfadeRef}
                 messages={[
-                  "Це спільнота розумних покупок та якісних послуг!",
-                  "Знайди все, що тобі потрібно, в одному місці!",
-                  "Твій маркетплейс починається тут!",
+                  'Це спільнота розумних покупок та якісних послуг!',
+                  'Знайди все, що тобі потрібно, в одному місці!',
+                  'Твій маркетплейс починається тут!',
                 ]}
                 textStyle={styles.text}
                 duration={500}
@@ -591,27 +590,27 @@ export default function LoadingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
+    flexDirection: 'column',
     backgroundColor: Colors.white,
     paddingTop: 120,
     paddingBottom: 40,
   },
   imageContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 40,
-    width: "100%",
+    width: '100%',
   },
   title: {
-    fontFamily: "Namu",
-    textTransform: "uppercase",
+    fontFamily: 'Namu',
+    textTransform: 'uppercase',
     color: Colors.blackMain,
   },
   bottomContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 16,
     paddingHorizontal: 16,
   },
@@ -619,11 +618,11 @@ const styles = StyleSheet.create({
     height: 100,
   },
   text: {
-    fontFamily: "Manrope",
-    fontWeight: "400",
+    fontFamily: 'Manrope',
+    fontWeight: '400',
     fontSize: 22,
     color: Colors.blackMain,
     letterSpacing: 0,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

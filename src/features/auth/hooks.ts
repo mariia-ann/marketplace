@@ -1,6 +1,6 @@
 // src/features/auth/queries.ts
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "@/src/state/useAuthStore";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '@/src/state/useAuthStore';
 import {
   getUserById,
   login as loginApi,
@@ -8,17 +8,18 @@ import {
   signup as signupApi,
   type SignupDto,
   LoginDto,
-} from "@/src/features/auth/api";
+} from '@/src/features/auth/api';
+import { router } from 'expo-router';
 
 // Decode JWT payload to pull user id. Keep scope local to this module.
 const parseJwt = (t: string) => {
   try {
-    const b = t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const b = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
     const j = decodeURIComponent(
       atob(b)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join(""),
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(''),
     );
     return JSON.parse(j);
   } catch {
@@ -36,7 +37,7 @@ export function useMe() {
   // which triggers React Query to think dependencies changed it was the cause of infinite loops.
 
   return useQuery({
-    queryKey: ["me", userId],
+    queryKey: ['me', userId],
     queryFn: async () => {
       // console.warn( ">>> queryFn in useMe is running with userId:", userId );
       return getUserById(userId!);
@@ -61,14 +62,14 @@ export function useLogin() {
       const p = parseJwt(access_token);
       const uid = p?.userId ?? p?.uid ?? p?.sub ?? null;
       setUserId(uid);
-      qc.invalidateQueries({ queryKey: ["me"] });
+      qc.invalidateQueries({ queryKey: ['me'] });
     },
     onError: () => {
-      console.warn("Login failed");
+      console.warn('Login failed');
       // Ensure any stale auth is cleared so guards treat the user as a guest
       const token = useAuthStore.getState().token;
       if (token) signOut();
-      qc.removeQueries({ queryKey: ["me"] });
+      qc.removeQueries({ queryKey: ['me'] });
     },
   });
 }
@@ -86,14 +87,14 @@ export function useSignup() {
     },
 
     onSuccess: (signupRes, dto) => {
-      console.warn("signupRes", signupRes);
+      console.warn('signupRes', signupRes);
       console.warn(dto);
-      qc.setQueryData(["signupDto"], dto);
+      qc.setQueryData(['signupDto'], dto);
     },
     onError: () => {
       const token = useAuthStore.getState().token;
       if (token) signOut();
-      qc.removeQueries({ queryKey: ["me"] });
+      qc.removeQueries({ queryKey: ['me'] });
     },
   });
 }
@@ -106,13 +107,16 @@ export function useLogout() {
 
   return useMutation({
     mutationFn: async () => logoutApi(),
-    onSuccess: () => {
-      signOut();
-      qc.removeQueries({ queryKey: ["me"] });
-      qc.clear();
-    },
     onError: (e) => {
-      console.log("Logout failed:", e instanceof Error ? e.message : String(e));
+      console.log('Logout failed:', e instanceof Error ? e.message : String(e));
+    },
+    onSettled: () => {
+      // Always clear local auth so an expired token can't trap the user.
+      console.warn('Settling logout');
+      signOut();
+      qc.removeQueries({ queryKey: ['me'] });
+      qc.clear();
+      router.replace('/(main)');
     },
   });
 }
