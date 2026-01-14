@@ -38,7 +38,7 @@ export default function WelcomeScreen() {
             title="Продовжити як гість"
             active={true}
             size="L"
-            onPress={() => router.push("/(tabs)/category/womens")}
+            onPress={() => router.push("/(tabs)")}
           />
         </View>
         <View style={styles.linkBlock}>
