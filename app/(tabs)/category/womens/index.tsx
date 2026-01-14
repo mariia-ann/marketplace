@@ -15,7 +15,8 @@ function WomensBoots() {
 
   const styles = StyleSheet.create({
     container: {
-      padding: 20
+      padding: 20,
+      paddingTop: 30,
     },
   });
 
@@ -69,20 +70,20 @@ function WomensBoots() {
           <SvgIcons name={CUSTOM_ICON_REF.Funnel} baseStyle={{ width: iconbSize, height: iconbSize, color: "#000000" }} />
           <View style={{paddingLeft: 10}}>
             <Text>Фільтр</Text>
-            <Text>не обраний</Text>
+            <Text style={{color: "#666666"}}>не обраний</Text>
           </View>
         </CustomButton>
         <CustomButton onPress={() => { }} customStyles={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", width: "48%", alignItems: "center", backgroundColor: "transparent", borderColor: "transparent" }}>
           <SvgIcons name={CUSTOM_ICON_REF.SlidersHorizontal} baseStyle={{ width: iconbSize, height: iconbSize, color: "#000000" }} />
           <View style={{paddingLeft: 10}}>
             <Text>Сортування</Text>
-            <Text>за рейтингом</Text>
+            <Text style={{color: "#666666"}}>за рейтингом</Text>
           </View>
         </CustomButton>
       </View>
       
       {/* Products grid would go here */}
-      <View style={{ marginTop: 20, display: 'flex', flexDirection: 'row', justifyContent: "space-between", flexWrap: 'wrap', gap: 10 }}>
+      <View style={{ marginTop: 20, display: 'flex', flexDirection: 'row', justifyContent: "space-between", flexWrap: 'wrap' }}>
         {products.map((product) => (
           <ItemCard key={product.id} imageSrc={product.image} itemName={product.title} discountedPrice={product.price} mrpPrice={product.oldPrice} rating={product.rating} addedTowishlist={product.isFavorite} handleSetWishlist={() => { }} /> 
         ))}
