@@ -1,9 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { CaretLeft } from "phosphor-react-native";
-import { StyleSheet, Pressable, View } from "react-native";
+import { StyleSheet, Pressable, View, StyleProp, ViewStyle } from "react-native";
 import Colors from "@/constants/Colors";
 
-export default function BackArrow() {
+interface BackArrowProps {
+  customStyles?: StyleProp<ViewStyle>;
+}
+
+export default function BackArrow(props: BackArrowProps) {
+  const { customStyles } = props;
   const navigation = useNavigation();
 
   return (
@@ -12,8 +17,9 @@ export default function BackArrow() {
         <View
           style={[
             styles.backIconCircle,
+            customStyles,
             {
-              backgroundColor: pressed ? Colors.purple400 : Colors.activePurple,
+              backgroundColor: pressed ? Colors.activePurple : Colors.purple400,
             },
           ]}
         >

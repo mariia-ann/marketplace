@@ -7,7 +7,7 @@ interface Props {
   itemName?: string;
   addedTowishlist?: boolean;
   rating?: number;
-  mrpPrice?: number;
+  mrpPrice?: number | null;
   discountedPrice?: number;
   imageSrc?: any;
   handleSetWishlist?: () => void;
@@ -19,7 +19,7 @@ function ItemCard(props: Props) {
   const iswishListed: any = addedTowishlist ? CUSTOM_ICON_REF.WishlistFillIcon : CUSTOM_ICON_REF.WishlistIcon;
 
   return (
-    <View style={{ boxShadow: "0 0 10px #00000030", borderRadius: 10, width: 175, marginBottom: 30 }}>
+    <View style={{ boxShadow: "0 0 10px #00000030", borderRadius: 10, width: 175, marginBottom: 20 }}>
       <View style={{height: 200, position: "relative"}}>
         <Pressable style={{position: "absolute", top: 10, right: 10, zIndex: 99}} onPress={handleSetWishlist}>
           <SvgIcons name={iswishListed} baseStyle={{ width: baseIconSize, height: baseIconSize , backgroundColor: "#fff", color: iswishListed ? "#8E6CEF" : "", padding: 3, borderRadius: "100%" }} />
@@ -34,8 +34,8 @@ function ItemCard(props: Props) {
         <Text style={{display: "flex", flex: 1, paddingTop: 10, paddingBottom: 10, flexWrap: 'wrap'}}>{itemName}</Text>
         <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
           <View style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-            {discountedPrice && <Text style={{fontWeight: "bold", color: "#D30004"}}>₴{discountedPrice}</Text>}
-            {mrpPrice && <Text style={{ ...(discountedPrice ? { textDecorationLine: "line-through", color: "#999999" } : {color: "#170F2B"}), paddingLeft: 5, fontWeight: "bold" }}>₴{mrpPrice}</Text>}
+            {discountedPrice && <Text style={{fontWeight: "bold", color: "#D30004"}}>{discountedPrice} ₴</Text>}
+            {mrpPrice && <Text style={{ ...(discountedPrice ? { textDecorationLine: "line-through", color: "#999999" } : {color: "#170F2B"}), paddingLeft: 5, fontWeight: "bold" }}>{mrpPrice} ₴</Text>}
           </View>
           <SvgIcons name={CUSTOM_ICON_REF.CartBagIcon} baseStyle={{ width: baseIconSize, height: baseIconSize, backgroundColor: "#F5F4FE", padding: 5, borderRadius: "100%" }} />
         </View>
