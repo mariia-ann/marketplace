@@ -26,8 +26,29 @@ export default function CreateShopLayout() {
         }}
       />
       <Stack.Screen
-        name='ChooseSellerType'
+        name='step1'
         options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name='step2'
+        options={{
+          title: 'Створіть свій перший магазин',
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name='step3'
+        options={{
+          title: 'Реквізити та документи ФОП',
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name='step4'
+        options={{
+          title: 'Контактна інформація',
           headerShown: true,
         }}
       />

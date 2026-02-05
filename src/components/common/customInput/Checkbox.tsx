@@ -1,7 +1,7 @@
-import Colors from "@/constants/Colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import Colors from '@/constants/Colors';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 interface Props {
   isChecked?: boolean;
@@ -15,21 +15,21 @@ interface Props {
 const CheckBox = (props: Props) => {
   const { checkboxStyle, titleStyle } = props;
   const iconName = props.isChecked
-    ? "checkbox-marked"
-    : "checkbox-blank-outline";
+    ? 'checkbox-marked'
+    : 'checkbox-blank-outline';
 
   return (
-    <View style={styles.container}>
-      <Pressable onPress={props.onPress}>
+    <Pressable onPress={props.onPress}>
+      <View style={styles.container}>
         <MaterialCommunityIcons
           name={iconName}
           size={24}
           color={Colors.softPurple}
           {...checkboxStyle}
         />
-      </Pressable>
-      <Text style={titleStyle}>{props.title}</Text>
-    </View>
+        <Text style={titleStyle}>{props.title}</Text>
+      </View>
+    </Pressable>
   );
 };
 
@@ -37,9 +37,9 @@ export default CheckBox;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "flex-start",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
     gap: 8,
   },
 });

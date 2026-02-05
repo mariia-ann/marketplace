@@ -12,6 +12,9 @@ export default function SellerProfile() {
       <NavigationHeader
         customStyles={{ marginBottom: 32 }}
         title='Кабінет продавця'
+        onBack={() => {
+          router.replace('/(tabs)/category');
+        }}
       />
       <ScrollView>
         <SellerDashBoard />
