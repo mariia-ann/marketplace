@@ -1,12 +1,20 @@
 import * as Yup from 'yup';
 import Colors from '@/constants/Colors';
 import { Formik } from 'formik';
-import { Text, StyleSheet, Pressable, ScrollView, View } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  View,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import BasicFormInput from '@/src/components/common/customInput/BasicFormInput';
-import { CloudArrowDown, PlusCircle } from 'phosphor-react-native';
+import { CloudArrowDown, PlusCircle, Swap, Trash } from 'phosphor-react-native';
 import PrimaryButton from '@/src/components/common/buttons/PrimaryButton';
+import { pickPdfOrJpeg, type UploadFile } from '@/src/utils/documentUpload';
 
 interface Address {
   city: string;
@@ -21,6 +29,8 @@ type shopDetailsStep3 = {
   IBAN: string;
   bankName: string;
   ownerName: string;
+  bankConfirmation: UploadFile | null;
+  fopCertificate: UploadFile | null;
   legalAddress: Address;
 };
 
@@ -31,6 +41,8 @@ const LegalDetails = () => {
     IBAN: '',
     bankName: '',
     ownerName: '',
+    bankConfirmation: null,
+    fopCertificate: null,
     legalAddress: {
       city: '',
       street: '',
@@ -40,6 +52,21 @@ const LegalDetails = () => {
   };
 
   const ibanRegex = /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/;
+  const ALLOWED_MIME = new Set(['application/pdf', 'image/jpeg']);
+  const MAX_BYTES = 10 * 1024 * 1024; // 10MB
+  const fileSchema = Yup.mixed<UploadFile>()
+    .nullable()
+    .required('Document is required')
+    .test('file-required', 'Document is required', (value) => !!value)
+    .test('file-type', 'Only PDF or JPEG is allowed', (value) => {
+      if (!value) return false;
+      return ALLOWED_MIME.has(value.mimeType);
+    })
+    .test('file-size', 'File is too large', (value) => {
+      if (!value) return false;
+      if (typeof value.size !== 'number') return true; // size can be missing on Android
+      return value.size <= MAX_BYTES;
+    });
 
   const shopDetailsStep3Schema = Yup.object({
     taxNumber: Yup.string().trim().required('Tax number is required'),
@@ -52,6 +79,10 @@ const LegalDetails = () => {
       .required('IBAN is required'),
     bankName: Yup.string().trim().required('Bank name is required'),
     ownerName: Yup.string().trim().required('Owner name is required'),
+
+    bankConfirmation: fileSchema,
+    fopCertificate: fileSchema,
+
     legalAddress: Yup.object({
       city: Yup.string().trim().required('City is required'),
       street: Yup.string().trim().required('Street is required'),
@@ -60,8 +91,33 @@ const LegalDetails = () => {
     }),
   });
 
+  // TODO: refactor both handlers to separate component to avoid code duplication
+  // documet upload handlers for bank confirmation and FOP certificate, they use the same file picker but different field in formik values:
+  const onPickBankConfirmation = async (
+    setFieldValue: (field: string, value: UploadFile) => void,
+  ) => {
+    try {
+      const file = await pickPdfOrJpeg();
+      if (!file) return;
+      setFieldValue('bankConfirmation', file);
+    } catch (e: any) {
+      Alert.alert('Upload error', e?.message ?? 'Failed to pick file');
+    }
+  };
+  const onPickFopCertificate = async (
+    setFieldValue: (field: string, value: UploadFile) => void,
+  ) => {
+    try {
+      const file = await pickPdfOrJpeg();
+      if (!file) return;
+      setFieldValue('fopCertificate', file);
+    } catch (e: any) {
+      Alert.alert('Upload error', e?.message ?? 'Failed to pick file');
+    }
+  };
+
   const handleDataSave = (values: shopDetailsStep3) => {
-    console.warn(`proceed to step3 with ${values}`);
+    console.warn(`proceed to step3 with ${JSON.stringify(values)}`);
     router.push(`/seller_profile/create-shop/step4`);
   };
 
@@ -171,20 +227,71 @@ const LegalDetails = () => {
                 <Text style={[styles.inputHintText, { textAlign: 'left' }]}>
                   має бути кольорова скан/фото копія з оригіналу документа
                 </Text>
-                <Pressable style={styles.uploadButtonBox}>
-                  <CloudArrowDown size={32} color={Colors.softPurple} />
-                  <Text style={styles.uploadButtonText}>Завантажити</Text>
-                </Pressable>
+                {values.bankConfirmation ? (
+                  <View style={styles.uploadButtonBox}>
+                    <Pressable
+                      style={styles.uploadButtonMain}
+                      onPress={() => onPickBankConfirmation(setFieldValue)}
+                    >
+                      <Swap size={32} color={Colors.softPurple} />
+                      <Text style={styles.uploadButtonText}>
+                        {values.bankConfirmation.name.length > 30
+                          ? `${values.bankConfirmation.name.slice(0, 20)}…`
+                          : values.bankConfirmation.name}
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      style={styles.uploadButtonAdditionalIcon}
+                      onPress={() => setFieldValue('bankConfirmation', null)}
+                    >
+                      <Trash size={28} color={Colors.red} />
+                    </Pressable>
+                  </View>
+                ) : (
+                  <Pressable
+                    onPress={() => onPickBankConfirmation(setFieldValue)}
+                    style={styles.uploadButtonBox}
+                  >
+                    <CloudArrowDown size={32} color={Colors.softPurple} />
+                    <Text style={styles.uploadButtonText}>Завантажити</Text>
+                  </Pressable>
+                )}
                 <Text style={[styles.secondaryText, { marginTop: 24 }]}>
                   Довідка ФОП
                 </Text>
                 <Text style={[styles.inputHintText, { textAlign: 'left' }]}>
                   має бути кольорова скан/фото копія з оригіналу документа
                 </Text>
-                <Pressable style={styles.uploadButtonBox}>
-                  <CloudArrowDown size={32} color={Colors.softPurple} />
-                  <Text style={styles.uploadButtonText}>Завантажити</Text>
-                </Pressable>
+                {values.fopCertificate ? (
+                  <View style={styles.uploadButtonBox}>
+                    <Pressable
+                      style={styles.uploadButtonMain}
+                      onPress={() => onPickFopCertificate(setFieldValue)}
+                    >
+                      <Swap size={32} color={Colors.softPurple} />
+                      <Text style={styles.uploadButtonText}>
+                        {values.fopCertificate.name.length > 30
+                          ? `${values.fopCertificate.name.slice(0, 20)}…`
+                          : values.fopCertificate.name}
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      style={styles.uploadButtonAdditionalIcon}
+                      onPress={() => setFieldValue('fopCertificate', null)}
+                    >
+                      <Trash size={28} color={Colors.red} />
+                    </Pressable>
+                  </View>
+                ) : (
+                  <Pressable
+                    onPress={() => onPickFopCertificate(setFieldValue)}
+                    style={styles.uploadButtonBox}
+                  >
+                    <CloudArrowDown size={32} color={Colors.softPurple} />
+                    <Text style={styles.uploadButtonText}>Завантажити</Text>
+                  </Pressable>
+                )}
+
                 <Pressable style={styles.uploadButtonBox}>
                   <PlusCircle size={28} color={Colors.softPurple} />
                   <Text style={styles.uploadButtonText}>
@@ -308,5 +415,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
     color: Colors.softPurple,
+  },
+  uploadButtonMain: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  uploadButtonAdditionalIcon: {
+    flexShrink: 0,
   },
 });

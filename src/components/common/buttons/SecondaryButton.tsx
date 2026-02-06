@@ -1,15 +1,16 @@
-import Colors from "@/constants/Colors";
-import React, { FC, useEffect, useRef } from "react";
+import Colors from '@/constants/Colors';
+import React, { FC, useEffect, useRef } from 'react';
 import {
   Animated,
   Pressable,
   StyleProp,
   StyleSheet,
   TextStyle,
+  View,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 
-type ButtonSize = "L" | "M" | "S";
+type ButtonSize = 'L' | 'M' | 'S';
 
 type SecondaryButtonProps = {
   title: string;
@@ -25,7 +26,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const SecondaryButton: FC<SecondaryButtonProps> = ({
   title,
   onPress,
-  size = "M",
+  size = 'M',
   active = true,
   style,
   textStyle,
@@ -77,21 +78,23 @@ const SecondaryButton: FC<SecondaryButtonProps> = ({
   });
 
   return (
-    <AnimatedPressable
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      style={[
-        styles.base,
-        sizeStyles[size],
-        { borderColor, transform: [{ scale }] },
-        style,
-      ]}
-    >
-      <Animated.Text style={[styles.label, { color: textColor }, textStyle]}>
-        {title}
-      </Animated.Text>
-    </AnimatedPressable>
+    <View>
+      <AnimatedPressable
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={[
+          styles.base,
+          sizeStyles[size],
+          { borderColor, transform: [{ scale }] },
+          style,
+        ]}
+      >
+        <Animated.Text style={[styles.label, { color: textColor }, textStyle]}>
+          {title}
+        </Animated.Text>
+      </AnimatedPressable>
+    </View>
   );
 };
 
@@ -99,21 +102,22 @@ const styles = StyleSheet.create({
   base: {
     height: 52,
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     borderWidth: 1,
   },
   label: {
-    fontFamily: "Manrope",
-    fontWeight: "700",
+    fontFamily: 'Manrope',
+    fontWeight: '700',
     fontSize: 16,
     letterSpacing: 0,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
 const sizeStyles: Record<ButtonSize, ViewStyle> = {
-  L: { minWidth: 350, maxWidth: 420 },
+  L: { width: 350 },
   M: { minWidth: 330 },
   S: { minWidth: 165 },
 };

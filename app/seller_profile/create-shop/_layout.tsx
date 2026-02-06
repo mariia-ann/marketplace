@@ -7,7 +7,7 @@ export default function CreateShopLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         header: (props) => (
           <NavigationHeader
             {...props}
@@ -19,12 +19,6 @@ export default function CreateShopLayout() {
         ),
       }}
     >
-      <Stack.Screen
-        name='index'
-        options={{
-          headerShown: false,
-        }}
-      />
       <Stack.Screen
         name='step1'
         options={{
@@ -49,6 +43,20 @@ export default function CreateShopLayout() {
         name='step4'
         options={{
           title: 'Контактна інформація',
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name='step5'
+        options={{
+          title: 'Доставка',
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name='step6'
+        options={{
+          title: 'Фінансові налаштування',
           headerShown: true,
         }}
       />

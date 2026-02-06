@@ -95,7 +95,7 @@ const ChooseCategory = () => {
   };
 
   const handleDataSave = (values: shopDetailsStep2) => {
-    console.warn(`proceed to step3 with ${values}`);
+    console.warn(`proceed to step3 with ${JSON.stringify(values)}`);
     router.push(`/seller_profile/create-shop/step3`);
   };
 

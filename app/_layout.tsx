@@ -6,6 +6,7 @@ import { RestoreGate } from '@/src/features/auth/guards';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { queryClient } from '@/src/lib/queryClient';
 import { asyncStoragePersister } from '@/src/lib/persistor';
+import { View, StyleSheet } from 'react-native';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -46,32 +47,61 @@ export default function RootLayout() {
         persistOptions={{ persister: asyncStoragePersister }}
       >
         <RestoreGate>
-          <Stack>
-            {/* Welcome page screens */}
-            <Stack.Screen name='(main)' options={{ headerShown: false }} />
-            {/* Auth screens */}
-            <Stack.Screen name='auth/login' options={{ headerShown: false }} />
-            <Stack.Screen name='auth/signup' options={{ headerShown: false }} />
-            <Stack.Screen
-              name='auth/signup-otp'
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='auth/otp-code-verification'
-              options={{ headerShown: false }}
-            />
-            {/* Main app after login */}
-            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-            {/* Seller profile screen */}
-            <Stack.Screen
-              name='seller_profile'
-              options={{ headerShown: false }}
-            />
-            {/* 404 page */}
-            <Stack.Screen name='+not-found' options={{}} />
-          </Stack>
+          <View style={styles.appShell}>
+            <View style={styles.appContent}>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: {
+                    flex: 1,
+                  },
+                }}
+              >
+                {/* Welcome page screens */}
+                <Stack.Screen name='(main)' options={{ headerShown: false }} />
+                {/* Auth screens */}
+                <Stack.Screen
+                  name='auth/login'
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name='auth/signup'
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name='auth/signup-otp'
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name='auth/otp-code-verification'
+                  options={{ headerShown: false }}
+                />
+                {/* Main app after login */}
+                <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+                {/* Seller profile screen */}
+                <Stack.Screen
+                  name='seller_profile'
+                  options={{ headerShown: false }}
+                />
+                {/* 404 page */}
+                <Stack.Screen name='+not-found' options={{}} />
+              </Stack>
+            </View>
+          </View>
         </RestoreGate>
       </PersistQueryClientProvider>
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  appShell: {
+    flex: 1,
+  },
+  appContent: {
+    flex: 1,
+    width: '100%',
+    maxWidth: 390,
+    alignSelf: 'center',
+  },
+});
