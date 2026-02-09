@@ -17,6 +17,10 @@ export default function SellerProfilelayout() {
           <RequireAuth to='/auth/login'>
             <Stack>
               <Stack.Screen name='index' options={{ headerShown: false }} />
+              <Stack.Screen
+                name='create-shop'
+                options={{ headerShown: false }}
+              />
             </Stack>
           </RequireAuth>
         </RestoreGate>

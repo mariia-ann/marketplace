@@ -2,6 +2,7 @@ import Colors from '@/constants/Colors';
 import PrimaryButton from '@/src/components/common/buttons/PrimaryButton';
 import { NavigationHeader } from '@/src/components/common/NavigationHeader';
 import SellerDashBoard from '@/src/components/ui/seller/SellerDashboard';
+import { router } from 'expo-router';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,11 +12,18 @@ export default function SellerProfile() {
       <NavigationHeader
         customStyles={{ marginBottom: 32 }}
         title='Кабінет продавця'
+        onBack={() => {
+          router.replace('/(tabs)/category');
+        }}
       />
       <ScrollView>
         <SellerDashBoard />
       </ScrollView>
-      <PrimaryButton title='Новий магазин' style={{ marginBottom: 24 }} />
+      <PrimaryButton
+        onPress={() => router.push('/seller_profile/create-shop')}
+        title='Новий магазин'
+        style={{ marginBottom: 24 }}
+      />
     </SafeAreaView>
   );
 }

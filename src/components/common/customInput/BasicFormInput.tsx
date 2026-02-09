@@ -1,6 +1,6 @@
 // this component is a basic form input which accepts label, errorMessage and other TextInputProps
 // It also supports an optional right icon with press functionality
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef } from 'react';
 import {
   TextInput,
   View,
@@ -9,12 +9,13 @@ import {
   TextInputProps,
   FocusEvent,
   Pressable,
-} from "react-native";
-import Colors from "@/constants/Colors";
+} from 'react-native';
+import Colors from '@/constants/Colors';
 
 interface BasicFormInputProps extends TextInputProps {
-  label: string;
+  label?: string;
   errorMessage?: string;
+  noTextError?: boolean;
   rightIcon?: {
     render: React.ReactNode;
     onPress?: () => void;
@@ -26,6 +27,7 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
     {
       label,
       errorMessage,
+      noTextError,
       rightIcon,
       style,
       onFocus,
@@ -53,7 +55,7 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
 
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>{label}</Text>
+        {label && <Text style={styles.label}>{label}</Text>}
         <View style={styles.inputWrapper}>
           <TextInput
             ref={ref}
@@ -67,11 +69,11 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
             placeholderTextColor={Colors.grey400}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            autoCapitalize="none"
+            autoCapitalize='none'
             autoCorrect={false}
-            textContentType={textContentType ?? "none"}
-            autoComplete={autoComplete ?? "off"}
-            importantForAutofill={importantForAutofill ?? "no"}
+            textContentType={textContentType ?? 'none'}
+            autoComplete={autoComplete ?? 'off'}
+            importantForAutofill={importantForAutofill ?? 'no'}
             {...rest}
           />
           {rightIcon && (
@@ -84,25 +86,27 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
             </Pressable>
           )}
         </View>
-        <View style={{ minHeight: ERROR_HEIGHT, marginTop: 4 }}>
-          <Text style={[styles.errorText, !errorMessage && styles.errorHidden]}>
-            {errorMessage ?? " "}
-          </Text>
-        </View>
+        {errorMessage && !noTextError && (
+          <View style={{ minHeight: ERROR_HEIGHT, marginTop: 4 }}>
+            <Text style={[styles.errorText, styles.errorHidden]}>
+              {errorMessage}
+            </Text>
+          </View>
+        )}
       </View>
     );
   },
 );
 
-BasicFormInput.displayName = "BasicFormInput";
+BasicFormInput.displayName = 'BasicFormInput';
 export default BasicFormInput;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: '100%',
   },
   label: {
-    fontFamily: "Manrope",
+    fontFamily: 'Manrope',
     fontSize: 12,
     color: Colors.grey400,
     marginBottom: 8,
@@ -115,21 +119,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 13.5,
     fontSize: 16,
-    fontFamily: "Manrope",
+    fontFamily: 'Manrope',
     color: Colors.blackMain,
   },
   inputWrapper: {
-    position: "relative",
-    justifyContent: "center",
+    position: 'relative',
+    justifyContent: 'center',
   },
   inputWithIcon: {
     paddingRight: 40,
   },
   iconRight: {
-    position: "absolute",
+    position: 'absolute',
     right: 12,
-    height: "100%",
-    justifyContent: "center",
+    height: '100%',
+    justifyContent: 'center',
   },
   focused: {
     borderColor: Colors.softPurple,
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
   errorHidden: { opacity: 0 },
   errorText: {
     fontSize: 10,
-    fontFamily: "Manrope",
+    fontFamily: 'Manrope',
     letterSpacing: 0.5,
     color: Colors.red,
   },
