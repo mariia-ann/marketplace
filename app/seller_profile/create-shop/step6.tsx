@@ -12,6 +12,7 @@ import { Text, StyleSheet, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Yup from 'yup';
 
+//TODO: /by Demidas/ ADD API fecth for recurrence and paymentDay lists and remove decraled types to dedicated file.
 type Recurrence = (typeof recurrenceOptions)[number]['value'];
 
 const recurrenceOptions = [
@@ -59,8 +60,9 @@ const FinancialSettings = () => {
   });
 
   const handleDataSave = (values: shopDetailsStep5) => {
-    console.warn(`proceed to step4 with ${values}`);
-    router.push(`/seller_profile/create-shop/step2`);
+    console.warn(`proceed to step7 with ${values}`);
+    //TODO: /by Demidas/ update the link according with updated user flow.
+    router.push(`/seller_profile`);
   };
 
   return (
@@ -98,7 +100,11 @@ const FinancialSettings = () => {
               <Text style={[styles.mainText, { marginTop: 16 }]}>
                 Налаштування виплат
               </Text>
-              <ScrollView showsVerticalScrollIndicator={false}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps='handled'
+                keyboardDismissMode='on-drag'
+              >
                 <View style={{ marginTop: 16, gap: 16 }}>
                   {/* TODO: These two below should be a dropdown */}
                   <BasicDropDown<Recurrence>
@@ -136,42 +142,55 @@ const FinancialSettings = () => {
                       <BasicFormInput
                         placeholder='500'
                         style={{ flexShrink: 0 }}
+                        onChangeText={(text) =>
+                          setFieldValue('minimumSumm', text)
+                        }
+                        onBlur={handleBlur('minimumSumm')}
+                        noTextError={true}
+                        errorMessage={
+                          touched.minimumSumm && errors.minimumSumm
+                            ? errors.minimumSumm
+                            : undefined
+                        }
                       />
                     </View>
-                    <View>
+                    <View style={styles.currencyBox}>
                       <MaterialCommunityIcons
                         name='currency-uah'
-                        size={24}
+                        size={20}
                         color='black'
-                        style={{ flexShrink: 0, paddingRight: 66 }}
                       />
                     </View>
                   </View>
                 </View>
-                <View style={{ marginTop: 33 }}>
-                  <Text style={[styles.mainText, { marginBottom: 12 }]}>
-                    Умови
-                  </Text>
+                <View style={{ marginTop: 33, gap: 12 }}>
+                  <Text style={styles.mainText}>Умови</Text>
 
-                  <View></View>
-                  <Text style={styles.termText}>
-                    Комісія: 5% з кожного продажу
-                  </Text>
-                  <Text style={styles.termText}>Резерв на повернення: 10%</Text>
-                  <Text style={styles.termText}>
-                    Термін утримання резерву: 30 днів
-                  </Text>
+                  <View style={{ gap: 8 }}>
+                    <Text style={styles.termText}>
+                      Комісія: 5% з кожного продажу
+                    </Text>
+                    <Text style={styles.termText}>
+                      Резерв на повернення: 10%
+                    </Text>
+                    <Text style={styles.termText}>
+                      Термін утримання резерву: 30 днів
+                    </Text>
+                  </View>
                   <CheckBox
                     title='Даю згоду з фінансовими умовами'
                     titleStyle={styles.mainText}
+                    isChecked={values.termsAccepted}
+                    onPress={() => {
+                      setFieldValue('termsAccepted', !values.termsAccepted);
+                    }}
                   />
                 </View>
               </ScrollView>
-
               <PrimaryButton
-                style={{ marginTop: 23, alignSelf: 'flex-end' }}
+                style={{ marginTop: 24, alignSelf: 'flex-end' }}
                 size='L'
-                title='Продовжити'
+                title='Завершити реєстрацію'
                 onPress={() => handleSubmit()}
                 active={isFormValid}
               />
@@ -197,6 +216,15 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 14,
     color: Colors.grey400,
+  },
+  currencyBox: {
+    borderWidth: 1,
+    borderColor: Colors.grey400,
+    borderRadius: 10,
+    paddingVertical: 13,
+    paddingHorizontal: 7.5,
+    width: 48,
+    alignItems: 'center',
   },
   termText: {
     fontFamily: 'Manrope',

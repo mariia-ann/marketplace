@@ -78,7 +78,12 @@ const ShopContactDetails = () => {
                 <Text style={styles.inputHintText}>
                   для зв’язку з адміністратором застосунку
                 </Text>
-                <Text style={[styles.secondaryText, { marginTop: 16 }]}>
+                <Text
+                  style={[
+                    styles.secondaryText,
+                    { marginTop: 24, marginBottom: 16 },
+                  ]}
+                >
                   Робочі години
                 </Text>
                 <View
@@ -120,8 +125,12 @@ const ShopContactDetails = () => {
                     />
                   </View>
                 </View>
-                <Pressable style={styles.uploadButtonBox}>
-                  <PlusCircle size={28} color={Colors.softPurple} />
+                <Pressable style={[styles.uploadButtonBox, { marginTop: 16 }]}>
+                  <PlusCircle
+                    size={26}
+                    color={Colors.softPurple}
+                    weight='fill'
+                  />
                   <Text style={styles.uploadButtonText}>Додати дні</Text>
                 </Pressable>
                 <View
@@ -194,7 +203,11 @@ const ShopContactDetails = () => {
                     </View>
                   </View>
                   <Pressable style={styles.uploadButtonBox}>
-                    <PlusCircle size={28} color={Colors.softPurple} />
+                    <PlusCircle
+                      size={26}
+                      color={Colors.softPurple}
+                      weight='fill'
+                    />
                     <Text style={styles.uploadButtonText}>
                       Додати адресу магазину (або складу)
                     </Text>
@@ -237,7 +250,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   uploadButtonBox: {
-    marginTop: 16,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,

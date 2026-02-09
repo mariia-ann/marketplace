@@ -135,7 +135,9 @@ const ChooseCategory = () => {
             };
             return (
               <>
-                <Text style={styles.secondaryText}>Введіть дані магазину</Text>
+                <Text style={[styles.secondaryText, { marginBottom: 24 }]}>
+                  Введіть дані магазину
+                </Text>
                 <BasicFormInput
                   label='Назва магазину'
                   placeholder='Назва'
@@ -145,7 +147,9 @@ const ChooseCategory = () => {
                     touched.name && errors.name ? errors.name : undefined
                   }
                 />
-                <Text style={styles.secondaryText}>Оберіть категорії</Text>
+                <Text style={[styles.secondaryText, { marginBottom: 16 }]}>
+                  Оберіть категорії
+                </Text>
                 <View style={styles.categoryBox}>
                   {listOfCategories ? (
                     listOfCategories.map((category) => (

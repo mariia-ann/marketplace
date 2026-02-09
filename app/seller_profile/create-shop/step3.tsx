@@ -294,7 +294,7 @@ const LegalDetails = () => {
 
                 <Pressable style={styles.uploadButtonBox}>
                   <PlusCircle
-                    size={28}
+                    size={26}
                     color={Colors.softPurple}
                     weight='fill'
                   />

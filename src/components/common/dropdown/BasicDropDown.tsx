@@ -1,7 +1,7 @@
 import Colors from '@/constants/Colors';
 import { CaretDown, CaretUp } from 'phosphor-react-native';
 import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Keyboard } from 'react-native';
 
 export type DropDownOption<T extends string = string> = {
   value: T;
@@ -29,7 +29,10 @@ const BasicDropDown = <T extends string = string>(
             ? styles.container
             : [styles.container, styles.containerOpened]
         }
-        onPress={() => setOpenStatus(!openStatus)}
+        onPress={() => {
+          Keyboard.dismiss();
+          setOpenStatus(!openStatus);
+        }}
       >
         <Text style={styles.optionText}>
           {props.chosenOption?.label && !openStatus

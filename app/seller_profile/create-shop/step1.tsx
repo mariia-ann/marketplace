@@ -44,18 +44,21 @@ const ChooseSellerType = () => {
             <>
               <View style={{ flex: 1, gap: 15 }}>
                 <RadioButton
-                  onPress={() => setFieldValue('sellerType', 'self_employed')}
-                  selected={values.sellerType === 'self_employed'}
-                  active={true}
-                  size='L'
-                  title='Самозайнятий'
-                />
-                <RadioButton
                   onPress={() => setFieldValue('sellerType', 'private')}
                   selected={values.sellerType === 'private'}
                   active={true}
                   size='L'
+                  title='Фізична особа'
+                  textStyle={{ color: Colors.softPurple }}
+                />
+
+                <RadioButton
+                  onPress={() => setFieldValue('sellerType', 'self_employed')}
+                  selected={values.sellerType === 'self_employed'}
+                  active={true}
+                  size='L'
                   title='Фізична особа-підприємець'
+                  textStyle={{ color: Colors.softPurple }}
                 />
                 <RadioButton
                   onPress={() => setFieldValue('sellerType', 'company')}
@@ -63,6 +66,7 @@ const ChooseSellerType = () => {
                   active={true}
                   size='L'
                   title='Юридична особа (ТОВ)'
+                  textStyle={{ color: Colors.softPurple }}
                 />
               </View>
               <View style={{ flexDirection: 'column', gap: 15 }}>

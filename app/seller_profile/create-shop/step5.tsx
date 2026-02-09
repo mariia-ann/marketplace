@@ -207,7 +207,7 @@ const COUNTRIES_OF_DELIVERY = [
   { code: 'CZ', name: 'Чеська Республіка', available: false },
 ] as const;
 
-const FinancialSettings = () => {
+const DeliverySettings = () => {
   const initialValues: DeliveryFormState = {
     methods: {
       SELF_PICKUP: false,
@@ -350,10 +350,7 @@ const FinancialSettings = () => {
 
                 {/* Shipping terms block */}
                 <Text
-                  style={[
-                    styles.secondaryText,
-                    { marginTop: 24, marginBottom: 8 },
-                  ]}
+                  style={[styles.mainText, { marginTop: 24, marginBottom: 8 }]}
                 >
                   Орієнтовні терміни відправки
                 </Text>
@@ -485,7 +482,7 @@ const FinancialSettings = () => {
   );
 };
 
-export default FinancialSettings;
+export default DeliverySettings;
 
 const styles = StyleSheet.create({
   mainText: {
