@@ -1,15 +1,39 @@
 import Colors from '@/constants/Colors';
 import PrimaryButton from '@/src/components/common/buttons/PrimaryButton';
 import BasicFormInput from '@/src/components/common/customInput/BasicFormInput';
+import CheckBox from '@/src/components/common/customInput/Checkbox';
+import BasicDropDown, {
+  DropDownOption,
+} from '@/src/components/common/dropdown/BasicDropDown';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Formik } from 'formik';
-import { Text, StyleSheet, View, Pressable, ScrollView } from 'react-native';
+import { Text, StyleSheet, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Yup from 'yup';
 
+type Recurrence = (typeof recurrenceOptions)[number]['value'];
+
+const recurrenceOptions = [
+  { value: 'weekly', label: 'Щотижня' },
+  { value: 'monthly', label: 'Щомісяця' },
+  { value: 'quarterly', label: 'Щокварталу' },
+] as const;
+
+type DayOfPayment = (typeof paymentDayOptions)[number]['value'];
+
+const paymentDayOptions = [
+  { value: 'monday', label: 'Понеділок' },
+  { value: 'tuesday', label: 'Вівторок' },
+  { value: 'wednesday', label: 'Середа' },
+  { value: 'thursday', label: 'Четвер' },
+  { value: 'friday', label: "П'ятниця" },
+  { value: 'saturday', label: 'Субота' },
+  { value: 'sunday', label: 'Неділя' },
+];
 type shopDetailsStep5 = {
-  recurrence: string;
-  paymentDay: string;
+  recurrence: Recurrence | '';
+  paymentDay: DayOfPayment | '';
   minimumSumm: number;
   termsAccepted: boolean;
 };
@@ -44,65 +68,117 @@ const FinancialSettings = () => {
       edges={['bottom']}
       style={{ flex: 1, backgroundColor: Colors.white, paddingHorizontal: 20 }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={shopDetailsStep5Schema}
-          onSubmit={handleDataSave}
-        >
-          {({
-            errors,
-            touched,
-            isValid,
-            dirty,
-            handleBlur,
-            setFieldValue,
-            handleSubmit,
-          }) => {
-            const isFormValid = isValid && dirty;
-            return (
-              <>
-                <Text style={[styles.secondaryText, { marginTop: 16 }]}>
-                  Налаштування виплат
-                </Text>
-                {/* TODO: These two below should be a dropdown */}
-                <BasicFormInput
-                  label='Періодичність'
-                  placeholder='Щотижня'
-                  onChangeText={(text) => setFieldValue('recurrence', text)}
-                  onBlur={handleBlur('recurrence')}
-                  noTextError={true}
-                  errorMessage={
-                    touched.recurrence && errors.recurrence
-                      ? errors.recurrence
-                      : undefined
-                  }
-                />
-                <BasicFormInput
-                  label='День виплат'
-                  placeholder='П’ятниця'
-                  onChangeText={(text) => setFieldValue('paymentDay', text)}
-                  onBlur={handleBlur('paymentDay')}
-                  noTextError={true}
-                  errorMessage={
-                    touched.paymentDay && errors.paymentDay
-                      ? errors.paymentDay
-                      : undefined
-                  }
-                />
+      <Formik
+        initialValues={initialValues}
+        validationSchema={shopDetailsStep5Schema}
+        onSubmit={handleDataSave}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          isValid,
+          dirty,
+          handleBlur,
+          setFieldValue,
+          handleSubmit,
+        }) => {
+          const isFormValid = isValid && dirty;
+          const selectedRecurrenceOption: DropDownOption<Recurrence> | null =
+            recurrenceOptions.find(
+              (option) => option.value === values.recurrence,
+            ) ?? null;
+          const selectedPaymentDayOptions: DropDownOption<DayOfPayment> | null =
+            paymentDayOptions.find(
+              (option) => option.value === values.paymentDay,
+            ) ?? null;
 
-                <PrimaryButton
-                  style={{ marginTop: 23 }}
-                  size='L'
-                  title='Продовжити'
-                  onPress={() => handleSubmit()}
-                  active={isFormValid}
-                />
-              </>
-            );
-          }}
-        </Formik>
-      </ScrollView>
+          return (
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.mainText, { marginTop: 16 }]}>
+                Налаштування виплат
+              </Text>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{ marginTop: 16, gap: 16 }}>
+                  {/* TODO: These two below should be a dropdown */}
+                  <BasicDropDown<Recurrence>
+                    options={recurrenceOptions}
+                    chosenOption={selectedRecurrenceOption}
+                    onSelect={(option) =>
+                      setFieldValue('recurrence', option.value)
+                    }
+                    title='Оберіть варіант'
+                    label='Періодичність'
+                  />
+                  <BasicDropDown<DayOfPayment>
+                    options={paymentDayOptions}
+                    chosenOption={selectedPaymentDayOptions}
+                    onSelect={(option) =>
+                      setFieldValue('paymentDay', option.value)
+                    }
+                    title='Оберіть день'
+                    label='День виплат'
+                  />
+
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 8,
+                      width: '100%',
+                    }}
+                  >
+                    <Text style={[styles.inputHintText, { flexShrink: 0 }]}>
+                      Мінімальна сума
+                    </Text>
+                    <View style={{ minWidth: 110 }}>
+                      <BasicFormInput
+                        placeholder='500'
+                        style={{ flexShrink: 0 }}
+                      />
+                    </View>
+                    <View>
+                      <MaterialCommunityIcons
+                        name='currency-uah'
+                        size={24}
+                        color='black'
+                        style={{ flexShrink: 0, paddingRight: 66 }}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <View style={{ marginTop: 33 }}>
+                  <Text style={[styles.mainText, { marginBottom: 12 }]}>
+                    Умови
+                  </Text>
+
+                  <View></View>
+                  <Text style={styles.termText}>
+                    Комісія: 5% з кожного продажу
+                  </Text>
+                  <Text style={styles.termText}>Резерв на повернення: 10%</Text>
+                  <Text style={styles.termText}>
+                    Термін утримання резерву: 30 днів
+                  </Text>
+                  <CheckBox
+                    title='Даю згоду з фінансовими умовами'
+                    titleStyle={styles.mainText}
+                  />
+                </View>
+              </ScrollView>
+
+              <PrimaryButton
+                style={{ marginTop: 23, alignSelf: 'flex-end' }}
+                size='L'
+                title='Продовжити'
+                onPress={() => handleSubmit()}
+                active={isFormValid}
+              />
+            </View>
+          );
+        }}
+      </Formik>
     </SafeAreaView>
   );
 };
@@ -110,29 +186,22 @@ const FinancialSettings = () => {
 export default FinancialSettings;
 
 const styles = StyleSheet.create({
-  secondaryText: {
+  mainText: {
     fontFamily: 'Manrope',
     fontWeight: '600',
     fontSize: 16,
+    color: Colors.blackMain,
   },
   inputHintText: {
     fontFamily: 'Manrope',
     fontWeight: '400',
     fontSize: 14,
     color: Colors.grey400,
-    textAlign: 'right',
-    marginTop: 8,
   },
-  uploadButtonBox: {
-    marginTop: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  uploadButtonText: {
+  termText: {
     fontFamily: 'Manrope',
-    fontWeight: '600',
+    fontWeight: '400',
     fontSize: 16,
-    color: Colors.softPurple,
+    color: Colors.blackMain,
   },
 });

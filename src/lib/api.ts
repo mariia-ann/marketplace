@@ -82,10 +82,10 @@ api.interceptors.response.use(
       console.warn('Token expired or invalid. Clearing auth...');
       useAuthStore.getState().signOut();
       try {
-        router.replace('/'); // or "/auth/login"
+        router.replace('/auth/login'); // or "/auth/login"
       } catch {
-        console.warn('inside api error with epired token');
-        router.replace('/');
+        console.warn('inside api error with expired token');
+        router.replace('/auth/login');
       }
       // Optional: prevent axios from retrying infinite loop
       return Promise.reject(error);

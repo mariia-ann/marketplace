@@ -19,7 +19,7 @@ const CreateShop = () => {
       <View style={styles.buttonBlock}>
         <PrimaryButton
           title='Почати'
-          onPress={() => router.push('/seller_profile/create-shop/step1')}
+          onPress={() => router.push('/seller_profile/create-shop/step6')}
           size='L'
         />
         <SecondaryButton

@@ -293,7 +293,11 @@ const LegalDetails = () => {
                 )}
 
                 <Pressable style={styles.uploadButtonBox}>
-                  <PlusCircle size={28} color={Colors.softPurple} />
+                  <PlusCircle
+                    size={28}
+                    color={Colors.softPurple}
+                    weight='fill'
+                  />
                   <Text style={styles.uploadButtonText}>
                     Додати резервний рахунок (?)
                   </Text>
