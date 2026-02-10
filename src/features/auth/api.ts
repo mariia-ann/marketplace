@@ -1,4 +1,4 @@
-import { api } from "@/src/lib/api";
+import { api } from '@/src/lib/api';
 
 export type LoginDto = {
   email: string;
@@ -11,6 +11,7 @@ export type SignupDto = {
   email: string;
   password: string;
   isPhoneValidated: boolean;
+  isSeller: boolean;
 };
 
 export type sendOTPDto = {
@@ -34,6 +35,7 @@ export type SignupResponse = {
   isPhoneValidated: boolean;
   createdAt: string;
   updatedAt: string;
+  isSeller: boolean;
 };
 
 export type OTPResponse = {
@@ -46,37 +48,50 @@ export type VerifyOTPResponse = {
   reason?: string;
 };
 
+export type getUserByIdRepsonse = {
+  id: string;
+  firstName: string;
+  lastName?: string | null;
+  email: string;
+  phone: string;
+  isPhoneValidated: boolean;
+  isSeller: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export async function login(dto: LoginDto): Promise<LoginResponse> {
-  const { data } = await api.post("auth/login", dto, { skipAuth: true });
+  const { data } = await api.post('auth/login', dto, { skipAuth: true });
   return data; // LoginResponse { access_token: string }
 }
 
-export async function getUserById(id: string) {
-  console.warn("inside api.ts from getUserById", id);
+export async function getUserById(id: string): Promise<getUserByIdRepsonse> {
+  console.warn('inside api.ts from getUserById', id);
   const { data } = await api.get(`users/${id}`, { requireAuth: true });
+  console.warn('inside getUserById result is: ', data);
   return data;
 }
 
 export async function signup(dto: SignupDto): Promise<SignupResponse> {
-  const { data } = await api.post("auth/register", dto, { skipAuth: true });
+  const { data } = await api.post('auth/register', dto, { skipAuth: true });
   return data;
 }
 
 export async function logout() {
-  const { data } = await api.post("auth/logout", {}, { requireAuth: true });
+  const { data } = await api.post('auth/logout', {}, { requireAuth: true });
   return data;
 }
 
 export async function sendOTP(dto: sendOTPDto): Promise<OTPResponse> {
-  const { data } = await api.post("auth/phone/send", dto, {
+  const { data } = await api.post('auth/phone/send', dto, {
     requireAuth: false,
   });
   return data;
 }
 
 export async function verifyOTP(dto: verifyOTPDto) {
-  console.warn("verifyOTP called with DTO:", dto);
-  const { data } = await api.post("auth/phone/verify", dto, {
+  console.warn('verifyOTP called with DTO:', dto);
+  const { data } = await api.post('auth/phone/verify', dto, {
     requireAuth: false,
   });
   return data;

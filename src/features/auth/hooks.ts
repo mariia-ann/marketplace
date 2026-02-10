@@ -39,7 +39,7 @@ export function useMe() {
   return useQuery({
     queryKey: ['me', userId],
     queryFn: async () => {
-      // console.warn( ">>> queryFn in useMe is running with userId:", userId );
+      console.warn('>>> queryFn in useMe is running with userId:', userId);
       return getUserById(userId!);
     },
     enabled: !!userId,

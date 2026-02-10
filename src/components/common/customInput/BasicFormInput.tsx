@@ -86,7 +86,7 @@ const BasicFormInput = forwardRef<TextInput, BasicFormInputProps>(
             </Pressable>
           )}
         </View>
-        {errorMessage && !noTextError && (
+        {!noTextError && (
           <View style={{ minHeight: ERROR_HEIGHT, marginTop: 4 }}>
             <Text style={[styles.errorText, styles.errorHidden]}>
               {errorMessage}
