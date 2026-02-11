@@ -1,13 +1,14 @@
 // src/features/auth/guards.tsx
-import { Redirect, Slot } from "expo-router";
-import type { Href } from "expo-router";
-import React from "react";
-import { ActivityIndicator, View } from "react-native";
-import { useAuthStore } from "@/src/state/useAuthStore";
+import { Redirect, Slot } from 'expo-router';
+import type { Href } from 'expo-router';
+import React from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import { useAuthStore } from '@/src/state/useAuthStore';
+import { useMe } from '@/src/features/auth/hooks';
 
 function BlockingSplash() {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <ActivityIndicator />
     </View>
   );
@@ -25,7 +26,7 @@ type GuardProps = {
 };
 
 /** Allow only authenticated users; otherwise redirect to login */
-export function RequireAuth({ to = "/auth/login", children }: GuardProps) {
+export function RequireAuth({ to = '/auth/login', children }: GuardProps) {
   const token = useAuthStore((s) => s.token);
   if (!token) return <Redirect href={to} />;
 
@@ -33,8 +34,22 @@ export function RequireAuth({ to = "/auth/login", children }: GuardProps) {
   return children ? <>{children}</> : <Slot />;
 }
 
+/** Alow only users with Seller role, otherwise redirect to a page for profile upgrade. */
+export function RequireSeller({
+  to = '/(tabs)/profile',
+  children,
+}: GuardProps) {
+  const token = useAuthStore((s) => s.token);
+  const { data: me, isLoading } = useMe();
+  const isSeller = !!me?.isSeller;
+  if (!token || !isSeller) return <Redirect href={to} />;
+
+  // If used as a layout, render nested routes via Slot; if wrapped, render children.
+  return children ? <>{children}</> : <Slot />;
+}
+
 /** Allow only guests; otherwise redirect to tabs/home */
-export function RequireGuest({ to = "/(tabs)", children }: GuardProps) {
+export function RequireGuest({ to = '/(tabs)', children }: GuardProps) {
   const token = useAuthStore((s) => s.token);
   if (token) return <Redirect href={to} />;
 

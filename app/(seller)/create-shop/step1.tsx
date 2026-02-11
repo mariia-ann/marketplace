@@ -27,7 +27,7 @@ const ChooseSellerType = () => {
         onSubmit={(values) => {
           console.warn(`proceed to step2 with ${values.sellerType}`);
 
-          router.push(`/seller_profile/create-shop/step2`);
+          router.push(`/(seller)/create-shop/step2`);
         }}
       >
         {({

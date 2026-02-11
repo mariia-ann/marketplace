@@ -118,7 +118,7 @@ const LegalDetails = () => {
 
   const handleDataSave = (values: shopDetailsStep3) => {
     console.warn(`proceed to step3 with ${JSON.stringify(values)}`);
-    router.push(`/seller_profile/create-shop/step4`);
+    router.push(`/(seller)/create-shop/step4`);
   };
 
   return (

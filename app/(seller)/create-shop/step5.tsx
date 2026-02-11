@@ -252,7 +252,7 @@ const DeliverySettings = () => {
 
   const handleDataSave = (values: DeliveryFormState) => {
     console.warn(`proceed to step6 with ${values}`);
-    router.push(`/seller_profile/create-shop/step6`);
+    router.push(`/(seller)/create-shop/step6`);
   };
 
   return (

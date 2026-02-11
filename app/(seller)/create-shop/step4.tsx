@@ -39,7 +39,7 @@ const ShopContactDetails = () => {
 
   const handleDataSave = (values: shopDetailsStep4) => {
     console.warn(`proceed to step4 with ${JSON.stringify(values)}`);
-    router.push(`/seller_profile/create-shop/step5`);
+    router.push(`/(seller)/create-shop/step5`);
   };
 
   return (
