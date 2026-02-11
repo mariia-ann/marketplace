@@ -62,7 +62,7 @@ const FinancialSettings = () => {
   const handleDataSave = (values: shopDetailsStep5) => {
     console.warn(`proceed to step7 with ${values}`);
     //TODO: /by Demidas/ update the link according with updated user flow.
-    router.push(`/seller_profile`);
+    router.push(`/(seller)`);
   };
 
   return (

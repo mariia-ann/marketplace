@@ -1,7 +1,8 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
 import { router } from 'expo-router';
-import CreateShop from '@/app/seller_profile/create-shop';
+import CreateShop from '@/app/(seller)/create-shop';
+import { View, Text } from 'react-native';
 
 jest.mock('expo-router', () => ({
   router: {
@@ -10,16 +11,12 @@ jest.mock('expo-router', () => ({
 }));
 
 jest.mock('@/src/components/ui/welcome_page/WelcomeBackground', () => {
-  const React = require('react');
-  const { View } = require('react-native');
   return function MockWelcomeBackground() {
     return React.createElement(View, { testID: 'welcome-background' });
   };
 });
 
 jest.mock('@/src/components/common/buttons/PrimaryButton', () => {
-  const React = require('react');
-  const { Text } = require('react-native');
   return function MockPrimaryButton({
     title,
     onPress,
@@ -32,8 +29,6 @@ jest.mock('@/src/components/common/buttons/PrimaryButton', () => {
 });
 
 jest.mock('@/src/components/common/buttons/SecondaryButton', () => {
-  const React = require('react');
-  const { Text } = require('react-native');
   return function MockSecondaryButton({
     title,
     onPress,
@@ -65,7 +60,7 @@ describe('CreateShop', () => {
 
     fireEvent.press(getByText('Почати'));
 
-    expect(pushMock).toHaveBeenCalledWith('/seller_profile/create-shop/step1');
+    expect(pushMock).toHaveBeenCalledWith('/(seller)/create-shop/step1');
   });
 
   it('navigates to seller profile on cancel', () => {
@@ -73,6 +68,6 @@ describe('CreateShop', () => {
 
     fireEvent.press(getByText('Відмовитись'));
 
-    expect(pushMock).toHaveBeenCalledWith('/seller_profile');
+    expect(pushMock).toHaveBeenCalledWith('/(seller)');
   });
 });

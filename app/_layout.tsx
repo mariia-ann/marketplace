@@ -7,6 +7,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { queryClient } from '@/src/lib/queryClient';
 import { asyncStoragePersister } from '@/src/lib/persistor';
 import { View, StyleSheet } from 'react-native';
+import { useAuthStore } from '@/src/state/useAuthStore';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -18,6 +19,10 @@ export default function RootLayout() {
     // Outfit: require("../assets/fonts/Outfit-Regular.ttf"),
     // OutfitBold: require("../assets/fonts/Outfit-Bold.ttf"),
   });
+
+  const token = useAuthStore((s) => s.token);
+  console.warn(token);
+  const isLoggedIn = !!token;
 
   useEffect(() => {
     const prepare = async () => {
@@ -79,10 +84,12 @@ export default function RootLayout() {
                 {/* Main app after login */}
                 <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
                 {/* Seller profile screen */}
-                <Stack.Screen
-                  name='seller_profile'
-                  options={{ headerShown: false }}
-                />
+                <Stack.Protected guard={isLoggedIn}>
+                  <Stack.Screen
+                    name='(seller)'
+                    options={{ headerShown: false }}
+                  />
+                </Stack.Protected>
                 {/* 404 page */}
                 <Stack.Screen name='+not-found' options={{}} />
               </Stack>

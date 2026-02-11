@@ -20,7 +20,7 @@ export default function SellerProfile() {
         <SellerDashBoard />
       </ScrollView>
       <PrimaryButton
-        onPress={() => router.push('/seller_profile/create-shop')}
+        onPress={() => router.push('/(seller)/create-shop')}
         title='Новий магазин'
         style={{ marginBottom: 24 }}
       />

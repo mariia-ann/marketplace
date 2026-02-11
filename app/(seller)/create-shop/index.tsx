@@ -19,14 +19,14 @@ const CreateShop = () => {
       <View style={styles.buttonBlock}>
         <PrimaryButton
           title='Почати'
-          onPress={() => router.push('/seller_profile/create-shop/step1')}
+          onPress={() => router.push('/(seller)/create-shop/step1')}
           size='L'
         />
         <SecondaryButton
           title='Відмовитись'
           active={true}
           size='L'
-          onPress={() => router.push('/seller_profile')}
+          onPress={() => router.push('/(seller)')}
         />
       </View>
     </SafeAreaView>
