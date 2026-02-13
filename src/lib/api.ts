@@ -17,7 +17,7 @@ export const api = axios.create({
 
 // REQUEST INTERCEPTOR
 api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  const token = useAuthStore.getState().access_token;
   if (__DEV__) {
     console.warn(
       `[${config.method?.toUpperCase()}] ${config.baseURL}${config.url} ` +

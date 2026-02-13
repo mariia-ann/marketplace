@@ -47,7 +47,6 @@ const Signup = () => {
     void repeatPassword;
     const dto: SignupDto = {
       ...rest,
-      isPhoneValidated: true,
       isSeller: accountType === 'seller',
     };
     console.log('Signing up with:', dto);
