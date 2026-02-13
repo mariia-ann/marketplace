@@ -8,6 +8,7 @@ import {
   signup as signupApi,
   type SignupDto,
   LoginDto,
+  LoginResponse,
 } from '@/src/features/auth/api';
 import { router } from 'expo-router';
 
@@ -57,17 +58,19 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: async (dto: LoginDto) => loginApi(dto),
-    onSuccess: ({ access_token }) => {
-      setToken(access_token);
-      const p = parseJwt(access_token);
+    onSuccess: (data: LoginResponse) => {
+      setToken(data.accessToken.access_token);
+      const p = parseJwt(data.accessToken.access_token);
       const uid = p?.userId ?? p?.uid ?? p?.sub ?? null;
       setUserId(uid);
       qc.invalidateQueries({ queryKey: ['me'] });
+      console.warn('uid:', uid);
+      console.warn('token', data.accessToken.access_token);
     },
     onError: () => {
       console.warn('Login failed');
       // Ensure any stale auth is cleared so guards treat the user as a guest
-      const token = useAuthStore.getState().token;
+      const token = useAuthStore.getState().access_token;
       if (token) signOut();
       qc.removeQueries({ queryKey: ['me'] });
     },
@@ -92,7 +95,7 @@ export function useSignup() {
       qc.setQueryData(['signupDto'], dto);
     },
     onError: () => {
-      const token = useAuthStore.getState().token;
+      const token = useAuthStore.getState().access_token;
       if (token) signOut();
       qc.removeQueries({ queryKey: ['me'] });
     },

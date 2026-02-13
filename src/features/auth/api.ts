@@ -10,7 +10,6 @@ export type SignupDto = {
   phone: string;
   email: string;
   password: string;
-  isPhoneValidated: boolean;
   isSeller: boolean;
 };
 
@@ -24,7 +23,11 @@ export type verifyOTPDto = {
 };
 
 export type LoginResponse = {
-  access_token: string;
+  accessToken: {
+    access_token: string;
+  };
+  isEmailValideted: boolean;
+  isPhoneValidated: boolean;
 };
 
 export type SignupResponse = {
@@ -62,6 +65,7 @@ export type getUserByIdRepsonse = {
 
 export async function login(dto: LoginDto): Promise<LoginResponse> {
   const { data } = await api.post('auth/login', dto, { skipAuth: true });
+  console.warn('inside api', data);
   return data; // LoginResponse { access_token: string }
 }
 

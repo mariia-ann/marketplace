@@ -27,7 +27,7 @@ type GuardProps = {
 
 /** Allow only authenticated users; otherwise redirect to login */
 export function RequireAuth({ to = '/auth/login', children }: GuardProps) {
-  const token = useAuthStore((s) => s.token);
+  const token = useAuthStore((s) => s.access_token);
   if (!token) return <Redirect href={to} />;
 
   // If used as a layout, render nested routes via Slot; if wrapped, render children.
@@ -39,7 +39,7 @@ export function RequireSeller({
   to = '/(tabs)/profile',
   children,
 }: GuardProps) {
-  const token = useAuthStore((s) => s.token);
+  const token = useAuthStore((s) => s.access_token);
   const { data: me, isLoading } = useMe();
   const isSeller = !!me?.isSeller;
   if (!token || !isSeller) return <Redirect href={to} />;
@@ -50,7 +50,7 @@ export function RequireSeller({
 
 /** Allow only guests; otherwise redirect to tabs/home */
 export function RequireGuest({ to = '/(tabs)', children }: GuardProps) {
-  const token = useAuthStore((s) => s.token);
+  const token = useAuthStore((s) => s.access_token);
   if (token) return <Redirect href={to} />;
 
   return children ? <>{children}</> : <Slot />;
