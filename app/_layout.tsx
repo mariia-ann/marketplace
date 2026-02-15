@@ -1,8 +1,8 @@
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { RestoreGate } from '@/src/features/auth/guards';
+import { bootstrapAuth, RestoreGate } from '@/src/features/auth/guards';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { queryClient } from '@/src/lib/queryClient';
 import { asyncStoragePersister } from '@/src/lib/persistor';
@@ -20,9 +20,23 @@ export default function RootLayout() {
     // OutfitBold: require("../assets/fonts/Outfit-Bold.ttf"),
   });
 
-  const token = useAuthStore((s) => s.token);
-  console.warn(token);
+  const token = useAuthStore((s) => s.access_token);
+  const isRestoring = useAuthStore((s) => s.isRestoring);
+
+  useEffect(() => {
+    if (isRestoring) return;
+    console.warn(
+      `>>> RootLayout: ${token ? 'token is present' : 'no token'} on load`,
+    );
+  }, [isRestoring, token]);
   const isLoggedIn = !!token;
+  // Below useEffect should run only once on app start to bootstrap auth state from http cookie with refresh token.
+  const didBootstrap = useRef(false);
+  useEffect(() => {
+    if (didBootstrap.current) return;
+    didBootstrap.current = true;
+    void bootstrapAuth();
+  }, []);
 
   useEffect(() => {
     const prepare = async () => {

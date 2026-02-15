@@ -5,8 +5,6 @@ import { useMe } from '@/src/features/auth/hooks';
 
 export default function User() {
   const { data: currentUser, isLoading, isFetching, error, status } = useMe();
-  console.warn('inside User component, User is: ', currentUser);
-
   if (isLoading || isFetching) {
     return (
       <View style={styles.user}>
