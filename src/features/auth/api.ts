@@ -1,4 +1,4 @@
-import { api } from '@/src/lib/api';
+import { api, refreshApi } from '@/src/lib/api';
 
 export type LoginDto = {
   email: string;
@@ -65,14 +65,14 @@ export type getUserByIdRepsonse = {
 
 export async function login(dto: LoginDto): Promise<LoginResponse> {
   const { data } = await api.post('auth/login', dto, { skipAuth: true });
-  console.warn('inside api', data);
-  return data; // LoginResponse { access_token: string }
+  return data;
 }
 
-export async function getUserById(id: string): Promise<getUserByIdRepsonse> {
-  console.warn('inside api.ts from getUserById', id);
-  const { data } = await api.get(`users/${id}`, { requireAuth: true });
-  console.warn('inside getUserById result is: ', data);
+export async function getUserById(
+  id: string,
+  signal?: AbortSignal,
+): Promise<getUserByIdRepsonse> {
+  const { data } = await api.get(`users/${id}`, { requireAuth: true, signal });
   return data;
 }
 
@@ -99,4 +99,12 @@ export async function verifyOTP(dto: verifyOTPDto) {
     requireAuth: false,
   });
   return data;
+}
+
+export async function refreshAccessToken() {
+  const { data } = await refreshApi.post('auth/refresh', null, {
+    skipAuth: false,
+  });
+  console.warn('Refresh token response: ', data);
+  return data.access_token;
 }

@@ -1,4 +1,8 @@
-import axios, { CanceledError, isCancel } from 'axios';
+import axios, {
+  AxiosError,
+  CanceledError,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { useAuthStore } from '@/src/state/useAuthStore';
 import { router } from 'expo-router';
 
@@ -9,15 +13,48 @@ declare module 'axios' {
   }
 }
 
+// Use localApiUrl if you are running the backend project locally, otherwise use remoteApiUrl for testing with the deployed backend.
+// const localApiUrl = 'http://localhost:3000/';
+const remoteApiUrl = 'http://34.227.53.16:3000/';
+
 export const api = axios.create({
-  baseURL: 'http://34.227.53.16:3000/',
-  // baseURL: 'http://localhost:3000/',
+  baseURL: remoteApiUrl,
   timeout: 15_000,
 });
 
+// separate instance without interceptors for token refresh to avoid infinite loop
+export const refreshApi = axios.create({
+  baseURL: remoteApiUrl,
+  timeout: 15_000,
+  withCredentials: true,
+});
+
+// access token life span left before we attempt refresh.
+export const TOKEN_REFRESH_THRESHOLD = 60_000; // 1 minute
+
 // REQUEST INTERCEPTOR
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(async (config) => {
   const token = useAuthStore.getState().access_token;
+  const expireAtMs = useAuthStore.getState().access_token_expireAt
+    ? new Date(useAuthStore.getState().access_token_expireAt as Date).getTime()
+    : null;
+  // Check if token is expiring soon and proactively refresh it before making the API call
+  const expiringSoon =
+    !!expireAtMs && Date.now() >= expireAtMs - TOKEN_REFRESH_THRESHOLD;
+  console.warn(
+    'Token expiring soon:',
+    expiringSoon,
+    ' expireAtMs:',
+    expireAtMs,
+    ' now:',
+    Date.now(),
+  );
+
+  if (token && expiringSoon) {
+    console.warn('access token will expire soon, refreshing it');
+    await refreshAccessTokenOnce(); // single-flight function you already have
+  }
+
   if (__DEV__) {
     console.warn(
       `[${config.method?.toUpperCase()}] ${config.baseURL}${config.url} ` +
@@ -62,35 +99,52 @@ api.interceptors.request.use((config) => {
 // RESPONSE INTERCEPTOR (optional QoL)
 api.interceptors.response.use(
   (res) => res,
-  (error) => {
-    const cfg = error?.config || {};
-    const triedWithAuth =
-      cfg.requireAuth ||
-      (!!cfg.headers &&
-        'Authorization' in cfg.headers &&
-        !!cfg.headers.Authorization);
+  async (error: AxiosError) => {
+    const original = (error.config || {}) as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+      skipAuth?: boolean;
+    };
 
-    // Swallow our deliberate cancel cleanly
-    if (isCancel(error) && error.message === 'AUTH_REQUIRED') {
-      // Optionally signal UI: show login modal/toast
-      return Promise.reject({ code: 'AUTH_REQUIRED' });
-    }
+    const is401 = error.response?.status === 401;
+    const isRefreshCall = original.url?.includes('auth/refresh');
 
-    // Central 401 handling for calls that attempted auth but failed (expired token)
-    if (error?.response?.status === 401 && triedWithAuth) {
-      // You can softly sign out or trigger a refresh flow here
-      console.warn('Token expired or invalid. Clearing auth...');
-      useAuthStore.getState().signOut();
-      try {
-        router.replace('/auth/login'); // or "/auth/login"
-      } catch {
-        console.warn('inside api error with expired token');
-        router.replace('/auth/login');
-      }
-      // Optional: prevent axios from retrying infinite loop
+    if (!is401 || original._retry || original.skipAuth || isRefreshCall) {
       return Promise.reject(error);
     }
 
-    return Promise.reject(error);
+    try {
+      const newToken = await refreshAccessTokenOnce();
+      console.warn(
+        'Access token was expired, refreshed and set to: ',
+        newToken,
+      );
+      original._retry = true;
+      original.headers = original.headers || {};
+      original.headers.Authorization = `Bearer ${newToken}`;
+      return api(original);
+    } catch {
+      useAuthStore.getState().onSignOut();
+      router.replace('/auth/login');
+      return Promise.reject(error);
+    }
   },
 );
+
+// This function ensures that only one refresh request is in-flight at a time, and that all callers receive the new token when it's ready.
+let refreshPromise: Promise<string> | null = null;
+
+function refreshAccessTokenOnce(): Promise<string> {
+  if (!refreshPromise) {
+    refreshPromise = refreshApi
+      .post('auth/refresh', null)
+      .then((res) => {
+        const token = res.data.access_token;
+        useAuthStore.getState().setToken(token);
+        return token;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
+}
