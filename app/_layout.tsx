@@ -6,6 +6,7 @@ import { RestoreGate } from '@/src/features/auth/guards';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { queryClient } from '@/src/lib/queryClient';
 import { asyncStoragePersister } from '@/src/lib/persistor';
+import Toast from 'react-native-toast-message';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -72,6 +73,7 @@ export default function RootLayout() {
           </Stack>
         </RestoreGate>
       </PersistQueryClientProvider>
+      <Toast />
     </SafeAreaProvider>
   );
 }

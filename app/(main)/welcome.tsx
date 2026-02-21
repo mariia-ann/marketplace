@@ -1,12 +1,12 @@
-import Colors from "@/constants/Colors";
-import { router } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Colors from '@/constants/Colors';
+import { router } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import SecondaryButton from "@/src/components/common/buttons/SecondaryButton";
-import PrimaryButton from "@/src/components/common/buttons/PrimaryButton";
-import TextLink from "@/src/components/common/TextLink_w_arrow";
-import WelcomeBackground from "@/src/components/ui/welcome_page/WelcomeBackground";
+import SecondaryButton from '@/src/components/common/buttons/SecondaryButton';
+import PrimaryButton from '@/src/components/common/buttons/PrimaryButton';
+import TextLink from '@/src/components/common/TextLink_w_arrow';
+import WelcomeBackground from '@/src/components/ui/welcome_page/WelcomeBackground';
 
 export default function WelcomeScreen() {
   return (
@@ -24,32 +24,32 @@ export default function WelcomeScreen() {
         </Text>
         <View style={styles.buttonBlock}>
           <PrimaryButton
-            title="Увійти"
-            onPress={() => router.push("/auth/login")}
-            size="L"
+            title='Увійти'
+            onPress={() => router.push('/auth/login')}
+            size='L'
             active={true}
           />
           <SecondaryButton
-            title="Зареєструватись"
-            onPress={() => router.push("/auth/signup")}
-            size="L"
+            title='Зареєструватись'
+            onPress={() => router.push('/auth/signup')}
+            size='L'
           />
           <SecondaryButton
-            title="Продовжити як гість"
+            title='Продовжити як гість'
             active={true}
-            size="L"
-            onPress={() => router.push("/(tabs)")}
+            size='L'
+            onPress={() => router.push('/(tabs)/profile/product-review')}
           />
         </View>
         <View style={styles.linkBlock}>
           <TextLink
-            title="Мова застосунку українська"
-            onPress={() => router.push("/(main)/choose-language")}
+            title='Мова застосунку українська'
+            onPress={() => router.push('/(main)/choose-language')}
             decorated={true}
           />
           <TextLink
-            title="Країна вашого перебування Україна"
-            onPress={() => router.push("/(main)/choose-country")}
+            title='Країна вашого перебування Україна'
+            onPress={() => router.push('/(main)/choose-country')}
             decorated={true}
           />
         </View>
@@ -61,30 +61,30 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
+    flexDirection: 'column',
     backgroundColor: Colors.white,
     paddingHorizontal: 20,
     paddingBottom: 44,
     gap: 24,
   },
   welcomeBackground: {
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   title: {
-    fontFamily: "Manrope",
-    fontWeight: "400",
+    fontFamily: 'Manrope',
+    fontWeight: '400',
     fontSize: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonBlock: {
-    flexDirection: "column",
+    flexDirection: 'column',
     gap: 16,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   linkBlock: {
-    flexDirection: "column",
+    flexDirection: 'column',
     gap: 17,
-    alignSelf: "center",
-    alignItems: "center",
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 });
