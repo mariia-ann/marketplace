@@ -60,19 +60,22 @@ export function useLogin() {
   return useMutation({
     mutationFn: async (dto: LoginDto) => loginApi(dto),
     onSuccess: (data: LoginResponse) => {
-      const token = data.accessToken.access_token;
+      const token = data.accessToken;
       // 1) keep in memory for app usage in store
       setToken(token);
       // 2) decode the token to pull out the user id and set in store for easy access
-      const p = parseJwt(data.accessToken.access_token);
+      const p = parseJwt(data.accessToken);
       const uid = p?.userId ?? p?.uid ?? p?.sub ?? null;
       setUserId(uid);
       const expireAt = p?.exp ? new Date(p.exp * 1000) : null;
       useAuthStore.getState().setAccessTokenExpireAt(expireAt);
       qc.invalidateQueries({ queryKey: ['me'] });
     },
-    onError: () => {
-      console.warn('Login failed');
+    onError: (e) => {
+      console.warn(
+        'Login failed: ',
+        e instanceof Error ? e.message : String(e),
+      );
       // Ensure any stale auth is cleared so guards treat the user as a guest
       const token = useAuthStore.getState().access_token;
       if (token) signOut();

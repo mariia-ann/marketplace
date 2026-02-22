@@ -13,6 +13,7 @@ import { Formik } from 'formik';
 import {
   LoginFormValues,
   loginSchema,
+  normalizeIdentifier,
 } from '@/src/features/auth/schemas/login.schema';
 import BasicFormInput from '@/src/components/common/customInput/BasicFormInput';
 import PrimaryButton from '@/src/components/common/buttons/PrimaryButton';
@@ -22,7 +23,7 @@ import PasswordInput from '@/src/components/common/customInput/PasswordInput';
 const Login = () => {
   const { mutate: doLogin, isPending, error, isSuccess, reset } = useLogin();
   const initialValues: LoginFormValues = {
-    email: '',
+    identifier: '',
     password: '',
   };
 
@@ -58,7 +59,10 @@ const Login = () => {
           validationSchema={loginSchema}
           validateOnMount
           onSubmit={(values) => {
-            doLogin(values);
+            doLogin({
+              identifier: normalizeIdentifier(values.identifier),
+              password: values.password.trim(),
+            });
           }}
         >
           {({
@@ -78,14 +82,16 @@ const Login = () => {
                 <BasicFormInput
                   label='email/телефон'
                   placeholder='email@gmail.com'
-                  value={values.email}
+                  value={values.identifier}
                   onChangeText={(text) => {
                     if (error) reset();
-                    setFieldValue('email', text);
+                    setFieldValue('identifier', text);
                   }}
-                  onBlur={handleBlur('email')}
+                  onBlur={handleBlur('identifier')}
                   errorMessage={
-                    touched.email && errors.email ? errors.email : undefined
+                    touched.identifier && errors.identifier
+                      ? errors.identifier
+                      : undefined
                   }
                 />
 

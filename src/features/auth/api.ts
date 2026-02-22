@@ -1,7 +1,7 @@
 import { api, refreshApi } from '@/src/lib/api';
 
 export type LoginDto = {
-  email: string;
+  identifier: string;
   password: string;
 };
 
@@ -23,9 +23,7 @@ export type verifyOTPDto = {
 };
 
 export type LoginResponse = {
-  accessToken: {
-    access_token: string;
-  };
+  accessToken: string;
   isEmailValideted: boolean;
   isPhoneValidated: boolean;
 };
