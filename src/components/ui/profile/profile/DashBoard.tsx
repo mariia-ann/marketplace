@@ -88,7 +88,7 @@ export default function DashBoard() {
             <Text style={styles.text}>Налаштування</Text>
           </Pressable>
         </Link>
-        <Link href='/seller_profile' asChild>
+        <Link href='/(seller)' asChild>
           <Pressable style={styles.dashboard}>
             <UserSwitch size={32} weight='thin' />
             <Text style={styles.text}>Увійти в кабінет продавця</Text>

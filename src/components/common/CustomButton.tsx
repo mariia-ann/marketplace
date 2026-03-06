@@ -1,12 +1,5 @@
 import React, { FC } from 'react';
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
 
 type CustomButtonProps = {
   title?: string;

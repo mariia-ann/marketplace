@@ -1,9 +1,9 @@
-import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { StyleSheet, Text, View } from "react-native";
-import { useRouter } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import BackButton from "@/src/components/common/buttons/BackButton";
-import Colors from "@/constants/Colors";
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import { StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '@/src/components/common/buttons/BackButton';
+import Colors from '@/constants/Colors';
 
 // Props that allow the NavigationHeader to be used standalone (outside of a native stack navigator)
 type StandaloneExtras = {
@@ -33,28 +33,33 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   const canGoBackFromStack = !!back || navigation?.canGoBack?.() === true;
 
   const handleBack = () => {
-    if (typeof onBack === "function") {
+    console.warn('handleBack', { hasOnBack: !!onBack, route: route?.name });
+    if (typeof onBack === 'function') {
       onBack();
       return;
     }
     if (navigation && canGoBackFromStack) {
+      console.warn('goBack triggered');
+
       navigation.goBack();
       return;
     }
+    console.warn('router.back');
+
     router.back();
   };
 
-  const resolvedTitle = title ?? options?.title ?? route?.name ?? "";
+  const resolvedTitle = title ?? options?.title ?? route?.name ?? '';
 
   return (
-    <SafeAreaView edges={["top"]} style={{ ...customStyles, ...styles.header }}>
+    <SafeAreaView edges={['top']} style={{ ...customStyles, ...styles.header }}>
       {/* Left */}
       <View style={styles.sideLeft}>
         {showBack ? <BackButton onClick={handleBack} /> : null}
       </View>
       {/* Center */}
       <View style={styles.center}>
-        <Text style={styles.title} accessibilityRole="header">
+        <Text style={styles.title} accessibilityRole='header'>
           {resolvedTitle}
         </Text>
       </View>
@@ -66,30 +71,30 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
 
 const styles = StyleSheet.create({
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   sideLeft: {
     height: 40,
     width: 48,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingRight: 8,
   },
   sideRight: {
     width: 48,
     height: 40,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingLeft: 8,
   },
   center: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 22,
-    fontFamily: "Manrope",
-    textAlign: "center",
+    fontFamily: 'Manrope',
+    textAlign: 'center',
     color: Colors.blackMain,
   },
 });

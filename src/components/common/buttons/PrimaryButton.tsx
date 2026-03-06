@@ -4,8 +4,8 @@ It has:
 3 sizes: L, M, S
 States: active, inactive and pressed */
 
-import Colors from "@/constants/Colors";
-import React, { FC, useEffect, useRef } from "react";
+import Colors from '@/constants/Colors';
+import React, { FC, useEffect, useRef } from 'react';
 import {
   Animated,
   Pressable,
@@ -13,9 +13,10 @@ import {
   StyleSheet,
   TextStyle,
   ViewStyle,
-} from "react-native";
+  View,
+} from 'react-native';
 
-type ButtonSize = "L" | "M" | "S";
+type ButtonSize = 'L' | 'M' | 'S';
 
 type PrimaryButtonProps = {
   title: string;
@@ -32,7 +33,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const PrimaryButton: FC<PrimaryButtonProps> = ({
   title,
   onPress,
-  size = "M",
+  size = 'M',
   active = true,
   style,
   textStyle,
@@ -85,23 +86,25 @@ const PrimaryButton: FC<PrimaryButtonProps> = ({
     : 1;
 
   return (
-    <AnimatedPressable
-      onPress={onPress}
-      disabled={!active}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      style={[
-        styles.base,
-        sizeStyles[size],
-        { backgroundColor, transform: [{ scale }] },
-        style,
-      ]}
-      accessibilityState={{ disabled: !active }}
-    >
-      <Animated.Text style={[styles.label, { color: textColor }, textStyle]}>
-        {title}
-      </Animated.Text>
-    </AnimatedPressable>
+    <View>
+      <AnimatedPressable
+        onPress={onPress}
+        disabled={!active}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={[
+          styles.base,
+          sizeStyles[size],
+          { backgroundColor, transform: [{ scale }] },
+          style,
+        ]}
+        accessibilityState={{ disabled: !active }}
+      >
+        <Animated.Text style={[styles.label, { color: textColor }, textStyle]}>
+          {title}
+        </Animated.Text>
+      </AnimatedPressable>
+    </View>
   );
 };
 
@@ -109,22 +112,23 @@ const styles = StyleSheet.create({
   base: {
     height: 52,
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
   label: {
-    fontFamily: "Manrope",
-    fontWeight: "700",
+    fontFamily: 'Manrope',
+    fontWeight: '700',
     fontSize: 16,
     letterSpacing: 0,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
 const sizeStyles: Record<ButtonSize, ViewStyle> = {
-  L: { minWidth: 350, maxWidth: 420 },
-  M: { minWidth: 330 },
-  S: { minWidth: 252 },
+  L: { width: 350 },
+  M: { width: 330 },
+  S: { width: 252 },
 };
 
 export default PrimaryButton;
