@@ -1,5 +1,5 @@
-import { Redirect } from "expo-router";
+import { Redirect } from 'expo-router';
 
 export default function CategoryIndex() {
-  return <Redirect href="/(tabs)/category/womens" />;
+  return <Redirect href='/(tabs)/category/womens' />;
 }

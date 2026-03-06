@@ -8,6 +8,7 @@ import { queryClient } from '@/src/lib/queryClient';
 import { asyncStoragePersister } from '@/src/lib/persistor';
 import { View, StyleSheet } from 'react-native';
 import { useAuthStore } from '@/src/state/useAuthStore';
+import Toast from 'react-native-toast-message';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -111,6 +112,7 @@ export default function RootLayout() {
           </View>
         </RestoreGate>
       </PersistQueryClientProvider>
+      <Toast />
     </SafeAreaProvider>
   );
 }

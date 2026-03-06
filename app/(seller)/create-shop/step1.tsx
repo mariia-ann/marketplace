@@ -32,8 +32,8 @@ const ChooseSellerType = () => {
       >
         {({
           values,
-          errors,
-          touched,
+          // errors,
+          // touched,
           isValid,
           dirty,
           setFieldValue,
