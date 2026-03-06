@@ -7,12 +7,15 @@ import {
   StyleSheet,
   ViewStyle,
   StyleProp,
+  ImageStyle,
 } from 'react-native';
 
 interface BannerCarouselProps {
-  banners?: any[];
-  baseStyle?: any;
+  banners?: string[];
+  baseStyle?: StyleProp<ViewStyle>;
   containerHorizontalPadding?: number;
+  imageContainer?: StyleProp<ViewStyle>;
+  imageStyle?: StyleProp<ImageStyle>;
   bannerDotStyling?: StyleProp<ViewStyle>;
 }
 
@@ -25,7 +28,13 @@ const banners = [
 const BANNER_HORIZONTAL_MARGIN = 0;
 
 export default function BannerCarousel(props: BannerCarouselProps) {
-  const { baseStyle, containerHorizontalPadding = 0, bannerDotStyling } = props;
+  const {
+    baseStyle,
+    containerHorizontalPadding = 0,
+    bannerDotStyling,
+    imageContainer,
+    imageStyle,
+  } = props;
   const { width: windowWidth } = useWindowDimensions();
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -61,11 +70,12 @@ export default function BannerCarousel(props: BannerCarouselProps) {
           <View
             style={[
               styles.itemContainer,
+              imageContainer,
               { width: itemWidth, paddingHorizontal: BANNER_HORIZONTAL_MARGIN },
             ]}
           >
             <View style={[styles.bannerWrapper, { width: bannerWidth }]}>
-              <Image source={item} style={styles.image} />
+              <Image source={item} style={[styles.image, imageStyle]} />
               <View style={styles.dotsContainer}>
                 <View
                   style={[

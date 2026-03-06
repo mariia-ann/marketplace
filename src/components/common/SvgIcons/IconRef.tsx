@@ -27,6 +27,13 @@ import Star from './Icons/Star';
 import WishlistFillIcon from './Icons/WishlistFillIcon';
 import ShareNetwork from './Icons/ShareNetwork';
 import CopyLogo from './Icons/CopyLogo';
+import CreditCard from './Icons/CreditCard';
+import ShieldCheck from './Icons/ShieldCheck';
+import MopedFront from './Icons/MopedFront';
+import Storefront from './Icons/Storefront';
+import CheckCirleIcon from './Icons/CheckCirleIcon';
+import ChatCircleDots from './Icons/ChatCircleDots';
+import Wallet from './Icons/Wallet';
 
 export enum CUSTOM_ICON_REF {
   Google = 'Google',
@@ -55,9 +62,16 @@ export enum CUSTOM_ICON_REF {
   Star = 'Star',
   ShareNetwork = 'ShareNetwork',
   CopyLogo = 'CopyLogo',
+  CreditCard = 'CreditCard',
+  MopedFront = 'MopedFront',
+  ShieldCheck = 'ShieldCheck',
+  Storefront = 'Storefront',
+  CheckCirleIcon = 'CheckCirleIcon',
+  ChatCircleDots = 'ChatCircleDots',
+  Wallet = 'Wallet',
 }
 
-export const CustomIconRef: any = {
+export const CustomIconRef = {
   [CUSTOM_ICON_REF.Google]: Google,
   [CUSTOM_ICON_REF.Facebook]: Facebook,
   [CUSTOM_ICON_REF.Apple]: AppleIcon,
@@ -83,6 +97,13 @@ export const CustomIconRef: any = {
   [CUSTOM_ICON_REF.Star]: Star,
   [CUSTOM_ICON_REF.ShareNetwork]: ShareNetwork,
   [CUSTOM_ICON_REF.CopyLogo]: CopyLogo,
+  [CUSTOM_ICON_REF.CreditCard]: CreditCard,
+  [CUSTOM_ICON_REF.MopedFront]: MopedFront,
+  [CUSTOM_ICON_REF.ShieldCheck]: ShieldCheck,
+  [CUSTOM_ICON_REF.Storefront]: Storefront,
+  [CUSTOM_ICON_REF.CheckCirleIcon]: CheckCirleIcon,
+  [CUSTOM_ICON_REF.ChatCircleDots]: ChatCircleDots,
+  [CUSTOM_ICON_REF.Wallet]: Wallet,
 
   //Illustrations
   [CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration,

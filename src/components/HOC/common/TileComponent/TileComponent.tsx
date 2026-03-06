@@ -20,7 +20,7 @@ function TileComponent(props: Props) {
     padding: 20,
     marginBottom: 12,
     height: 'auto',
-    shadowColor: '#00000040',
+    shadowColor: '#00000060',
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,

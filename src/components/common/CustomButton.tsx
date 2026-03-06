@@ -15,6 +15,7 @@ type CustomButtonProps = {
   customTextStyles?: any;
   whiteTheme?: boolean;
   children?: React.ReactNode;
+  disabled?: boolean;
 };
 const CustomButton: FC<CustomButtonProps> = ({
   title,
@@ -23,6 +24,7 @@ const CustomButton: FC<CustomButtonProps> = ({
   whiteTheme,
   customTextStyles,
   children,
+  disabled,
 }) => {
   const styles = StyleSheet.create({
     addButton: {
@@ -44,6 +46,7 @@ const CustomButton: FC<CustomButtonProps> = ({
 
   return (
     <Pressable
+      disabled={disabled}
       style={{ ...styles.addButton, ...customStyles }}
       onPress={onPress}
     >
