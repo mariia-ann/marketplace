@@ -9,7 +9,8 @@ import ProductReviews from '@/src/components/ui/product-review/ProductReviews';
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 10,
+    paddingTop: 20,
     paddingBottom: 60,
     backgroundColor: '#fff',
   },

@@ -34,6 +34,12 @@ import Storefront from './Icons/Storefront';
 import CheckCirleIcon from './Icons/CheckCirleIcon';
 import ChatCircleDots from './Icons/ChatCircleDots';
 import Wallet from './Icons/Wallet';
+import Funnel from './Icons/Funnel';
+import SlidersHorizontal from './Icons/SlidersHorizontal';
+import SealCheck from './Icons/SealCheck';
+import WriteCommentIcon from './Icons/WriteCommentIcon';
+import ThumbsUp from './Icons/ThumbsUp';
+import ThumbsDown from './Icons/ThumbsDown';
 
 export enum CUSTOM_ICON_REF {
   Google = 'Google',
@@ -69,6 +75,12 @@ export enum CUSTOM_ICON_REF {
   CheckCirleIcon = 'CheckCirleIcon',
   ChatCircleDots = 'ChatCircleDots',
   Wallet = 'Wallet',
+  Funnel = 'Funnel',
+  SlidersHorizontal = 'SlidersHorizontal',
+  SealCheck = 'SealCheck',
+  WriteCommentIcon = 'WriteCommentIcon',
+  ThumbsUp = 'ThumbsUp',
+  ThumbsDown = 'ThumbsDown',
 }
 
 export const CustomIconRef = {
@@ -104,6 +116,12 @@ export const CustomIconRef = {
   [CUSTOM_ICON_REF.CheckCirleIcon]: CheckCirleIcon,
   [CUSTOM_ICON_REF.ChatCircleDots]: ChatCircleDots,
   [CUSTOM_ICON_REF.Wallet]: Wallet,
+  [CUSTOM_ICON_REF.Funnel]: Funnel,
+  [CUSTOM_ICON_REF.SlidersHorizontal]: SlidersHorizontal,
+  [CUSTOM_ICON_REF.SealCheck]: SealCheck,
+  [CUSTOM_ICON_REF.WriteCommentIcon]: WriteCommentIcon,
+  [CUSTOM_ICON_REF.ThumbsUp]: ThumbsUp,
+  [CUSTOM_ICON_REF.ThumbsDown]: ThumbsDown,
 
   //Illustrations
   [CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration,

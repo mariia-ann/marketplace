@@ -104,4 +104,60 @@ export const productDetailsData = {
       ],
     },
   ],
+  productsReviews: [
+    {
+      customerName: 'Іван Іваненко',
+      date: '2024-05-01',
+      rating: 4.0,
+      description:
+        'Якість товару відповідає опису, швидка доставка. Рекомендую!',
+      isConfirmedPurchase: true,
+      images: [
+        'https://example.com/review1_image1.jpg',
+        'https://example.com/review1_image2.jpg',
+        'https://example.com/review1_image3.jpg',
+        'https://example.com/review1_image4.jpg',
+      ],
+      likes: 12,
+      dislikes: 2,
+      commentCount: 3,
+      comments: [
+        {
+          commenterName: 'Петро Петров',
+          commentDate: '2024-05-02',
+          commentText: 'Дякую за відгук! Чи підійшов розмір?',
+        },
+        {
+          commenterName: 'Іван Іваненко',
+          commentDate: '2024-05-03',
+          commentText: 'Так, розмір підійшов і товар дуже зручний.',
+        },
+      ],
+    },
+    {
+      customerName: 'Олена Коваль',
+      date: '2024-04-28',
+      rating: 5.0,
+      description:
+        'Прекрасний сервіс та відмінна якість. Дуже задоволена покупкою!',
+      isConfirmedPurchase: false,
+      images: ['https://example.com/review2_image1.jpg'],
+      likes: 20,
+      dislikes: 1,
+      commentCount: 5,
+      comments: [
+        {
+          commenterName: 'Марія Марченко',
+          commentDate: '2024-04-29',
+          commentText: 'Дякую за відгук! Чи швидко доставили?',
+        },
+        {
+          commenterName: 'Олена Коваль',
+          commentDate: '2024-04-30',
+          commentText:
+            'Так, доставка була дуже швидкою, отримала товар за 2 дні.',
+        },
+      ],
+    },
+  ],
 };
