@@ -161,3 +161,66 @@ export const productDetailsData = {
     },
   ],
 };
+
+export const tableData = [
+  {
+    manuFacturerSize: 34,
+    inSoleLength: 22.3,
+    footLength: 22.0,
+  },
+  {
+    manuFacturerSize: 35,
+    inSoleLength: 22.8,
+    footLength: 22.5,
+  },
+  {
+    manuFacturerSize: 36,
+    inSoleLength: 23.5,
+    footLength: 23.2,
+  },
+  {
+    manuFacturerSize: 37,
+    inSoleLength: 24.1,
+    footLength: 23.8,
+  },
+  {
+    manuFacturerSize: 38,
+    inSoleLength: 24.7,
+    footLength: 24.4,
+  },
+  {
+    manuFacturerSize: 39,
+    inSoleLength: 25.3,
+    footLength: 25.0,
+  },
+  {
+    manuFacturerSize: 40,
+    inSoleLength: 26.0,
+    footLength: 25.7,
+  },
+  {
+    manuFacturerSize: 41,
+    inSoleLength: 26.6,
+    footLength: 26.3,
+  },
+  {
+    manuFacturerSize: 42,
+    inSoleLength: 27.2,
+    footLength: 26.9,
+  },
+  {
+    manuFacturerSize: 43,
+    inSoleLength: 27.8,
+    footLength: 27.5,
+  },
+  {
+    manuFacturerSize: 44,
+    inSoleLength: 28.5,
+    footLength: 28.2,
+  },
+  {
+    manuFacturerSize: 45,
+    inSoleLength: 29.1,
+    footLength: 28.8,
+  },
+];
