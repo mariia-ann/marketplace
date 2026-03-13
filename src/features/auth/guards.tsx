@@ -74,7 +74,10 @@ export function RequireSeller({
   children,
 }: GuardProps) {
   const token = useAuthStore((s) => s.access_token);
-  const { data: me, isLoading } = useMe();
+  const {
+    data: me,
+    // isLoading
+  } = useMe();
   const isSeller = !!me?.isSeller;
   if (isSeller)
     console.warn('>>> RequireSeller: user is a seller, allowing access');
