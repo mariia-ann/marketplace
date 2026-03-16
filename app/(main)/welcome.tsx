@@ -38,7 +38,7 @@ export default function WelcomeScreen() {
             title='Продовжити як гість'
             active={true}
             size='L'
-            onPress={() => router.push('/(tabs)/profile/write-to-seller')}
+            onPress={() => router.push('/(tabs)/profile')}
           />
         </View>
         <View style={styles.linkBlock}>
