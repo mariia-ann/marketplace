@@ -24,7 +24,7 @@ export type verifyOTPDto = {
 
 export type LoginResponse = {
   accessToken: string;
-  isEmailValideted: boolean;
+  isEmailValidated: boolean;
   isPhoneValidated: boolean;
 };
 
