@@ -8,6 +8,7 @@ import {
   View,
   StyleProp,
   TextStyle,
+  ViewStyle,
 } from 'react-native';
 
 interface Props {
@@ -15,19 +16,19 @@ interface Props {
   onPress?: () => void;
   title?: string;
   titleStyle?: StyleProp<TextStyle>;
-  containerStyle?: StyleProp<TextStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
   checkboxStyle?: StyleProp<TextStyle>;
 }
 
 const CheckBox = (props: Props) => {
-  const { checkboxStyle, titleStyle } = props;
+  const { checkboxStyle, titleStyle, containerStyle } = props;
   const iconName = props.isChecked
     ? 'checkbox-marked'
     : 'checkbox-blank-outline';
 
   return (
     <Pressable onPress={props.onPress}>
-      <View style={styles.container}>
+      <View style={[styles.container, containerStyle]}>
         <MaterialCommunityIcons
           name={iconName}
           size={24}

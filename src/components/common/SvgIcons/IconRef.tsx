@@ -41,6 +41,7 @@ import WriteCommentIcon from './Icons/WriteCommentIcon';
 import ThumbsUp from './Icons/ThumbsUp';
 import ThumbsDown from './Icons/ThumbsDown';
 import Footprints from './Icons/Footprints';
+import ImageIcon from './Icons/ImageIcon';
 
 export enum CUSTOM_ICON_REF {
   Google = 'Google',
@@ -83,6 +84,7 @@ export enum CUSTOM_ICON_REF {
   ThumbsUp = 'ThumbsUp',
   ThumbsDown = 'ThumbsDown',
   Footprints = 'Footprints',
+  ImageIcon = 'ImageIcon',
 }
 
 export const CustomIconRef = {
@@ -125,6 +127,7 @@ export const CustomIconRef = {
   [CUSTOM_ICON_REF.ThumbsUp]: ThumbsUp,
   [CUSTOM_ICON_REF.ThumbsDown]: ThumbsDown,
   [CUSTOM_ICON_REF.Footprints]: Footprints,
+  [CUSTOM_ICON_REF.ImageIcon]: ImageIcon,
 
   //Illustrations
   [CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration,
