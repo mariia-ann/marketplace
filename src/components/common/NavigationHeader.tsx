@@ -4,6 +4,10 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BackButton from '@/src/components/common/buttons/BackButton';
 import Colors from '@/constants/Colors';
+import { useBasketStore } from '@/src/state/useBasketStore';
+import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
+import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef';
+import CustomButton from '@/src/components/common/CustomButton';
 
 // Props that allow the NavigationHeader to be used standalone (outside of a native stack navigator)
 type StandaloneExtras = {
@@ -29,6 +33,8 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   showBack = true,
 }) => {
   const router = useRouter();
+  const basketStore = useBasketStore();
+  const shareNetworkIconSize = 28;
 
   const canGoBackFromStack = !!back || navigation?.canGoBack?.() === true;
 
@@ -50,6 +56,10 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   };
 
   const resolvedTitle = title ?? options?.title ?? route?.name ?? '';
+  const isBasketPage = route?.name === 'basket/index';
+  const handleShareButton = () => {
+    basketStore.handleBasketShare();
+  };
 
   return (
     <SafeAreaView edges={['top']} style={{ ...customStyles, ...styles.header }}>
@@ -62,9 +72,36 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
         <Text style={styles.title} accessibilityRole='header'>
           {resolvedTitle}
         </Text>
+        {isBasketPage && (
+          <Text style={[styles.title, { paddingLeft: 8 }]}>
+            ({basketStore.items.length})
+          </Text>
+        )}
       </View>
       {/* Right - spacer */}
-      <View style={styles.sideRight} />
+      {isBasketPage ? (
+        <CustomButton
+          onPress={handleShareButton}
+          customStyles={{
+            backgroundColor: Colors.white,
+            borderColor: 'transparent',
+            padding: 0,
+            width: shareNetworkIconSize + 4,
+            height: shareNetworkIconSize + 4,
+          }}
+        >
+          <SvgIcons
+            name={CUSTOM_ICON_REF.ShareNetwork}
+            baseStyle={{
+              width: shareNetworkIconSize,
+              height: shareNetworkIconSize,
+              color: Colors.blackMain,
+            }}
+          />
+        </CustomButton>
+      ) : (
+        <View style={styles.sideRight} />
+      )}
     </SafeAreaView>
   );
 };
@@ -88,6 +125,8 @@ const styles = StyleSheet.create({
   },
   center: {
     flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -41,6 +41,9 @@ import WriteCommentIcon from './Icons/WriteCommentIcon';
 import ThumbsUp from './Icons/ThumbsUp';
 import ThumbsDown from './Icons/ThumbsDown';
 import Footprints from './Icons/Footprints';
+import Trash from './Icons/Trash';
+import Minus from './Icons/Minus';
+import Plus from './Icons/Plus';
 
 export enum CUSTOM_ICON_REF {
   Google = 'Google',
@@ -83,6 +86,9 @@ export enum CUSTOM_ICON_REF {
   ThumbsUp = 'ThumbsUp',
   ThumbsDown = 'ThumbsDown',
   Footprints = 'Footprints',
+  Trash = 'Trash',
+  Minus = 'Minus',
+  Plus = 'Plus',
 }
 
 export const CustomIconRef = {
@@ -125,6 +131,9 @@ export const CustomIconRef = {
   [CUSTOM_ICON_REF.ThumbsUp]: ThumbsUp,
   [CUSTOM_ICON_REF.ThumbsDown]: ThumbsDown,
   [CUSTOM_ICON_REF.Footprints]: Footprints,
+  [CUSTOM_ICON_REF.Trash]: Trash,
+  [CUSTOM_ICON_REF.Minus]: Minus,
+  [CUSTOM_ICON_REF.Plus]: Plus,
 
   //Illustrations
   [CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration,

@@ -11,6 +11,7 @@ const Colors = {
   purple400: '#AC94E8', //back arrow
   purple200: '#E3DBF7', //my messages
   grey50: '#F4F4F4',
+  lightGrey: '#00000065',
   purple50: '#F5F4FE',
   purple100: '#EDEAFD',
   purple300: '#C3B9F9',
