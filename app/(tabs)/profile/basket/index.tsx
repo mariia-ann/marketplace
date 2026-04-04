@@ -6,6 +6,7 @@ import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef';
 import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
 import { useBasketStore } from '@/src/state/useBasketStore';
 import { CartItem, TCartItemTile } from '@/src/types/CartItems';
+import { suggesstionProducts } from '@/src/utils/suggesstionProducts';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -38,6 +39,22 @@ function Basket() {
         isWishListCheck={false}
       />
     );
+  };
+
+  const suggesstionItems = ['Рекомендації', 'Перегляди', 'Знижки'];
+
+  const renderSuggesstionItems = (item: string, index: number) => {
+    const handleSelectedSuggestionTitle = () => {};
+    return (
+      <CustomButton key={index} onPress={handleSelectedSuggestionTitle}>
+        <Text>{item}</Text>
+      </CustomButton>
+    );
+  };
+
+  const renderSuggesstionProducts = (item: any, index: number) => {
+    const handleSelectedSuggesstionProduct = () => {};
+    return <View></View>;
   };
 
   return (
@@ -146,6 +163,23 @@ function Basket() {
         {basketStore.items
           .filter((item) => item.company === 'Amigurumi')
           .map(renderBasketStoreItems)}
+      </View>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ paddingVertical: 20 }}
+      >
+        {suggesstionItems.map(renderSuggesstionItems)}
+      </ScrollView>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+        }}
+      >
+        {suggesstionProducts.map(renderSuggesstionProducts)}
       </View>
     </ScrollView>
   );
