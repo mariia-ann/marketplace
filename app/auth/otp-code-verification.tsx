@@ -1,6 +1,6 @@
 import Colors from '@/constants/Colors';
 import { NavigationHeader } from '@/src/components/common/NavigationHeader';
-import { RequireGuest } from '@/src/features/auth/guards';
+import { RequireVerificationAccess } from '@/src/features/auth/guards';
 import React from 'react';
 import {
   Modal,
@@ -16,9 +16,21 @@ import { router, useLocalSearchParams } from 'expo-router';
 import PrimaryButton from '@/src/components/common/buttons/PrimaryButton';
 import SecondaryButton from '@/src/components/common/buttons/SecondaryButton';
 import LinkButton from '@/src/components/common/buttons/LinkButton';
-import { useSendOtp, useVerifyOtp } from '@/src/features/auth/hooks/useSendOtp';
+import {
+  hasPendingVerification,
+  hydrateVerificationContext,
+  markVerificationMethodComplete,
+  type VerificationMethod,
+} from '@/src/features/auth/verification';
+import {
+  useSendEmailOtp,
+  useSendPhoneOtp,
+  useVerifyEmailOtp,
+  useVerifyPhoneOtp,
+} from '@/src/features/auth/hooks/useSendOtp';
 import { Loader } from '@/src/components/common/Loader';
 import { ShieldCheck } from 'phosphor-react-native';
+import { useAuthStore } from '@/src/state/useAuthStore';
 
 export default function OtpCodeVerification() {
   const { method, phone, email } = useLocalSearchParams<{
@@ -26,53 +38,166 @@ export default function OtpCodeVerification() {
     email?: string;
     phone?: string;
   }>();
+  const verification = useAuthStore((s) => s.verification);
+  const resolvedMethod = method ?? 'sms';
+  const resolvedPhone =
+    (typeof phone === 'string' ? phone : verification?.phone) ?? null;
+  const resolvedEmail =
+    (typeof email === 'string' ? email : verification?.email) ?? null;
   const [modalVisible, setModalVisible] = React.useState(false);
+  const [verificationError, setVerificationError] = React.useState<
+    string | null
+  >(null);
   const didNavigateAfterSuccessRef = React.useRef(false);
+  const nextRouteRef = React.useRef<
+    '/auth/login' | '/auth/signup-otp' | '/(tabs)'
+  >('/auth/login');
 
-  console.warn(phone);
+  const { mutate: verifyPhoneCode, isPending: isVerifyingPhone } =
+    useVerifyPhoneOtp();
+  const { mutate: verifyEmailCode, isPending: isVerifyingEmail } =
+    useVerifyEmailOtp();
+  const { mutate: resendPhoneCode, isPending: isSendingPhone } =
+    useSendPhoneOtp();
+  const { mutate: resendEmailCode, isPending: isSendingEmail } =
+    useSendEmailOtp();
+  const isPending =
+    isVerifyingPhone || isVerifyingEmail || isSendingPhone || isSendingEmail;
 
-  const { mutate: sendCode, isPending } = useVerifyOtp();
-  const { mutate: sendOtp } = useSendOtp();
-
-  // Function to handle sending the OTP code for verification
   const redirectAfterSuccess = React.useCallback(() => {
     // Prevent duplicate navigation from multiple modal close events.
     if (didNavigateAfterSuccessRef.current) return;
     didNavigateAfterSuccessRef.current = true;
     setModalVisible(false);
-    router.replace('/auth/login');
+    router.replace(nextRouteRef.current);
   }, []);
 
+  const updateVerificationState = React.useCallback(
+    async (verifiedMethod: VerificationMethod) => {
+      const auth = useAuthStore.getState();
+      const currentContext =
+        auth.verification ??
+        ({
+          email: resolvedEmail,
+          phone: resolvedPhone,
+          isEmailValidated: false,
+          isPhoneValidated: false,
+          source: auth.access_token ? 'login' : 'signup',
+        } as const);
+
+      const nextContext = await hydrateVerificationContext(
+        markVerificationMethodComplete(currentContext, verifiedMethod),
+        auth.userId,
+      );
+
+      if (hasPendingVerification(nextContext)) {
+        auth.setVerification(nextContext);
+        nextRouteRef.current = '/auth/signup-otp';
+        return;
+      }
+
+      auth.clearVerification();
+      nextRouteRef.current = auth.access_token ? '/(tabs)' : '/auth/login';
+    },
+    [resolvedEmail, resolvedPhone],
+  );
+
+  const handleVerifyResponse = React.useCallback(
+    async (
+      verifiedMethod: VerificationMethod,
+      ok: boolean,
+      reason?: string,
+    ) => {
+      if (!ok) {
+        setVerificationError(reason ?? 'Невірний код. Спробуйте ще раз.');
+        return;
+      }
+
+      setVerificationError(null);
+      didNavigateAfterSuccessRef.current = false;
+      await updateVerificationState(verifiedMethod);
+      setModalVisible(true);
+    },
+    [updateVerificationState],
+  );
+
   const handleSend = () => {
-    if (!phone || code.length !== 6 || isPending) return;
-    didNavigateAfterSuccessRef.current = false;
-    console.warn('Sending OTP verification code', phone, `code: "${code}"`);
-    sendCode(
-      { phone, code },
+    if (code.length !== 6 || isPending) return;
+    setVerificationError(null);
+
+    if (resolvedMethod === 'email' && resolvedEmail) {
+      verifyEmailCode(
+        { email: resolvedEmail, code },
+        {
+          onSuccess: async (response) => {
+            await handleVerifyResponse('email', response.ok, response.reason);
+          },
+        },
+      );
+      return;
+    }
+
+    if (!resolvedPhone) return;
+
+    verifyPhoneCode(
+      { phone: resolvedPhone, code },
       {
-        onSuccess: () => {
-          setModalVisible(true);
+        onSuccess: async (response) => {
+          await handleVerifyResponse('sms', response.ok, response.reason);
         },
       },
     );
   };
 
   const handleResend = () => {
-    if (phone) {
-      console.warn('Re-sending OTP verification code', phone);
-      sendOtp({ phone: phone }, { onSuccess: () => {} });
+    setVerificationError(null);
+
+    if (resolvedMethod === 'email' && resolvedEmail) {
+      resendEmailCode(
+        { email: resolvedEmail },
+        {
+          onSuccess: (response) => {
+            if (!response.ok) {
+              setVerificationError(
+                response.message ??
+                  'Не вдалося повторно надіслати код. Спробуйте ще раз.',
+              );
+            }
+          },
+        },
+      );
+      return;
     }
+
+    if (!resolvedPhone) return;
+    resendPhoneCode(
+      { phone: resolvedPhone },
+      {
+        onSuccess: (response) => {
+          if (!response.ok) {
+            setVerificationError(
+              response.message ??
+                'Не вдалося повторно надіслати код. Спробуйте ще раз.',
+            );
+          }
+        },
+      },
+    );
   };
 
   const deliveryMethod =
-    method === 'email' ? 'вашу електронну пошту' : 'ващ номер телефону';
+    resolvedMethod === 'email' ? 'вашу електронну пошту' : 'ваш номер телефону';
 
-  const displayValue = method === 'email' ? email : phone;
-  console.warn(method);
-  const [code, setCode] = React.useState('000000');
+  const displayValue =
+    resolvedMethod === 'email' ? resolvedEmail : resolvedPhone;
+  const helpLabel =
+    resolvedMethod === 'email'
+      ? 'Помилка в email?'
+      : 'Помилка в номері телефону?';
+  const [code, setCode] = React.useState('');
 
   return (
-    <RequireGuest to='/(tabs)'>
+    <RequireVerificationAccess to='/(tabs)'>
       <SafeAreaView edges={['left', 'right', 'bottom']} style={styles.safeArea}>
         <ScrollView
           style={styles.scroll}
@@ -111,7 +236,10 @@ export default function OtpCodeVerification() {
                 style={styles.inputStyle}
                 placeholder=''
                 value={code}
-                onChangeText={(text) => setCode(text.replace(/\D/g, ''))}
+                onChangeText={(text) => {
+                  setVerificationError(null);
+                  setCode(text.replace(/\D/g, ''));
+                }}
               />
             </View>
 
@@ -121,8 +249,11 @@ export default function OtpCodeVerification() {
               onPress={handleResend}
             />
           </View>
+          {verificationError && (
+            <Text style={styles.errorText}>{verificationError}</Text>
+          )}
           <PrimaryButton
-            active={code.length === 6}
+            active={code.length === 6 && !!displayValue && !isPending}
             style={{ marginTop: 24 }}
             title='Підтвердити'
             size='L'
@@ -130,7 +261,7 @@ export default function OtpCodeVerification() {
           />
           <LinkButton
             style={{ marginTop: 24, alignSelf: 'center' }}
-            title='Помилка в номері телефону?'
+            title={helpLabel}
             underline={true}
           />
         </ScrollView>
@@ -169,7 +300,7 @@ export default function OtpCodeVerification() {
           </Pressable>
         </Pressable>
       </Modal>
-    </RequireGuest>
+    </RequireVerificationAccess>
   );
 }
 
@@ -213,6 +344,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Manrope',
     fontWeight: '700',
     color: Colors.blackMain,
+  },
+  errorText: {
+    marginTop: 12,
+    color: Colors.red,
+    fontSize: 12,
+    fontFamily: 'Manrope',
+    textAlign: 'center',
   },
   backdrop: {
     flex: 1,

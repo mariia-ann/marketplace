@@ -5,8 +5,12 @@ import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuthStore } from '@/src/state/useAuthStore';
 import { useMe } from '@/src/features/auth/hooks';
-import { refreshApi } from '@/src/lib/api';
-import parseJwt from '@/src/utils/jwtParse';
+import { getUserById } from '@/src/features/auth/api';
+import { refreshApi } from '@/assets/lib/api';
+import {
+  buildUserVerificationContext,
+  hasPendingVerification,
+} from '@/src/features/auth/verification';
 
 function BlockingSplash() {
   return (
@@ -33,23 +37,16 @@ export async function bootstrapAuth() {
   s.setRestoring(true);
   try {
     const { data } = await refreshApi.post('auth/refresh', null); // cookie-based
-    console.warn(
-      '>>> bootstrapAuth got response from refresh endpoint: ',
-      data,
-    );
-
-    const token = data?.access_token;
-    s.setToken(token);
-
-    const p = parseJwt(token);
-    s.setUserId(p?.userId ?? p?.uid ?? p?.sub ?? null);
-    s.setAccessTokenExpireAt(p?.exp ? new Date(p.exp * 1000) : null);
-    console.warn(
-      'inside bootstrapAuth >>> Token: ',
-      useAuthStore.getState().access_token,
-      '\nLine >>> UserId: ',
-      useAuthStore.getState().userId,
-    );
+    s.applyAccessToken(data?.accessToken ?? null);
+    if (s.userId) {
+      const me = await getUserById(s.userId);
+      const verification = buildUserVerificationContext(me, 'login');
+      if (hasPendingVerification(verification)) {
+        s.setVerification(verification);
+      } else {
+        s.clearVerification();
+      }
+    }
   } catch (e) {
     console.warn('bootstrapAuth failed:', e);
     s.onSignOut();
@@ -90,7 +87,24 @@ export function RequireSeller({
 /** Allow only guests; otherwise redirect to tabs/home */
 export function RequireGuest({ to = '/(tabs)', children }: GuardProps) {
   const token = useAuthStore((s) => s.access_token);
+  const verification = useAuthStore((s) => s.verification);
+  if (token && hasPendingVerification(verification)) {
+    return <Redirect href='/auth/signup-otp' />;
+  }
   if (token) return <Redirect href={to} />;
+
+  return children ? <>{children}</> : <Slot />;
+}
+
+export function RequireVerificationAccess({
+  to = '/(tabs)',
+  children,
+}: GuardProps) {
+  const token = useAuthStore((s) => s.access_token);
+  const verification = useAuthStore((s) => s.verification);
+  if (token && !hasPendingVerification(verification)) {
+    return <Redirect href={to} />;
+  }
 
   return children ? <>{children}</> : <Slot />;
 }

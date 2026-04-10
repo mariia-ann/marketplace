@@ -6,19 +6,8 @@ function readApiBaseUrl() {
   }
 
   const url = new URL(rawUrl);
-
-  const isLocalHost =
-    url.hostname === 'localhost' ||
-    url.hostname.endsWith('.local') ||
-    /^127\./.test(url.hostname) ||
-    /^10\./.test(url.hostname) ||
-    /^192\.168\./.test(url.hostname) ||
-    /^172\.(1[6-9]|2\d|3[0-1])\./.test(url.hostname);
-
-  if (url.protocol !== 'https:' && !(__DEV__ && isLocalHost)) {
-    throw new Error(
-      'EXPO_PUBLIC_API_URL must use HTTPS outside local development',
-    );
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    throw new Error('EXPO_PUBLIC_API_URL must use HTTP or HTTPS');
   }
 
   if (!url.pathname.endsWith('/')) {

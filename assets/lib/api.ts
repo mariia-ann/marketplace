@@ -135,8 +135,8 @@ function refreshAccessTokenOnce(): Promise<string> {
     refreshPromise = refreshApi
       .post('auth/refresh', null)
       .then((res) => {
-        const token = res.data.access_token;
-        useAuthStore.getState().setToken(token);
+        const token = res.data.accessToken;
+        useAuthStore.getState().applyAccessToken(token);
         return token;
       })
       .finally(() => {
