@@ -5,6 +5,7 @@ import axios, {
 } from 'axios';
 import { useAuthStore } from '@/src/state/useAuthStore';
 import { router } from 'expo-router';
+import { env } from '@/src/config/env';
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
@@ -13,18 +14,14 @@ declare module 'axios' {
   }
 }
 
-// Use localApiUrl if you are running the backend project locally, otherwise use remoteApiUrl for testing with the deployed backend.
-// const localApiUrl = 'http://localhost:3000/';
-const remoteApiUrl = 'http://34.227.53.16:3000/';
-
 export const api = axios.create({
-  baseURL: remoteApiUrl,
+  baseURL: env.apiBaseUrl,
   timeout: 15_000,
 });
 
 // separate instance without interceptors for token refresh to avoid infinite loop
 export const refreshApi = axios.create({
-  baseURL: remoteApiUrl,
+  baseURL: env.apiBaseUrl,
   timeout: 15_000,
   withCredentials: true,
 });
@@ -138,8 +135,8 @@ function refreshAccessTokenOnce(): Promise<string> {
     refreshPromise = refreshApi
       .post('auth/refresh', null)
       .then((res) => {
-        const token = res.data.access_token;
-        useAuthStore.getState().setToken(token);
+        const token = res.data.accessToken;
+        useAuthStore.getState().applyAccessToken(token);
         return token;
       })
       .finally(() => {

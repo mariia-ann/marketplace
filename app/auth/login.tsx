@@ -1,6 +1,6 @@
 import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef';
 import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '@/constants/Colors';
@@ -21,7 +21,7 @@ import LinkButton from '@/src/components/common/buttons/LinkButton';
 import PasswordInput from '@/src/components/common/customInput/PasswordInput';
 
 const Login = () => {
-  const { mutate: doLogin, isPending, error, isSuccess, reset } = useLogin();
+  const { mutate: doLogin, isPending, error, reset } = useLogin();
   const initialValues: LoginFormValues = {
     identifier: '',
     password: '',
@@ -31,17 +31,13 @@ const Login = () => {
     if (!error) return undefined;
     if (isAxiosError(error)) {
       const status = error.response?.status;
-      if (status === 400 || status === 401) return 'Невірний email або пароль';
+      if (status === 400 || status === 401 || status === 404) {
+        return 'Невірний email або пароль';
+      }
       return 'Помилка входу. Спробуйте ще раз.';
     }
     return 'Сталася несподівана помилка.';
   })();
-
-  useEffect(() => {
-    if (isSuccess) {
-      router.replace('/(tabs)');
-    }
-  }, [isSuccess]);
 
   return (
     <RequireGuest to='/(tabs)'>

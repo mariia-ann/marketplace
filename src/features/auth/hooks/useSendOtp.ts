@@ -1,33 +1,35 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 import {
-  sendOTP,
-  verifyOTP,
-  type sendOTPDto,
-  type verifyOTPDto,
-} from "@/src/features/auth/api";
+  sendEmailOtp,
+  sendPhoneOtp,
+  verifyEmailOtp,
+  verifyPhoneOtp,
+  type SendEmailOtpDto,
+  type SendPhoneOtpDto,
+  type VerifyEmailOtpDto,
+  type VerifyPhoneOtpDto,
+} from '@/src/features/auth/api';
 
-// Hook to send OTP to a phone number
-export function useSendOtp() {
+export function useSendPhoneOtp() {
   return useMutation({
-    mutationFn: async (dto: sendOTPDto) => sendOTP(dto),
-    onSuccess: (data) => {
-      console.log("sendOtp response:", data);
-    },
+    mutationFn: async (dto: SendPhoneOtpDto) => sendPhoneOtp(dto),
   });
 }
 
-// Hook to verify the received OTP code
-export function useVerifyOtp() {
-  console.warn("useVerifyOtp hook called");
-
+export function useVerifyPhoneOtp() {
   return useMutation({
-    mutationFn: async (dto: verifyOTPDto) => verifyOTP(dto),
+    mutationFn: async (dto: VerifyPhoneOtpDto) => verifyPhoneOtp(dto),
+  });
+}
 
-    onSuccess: (data) => {
-      console.log("verifyOtp response:", data);
-    },
-    onError: (error) => {
-      console.error("verifyOtp error:", error);
-    },
+export function useSendEmailOtp() {
+  return useMutation({
+    mutationFn: async (dto: SendEmailOtpDto) => sendEmailOtp(dto),
+  });
+}
+
+export function useVerifyEmailOtp() {
+  return useMutation({
+    mutationFn: async (dto: VerifyEmailOtpDto) => verifyEmailOtp(dto),
   });
 }

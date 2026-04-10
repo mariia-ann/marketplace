@@ -1,12 +1,16 @@
 import * as Yup from 'yup';
-
-const phoneRegex = /^\+?[1-9]\d{5,14}$/;
-const stripPhone = (v: string) => v.replace(/[()\-\s]/g, '');
+import {
+  isE164Phone,
+  isPhoneLike,
+  normalizePhoneToE164,
+} from '@/src/utils/phone';
 
 export const normalizeIdentifier = (raw: string) => {
   const v = raw.trim();
-  const phone = stripPhone(v);
-  if (phoneRegex.test(phone)) return phone;
+  if (isPhoneLike(v)) {
+    const phone = normalizePhoneToE164(v);
+    if (isE164Phone(phone)) return phone;
+  }
   return v.toLowerCase();
 };
 
@@ -20,7 +24,7 @@ export const loginSchema = Yup.object().shape({
       (value) => {
         if (!value) return false;
         const emailOk = Yup.string().email().isValidSync(value);
-        const phoneOk = phoneRegex.test(stripPhone(value));
+        const phoneOk = isE164Phone(value);
         return emailOk || phoneOk;
       },
     ),
