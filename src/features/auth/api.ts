@@ -1,4 +1,4 @@
-import { api, refreshApi } from '@/src/lib/api';
+import { api, refreshApi } from '@/assets/lib/api';
 
 export type LoginDto = {
   identifier: string;
@@ -13,35 +13,39 @@ export type SignupDto = {
   isSeller: boolean;
 };
 
-export type sendOTPDto = {
+export type SendPhoneOtpDto = {
   phone: string;
 };
 
-export type verifyOTPDto = {
+export type VerifyPhoneOtpDto = {
   phone: string;
+  code: string;
+};
+
+export type SendEmailOtpDto = {
+  email: string;
+};
+
+export type VerifyEmailOtpDto = {
+  email: string;
   code: string;
 };
 
 export type LoginResponse = {
   accessToken: string;
-  isEmailValideted: boolean;
+  isEmailValidated: boolean;
   isPhoneValidated: boolean;
 };
 
 export type SignupResponse = {
-  id: string;
-  firstName: string;
-  email: string;
-  phone: string;
-  isPhoneValidated: boolean;
-  createdAt: string;
-  updatedAt: string;
-  isSeller: boolean;
+  message: string;
+  userId: string;
 };
 
 export type OTPResponse = {
   ok: boolean;
-  devHint: string;
+  devHint?: string;
+  message?: string;
 };
 
 export type VerifyOTPResponse = {
@@ -55,6 +59,7 @@ export type getUserByIdRepsonse = {
   lastName?: string | null;
   email: string;
   phone: string;
+  isEmailValidated?: boolean;
   isPhoneValidated: boolean;
   isSeller: boolean;
   createdAt: string;
@@ -62,7 +67,10 @@ export type getUserByIdRepsonse = {
 };
 
 export async function login(dto: LoginDto): Promise<LoginResponse> {
-  const { data } = await api.post('auth/login', dto, { skipAuth: true });
+  const { data } = await api.post('auth/login', dto, {
+    skipAuth: true,
+    withCredentials: true,
+  });
   return data;
 }
 
@@ -80,20 +88,44 @@ export async function signup(dto: SignupDto): Promise<SignupResponse> {
 }
 
 export async function logout() {
-  const { data } = await api.post('auth/logout', {}, { requireAuth: true });
+  const { data } = await api.post(
+    'auth/logout',
+    {},
+    {
+      requireAuth: true,
+      withCredentials: true,
+    },
+  );
   return data;
 }
 
-export async function sendOTP(dto: sendOTPDto): Promise<OTPResponse> {
-  const { data } = await api.post('auth/phone/send', dto, {
+export async function sendPhoneOtp(dto: SendPhoneOtpDto): Promise<OTPResponse> {
+  const { data } = await api.post('otp/phone/send', dto, {
     requireAuth: false,
   });
   return data;
 }
 
-export async function verifyOTP(dto: verifyOTPDto) {
-  console.warn('verifyOTP called with DTO:', dto);
-  const { data } = await api.post('auth/phone/verify', dto, {
+export async function verifyPhoneOtp(
+  dto: VerifyPhoneOtpDto,
+): Promise<VerifyOTPResponse> {
+  const { data } = await api.post('otp/phone/verify', dto, {
+    requireAuth: false,
+  });
+  return data;
+}
+
+export async function sendEmailOtp(dto: SendEmailOtpDto): Promise<OTPResponse> {
+  const { data } = await api.post('otp/email/send', dto, {
+    requireAuth: false,
+  });
+  return data;
+}
+
+export async function verifyEmailOtp(
+  dto: VerifyEmailOtpDto,
+): Promise<VerifyOTPResponse> {
+  const { data } = await api.post('otp/email/verify', dto, {
     requireAuth: false,
   });
   return data;
@@ -103,6 +135,5 @@ export async function refreshAccessToken() {
   const { data } = await refreshApi.post('auth/refresh', null, {
     skipAuth: false,
   });
-  console.warn('Refresh token response: ', data);
-  return data.access_token;
+  return data.accessToken;
 }

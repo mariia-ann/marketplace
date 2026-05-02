@@ -26,6 +26,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SignupDto } from '@/src/features/auth/api';
 import { isAxiosError } from 'axios';
 import PasswordInput from '@/src/components/common/customInput/PasswordInput';
+import { normalizePhoneToE164 } from '@/src/utils/phone';
 
 const Signup = () => {
   const [accountType, setAccountType] = useState<'buyer' | 'seller'>('buyer');
@@ -47,9 +48,10 @@ const Signup = () => {
     void repeatPassword;
     const dto: SignupDto = {
       ...rest,
+      email: rest.email.trim().toLowerCase(),
+      phone: normalizePhoneToE164(rest.phone),
       isSeller: accountType === 'seller',
     };
-    console.log('Signing up with:', dto);
     doSignUp(dto, {
       onSuccess: () => {
         router.replace({
@@ -63,10 +65,14 @@ const Signup = () => {
   const signUpErrorMsg = (() => {
     if (!error) return undefined;
     if (isAxiosError(error)) {
-      console.warn(error.message);
       const status = error.response?.status;
-      if (status === 400 || status === 401) return 'Невірний email або пароль';
-      return 'Помилка входу. Спробуйте ще раз.';
+      if (status === 409) {
+        return 'Користувач з таким email або телефоном вже існує';
+      }
+      if (status === 400) {
+        return 'Перевірте email, телефон і пароль';
+      }
+      return 'Помилка реєстрації. Спробуйте ще раз.';
     }
     return 'Сталася несподівана помилка.';
   })();
