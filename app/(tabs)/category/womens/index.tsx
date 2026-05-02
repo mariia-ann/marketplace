@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
-import whiteboots from '@/assets/images/category/womens/white-boots.png';
-import brownBoots from '@/assets/images/category/womens/brown-boots.png';
-import blackBoots from '@/assets/images/category/womens/black-boots.png';
-import maroonBoots from '@/assets/images/category/womens/maroon-boots.png';
 import CustomButton from '@/src/components/common/CustomButton';
 import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
 import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef';
 import BackArrow from '@/src/components/ui/BackArrow';
 import { Product } from '@/app/(tabs)';
 import ItemCard from '@/src/components/ui/home_page/ItemCard';
+import { suggesstionProducts } from '@/src/utils/suggesstionProducts';
 
 function WomensBoots() {
   const styles = StyleSheet.create({
@@ -21,41 +18,7 @@ function WomensBoots() {
 
   const iconbSize: number = 35;
 
-  const [products] = useState<Product[]>([
-    {
-      id: 1,
-      title: 'Чоботи Mavka жіночі білі',
-      price: 2890,
-      oldPrice: 3300,
-      rating: 4.5,
-      image: whiteboots,
-      isFavorite: false,
-    },
-    {
-      id: 2,
-      title: 'Чоботи Марсала жіночі осінні ',
-      oldPrice: 4199,
-      rating: 4.5,
-      image: brownBoots,
-      isFavorite: false,
-    },
-    {
-      id: 3,
-      title: 'Чоботи Kachorovska жіночі ковбойки',
-      oldPrice: 4199,
-      rating: 4.5,
-      image: maroonBoots,
-      isFavorite: false,
-    },
-    {
-      id: 4,
-      title: 'Чоботи Kasandra жіночі чорні',
-      oldPrice: 4199,
-      rating: 4.5,
-      image: blackBoots,
-      isFavorite: false,
-    },
-  ]);
+  const [products] = useState<Product[]>(suggesstionProducts);
 
   return (
     <ScrollView style={styles.container}>

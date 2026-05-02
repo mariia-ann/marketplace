@@ -56,7 +56,9 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   };
 
   const resolvedTitle = title ?? options?.title ?? route?.name ?? '';
-  const isBasketPage = route?.name === 'basket/index';
+  console.log(route?.name  + 'route name');
+  
+  const isBasketPage = route?.name === 'basket';
   const handleShareButton = () => {
     basketStore.handleBasketShare();
   };

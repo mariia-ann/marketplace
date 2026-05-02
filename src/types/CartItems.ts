@@ -5,7 +5,7 @@ type ItemColor = {
 };
 
 type CartItem = {
-  id?: string;
+  id: string;
   name: string;
   color?: ItemColor[];
   currency?: string;
@@ -20,6 +20,7 @@ type TCartItemTile = {
   cartItem: CartItem;
   isWishListCheck: boolean;
   handleIsCheck?: () => void;
+  onToggleSelection?: () => void;
 };
 
 export { CartItem, TCartItemTile };

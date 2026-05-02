@@ -14,6 +14,7 @@ function CartItemTile({
   cartItem,
   isWishListCheck,
   handleIsCheck,
+  onToggleSelection,
 }: TCartItemTile) {
   const { name, price, currency, quantity, color, imageSource } = cartItem;
 
@@ -50,6 +51,7 @@ function CartItemTile({
         <CheckBox
           containerStyle={{ position: 'absolute', top: 1, zIndex: 99 }}
           isChecked={cartItem.isChecked}
+          onPress={onToggleSelection}
         />
         <Image
           source={{ uri: imageSource }}
@@ -65,9 +67,10 @@ function CartItemTile({
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
+            // gap: 25,
           }}
         >
-          <Text>{truncateText(name, 24)}</Text>
+          <Text style={{ width: 225 }}>{truncateText(name, 24)}</Text>
           {typeof handleIsCheck === 'function' && (
             <CustomButton
               onPress={handleIsCheck}

@@ -2,16 +2,21 @@ import { CartItem } from '@/src/types/CartItems';
 import { create } from 'zustand';
 
 type BasketState = {
-  items: CartItem[]; // Replace 'any' with your actual item type
-  addItem: (item: any) => void; // Replace 'any' with your actual item type
+  items: CartItem[];
+  addItem: (item: CartItem) => void;
   removeItem: (itemId: string) => void;
   clearBasket: () => void;
   handleBasketShare: () => void;
+  toggleItemChecked: (itemId: string) => void;
+  setAllItemsChecked: (checked: boolean) => void;
+  toggleItemsCheckedByCompany: (company: string, checked: boolean) => void;
+  removeSelectedItems: () => void;
 };
 
 export const useBasketStore = create<BasketState>()((set) => ({
   items: [
     {
+      id: '1',
       name: 'Жіноча сумка Верде зелена',
       price: 2500,
       company: 'MALETSKIY',
@@ -28,6 +33,7 @@ export const useBasketStore = create<BasketState>()((set) => ({
         'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop',
     },
     {
+      id: '2',
       name: 'Чоловіча сумка Верде чорна',
       price: 3000,
       currency: '₴',
@@ -39,6 +45,7 @@ export const useBasketStore = create<BasketState>()((set) => ({
         'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=400&fit=crop',
     },
     {
+      id: '3',
       name: 'Amigurumi Ведмедик',
       price: 500,
       currency: '₴',
@@ -57,7 +64,28 @@ export const useBasketStore = create<BasketState>()((set) => ({
     })),
   clearBasket: () => set({ items: [] }),
   handleBasketShare: () => {
-    // Implement share functionality here
     console.warn('Share button pressed');
   },
+  toggleItemChecked: (itemId) =>
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.id === itemId
+          ? { ...item, isChecked: !item.isChecked }
+          : item,
+      ),
+    })),
+  setAllItemsChecked: (checked) =>
+    set((state) => ({
+      items: state.items.map((item) => ({ ...item, isChecked: checked })),
+    })),
+  toggleItemsCheckedByCompany: (company, checked) =>
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.company === company ? { ...item, isChecked: checked } : item,
+      ),
+    })),
+  removeSelectedItems: () =>
+    set((state) => ({
+      items: state.items.filter((item) => !item.isChecked),
+    })),
 }));

@@ -40,7 +40,7 @@ export default function ProfileStackLayout() {
     { name: 'support/index', title: 'Служба підтримки' },
     { name: 'support/chat', title: 'Чат-підтримки' },
     { name: 'support/chat/selectOrder', title: 'Оберіть замовлення' },
-    { name: 'basket/index', title: 'Кошикn' },
+    { name: 'basket', title: 'Кошик' },
   ];
 
   return (
