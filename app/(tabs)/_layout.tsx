@@ -27,7 +27,7 @@ function renderLabel(title: string, focused: boolean) {
 
 export default function TabLayout() {
   return (
-    // <RequireAuth to='/auth/login'>
+    <RequireAuth to='/auth/login'>
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#AC94E8',
@@ -143,6 +143,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-    // </RequireAuth>
+    </RequireAuth>
   );
 }

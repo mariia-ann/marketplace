@@ -9,7 +9,7 @@ dist/
 web-build/
 expo-env.d.ts
 eas.json
-
+.env
 # Native
 .kotlin/
 *.orig.*

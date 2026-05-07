@@ -16,6 +16,8 @@ import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
 export interface DropdownOption {
   label: string;
   value: string;
+  color?: string; // Optional color property for color-coded options
+  size?: number; // Optional size property for displaying size information
 }
 
 interface CustomDropdownProps {
@@ -28,6 +30,8 @@ interface CustomDropdownProps {
   labelStyle?: TextStyle;
   optionStyle?: ViewStyle;
   optionLabelStyle?: TextStyle;
+  ifColorCode?: boolean;
+  dropdownArrowIconStyle?: ViewStyle;
   maxHeight?: number;
 }
 
@@ -36,6 +40,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   dropdownButton: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -48,7 +53,6 @@ const styles = StyleSheet.create({
   },
   dropdownButtonText: {
     fontSize: 16,
-    flex: 1,
   },
   iconStyle: {
     marginLeft: 10,
@@ -114,11 +118,14 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   labelStyle,
   optionStyle,
   optionLabelStyle,
+  ifColorCode,
+  dropdownArrowIconStyle,
   maxHeight = 300,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const selectedOption = options.find((opt) => opt.value === selectedValue);
+  const selectedOption =
+    options.find((opt) => opt.value === selectedValue) || options[0];
   const displayText = selectedOption?.label || placeholder;
 
   const handleSelect = (option: DropdownOption) => {
@@ -140,6 +147,16 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         style={[styles.dropdownButton, dropdownStyle]}
         onPress={() => setIsOpen(!isOpen)}
       >
+        {ifColorCode && (
+          <View
+            style={{
+              width: 20,
+              height: 20,
+              backgroundColor: selectedOption?.color,
+              borderRadius: '100%',
+            }}
+          />
+        )}
         <Text
           style={[
             styles.dropdownButtonText,
@@ -148,10 +165,15 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           ]}
         >
           {displayText}
+          {selectedOption?.size ? ` /${selectedOption.size}` : ''}
         </Text>
         <SvgIcons
           name={CUSTOM_ICON_REF.Arrowright}
-          baseStyle={[styles.iconStyle, iconRotation]}
+          baseStyle={{
+            ...styles.iconStyle,
+            ...iconRotation,
+            ...dropdownArrowIconStyle,
+          }}
         />
       </TouchableOpacity>
 
@@ -180,6 +202,17 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                     ]}
                     onPress={() => handleSelect(option)}
                   >
+                    {ifColorCode && (
+                      <View
+                        style={{
+                          width: 20,
+                          height: 20,
+                          backgroundColor: option.color,
+                          borderRadius: '100%',
+                          marginRight: 30,
+                        }}
+                      />
+                    )}
                     <Text
                       style={[
                         styles.optionText,
@@ -188,7 +221,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                         optionLabelStyle,
                       ]}
                     >
-                      {option.label}
+                      {option.label} {option.size && `(/${option.size})`}
                     </Text>
                     {selectedValue === option.value && (
                       <SvgIcons
