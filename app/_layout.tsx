@@ -4,10 +4,11 @@ import React, { useEffect, useRef } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { bootstrapAuth, RestoreGate } from '@/src/features/auth/guards';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { queryClient } from '@/src/lib/queryClient';
-import { asyncStoragePersister } from '@/src/lib/persistor';
+import { queryClient } from '@/assets/lib/queryClient';
+import { asyncStoragePersister } from '@/assets/lib/persistor';
 import { View, StyleSheet } from 'react-native';
 import { useAuthStore } from '@/src/state/useAuthStore';
+import Toast from 'react-native-toast-message';
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -111,6 +112,7 @@ export default function RootLayout() {
           </View>
         </RestoreGate>
       </PersistQueryClientProvider>
+      <Toast />
     </SafeAreaProvider>
   );
 }

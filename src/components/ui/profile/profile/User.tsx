@@ -4,7 +4,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useMe } from '@/src/features/auth/hooks';
 
 export default function User() {
-  const { data: currentUser, isLoading, isFetching, error, status } = useMe();
+  const {
+    data: currentUser,
+    isLoading,
+    isFetching,
+    // error, status
+  } = useMe();
   if (isLoading || isFetching) {
     return (
       <View style={styles.user}>

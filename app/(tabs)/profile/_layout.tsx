@@ -2,7 +2,7 @@ import { NavigationHeader } from '@/src/components/common/NavigationHeader';
 import { Stack } from 'expo-router';
 import React from 'react';
 import Colors from '../../../constants/Colors';
-import { useAuthStore } from '../../../src/state/useAuthStore';
+// import { useAuthStore } from '../../../src/state/useAuthStore';
 
 export default function ProfileStackLayout() {
   const profileScreens = [
@@ -40,6 +40,7 @@ export default function ProfileStackLayout() {
     { name: 'support/index', title: 'Служба підтримки' },
     { name: 'support/chat', title: 'Чат-підтримки' },
     { name: 'support/chat/selectOrder', title: 'Оберіть замовлення' },
+    { name: 'basket', title: 'Кошик' },
   ];
 
   return (

@@ -1,12 +1,5 @@
-import React, { FC } from "react";
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  ViewStyle,
-} from "react-native";
+import React, { FC } from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
 
 type CustomButtonProps = {
   title?: string;
@@ -15,6 +8,7 @@ type CustomButtonProps = {
   customTextStyles?: any;
   whiteTheme?: boolean;
   children?: React.ReactNode;
+  disabled?: boolean;
 };
 const CustomButton: FC<CustomButtonProps> = ({
   title,
@@ -23,34 +17,37 @@ const CustomButton: FC<CustomButtonProps> = ({
   whiteTheme,
   customTextStyles,
   children,
+  disabled,
 }) => {
   const styles = StyleSheet.create({
     addButton: {
-      backgroundColor: whiteTheme ? "#fff" : "#8E6CEF",
-      borderColor: "#8E6CEF",
+      backgroundColor: whiteTheme ? '#fff' : '#8E6CEF',
+      borderColor: '#8E6CEF',
       borderWidth: 1,
-      height: 52,
+      height: customStyles?.height || 52,
       borderRadius: 10,
       // justifyContent: "center",
       // alignItems: "center",
     },
     addButtonText: {
-      color: whiteTheme ? "" : "white",
+      color: whiteTheme ? '' : 'white',
       fontSize: 16,
-      textAlign: "center",
-      fontFamily: "ManropeSemiBold",
+      textAlign: 'center',
+      fontFamily: 'ManropeSemiBold',
     },
   });
 
   return (
     <Pressable
+      disabled={disabled}
       style={{ ...styles.addButton, ...customStyles }}
       onPress={onPress}
     >
-      {title && <Text style={{ ...styles.addButtonText, ...customTextStyles }}>
-        {title}
-      </Text>}
-      {children}
+      {children || (
+        <Text style={{ ...styles.addButtonText, ...customTextStyles }}>
+          {title}
+        </Text>
+      )}
     </Pressable>
   );
 };

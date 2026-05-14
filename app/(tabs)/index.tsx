@@ -206,6 +206,7 @@ export default function HomeScreen() {
     );
   };
 
+
   const showAddedToFavoritesPopUp = () => {
     setPopUpTitle('Товар додано в обрані');
     setPopUpButtonTitle('Перейти');
@@ -317,6 +318,7 @@ export default function HomeScreen() {
   };
 
   return (
+
     <>
       <ScrollView style={styles.container}>
         <MarketPlaceHeader showSearchBar />
@@ -352,6 +354,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.recommendedGrid}>
           {recommendedProducts.map(renderRecommendedProducts)}
+           {/* <ItemCard itemName='Чоботи Марсала жіночі осінні ' addedTowishlist rating={4.5} handleSetWishlist={handleSetWishlist} imageSrc={bagpic} discountedPrice={3000} mrpPrice={4199} /> */}
         </View>
         <ScrollView horizontal style={styles.pillsScroll}>
           {pillsOptions.map(renderOptionPills)}
