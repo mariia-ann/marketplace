@@ -13,6 +13,9 @@ import reddress from '../../assets/images/productInCatalog/reddress.png';
 
 import { useState } from 'react';
 import BannerCarousel from '@/src/components/ui/home_page/carousel/BannerCarousel';
+import { useFavoritesStore } from '@/src/state/useFavoritesStore';
+import PopUpFavorites from '@/src/components/ui/favorites_page/PopUpFavorites';
+import { router } from 'expo-router';
 
 export interface Product {
   id: number;
@@ -31,6 +34,11 @@ export default function HomeScreen() {
     null,
   );
   const arrowRightIconSize: number = 30;
+  const { toggleFavorite } = useFavoritesStore();
+
+  const [isPopUpVisible, setIsPopUpVisible] = useState(false);
+  const [popUpTitle, setPopUpTitle] = useState<string>('');
+  const [popUpButtonTitle, setPopUpButtonTitle] = useState<string>('');
 
   const categoryData = [
     {
@@ -198,19 +206,61 @@ export default function HomeScreen() {
     );
   };
 
+
+  const showAddedToFavoritesPopUp = () => {
+    setPopUpTitle('Товар додано в обрані');
+    setPopUpButtonTitle('Перейти');
+    setIsPopUpVisible(true);
+    setTimeout(() => {
+      setIsPopUpVisible(false);
+    }, 2500);
+  };
+
   const handleSetWishlist = (index: number, isRecommended: boolean) => {
     if (isRecommended) {
       const updatedProducts = [...recommendedProducts];
-      updatedProducts[index].isFavorite = !updatedProducts[index].isFavorite;
-      // Since products is a constant array, we would typically use a state to manage it.
-      // For demonstration, we are just updating the local copy here.
+      const product = updatedProducts[index];
+      const newIsFavorite = !product.isFavorite;
+      updatedProducts[index] = { ...product, isFavorite: newIsFavorite };
       setRecommendedProducts(updatedProducts);
+
+      toggleFavorite(
+        {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          oldPrice: product.oldPrice,
+          rating: product.rating,
+          image: product.image,
+        },
+        newIsFavorite,
+      );
+
+      if (newIsFavorite) {
+        showAddedToFavoritesPopUp();
+      }
     } else {
       const updatedProducts = [...products];
-      updatedProducts[index].isFavorite = !updatedProducts[index].isFavorite;
-      // Since products is a constant array, we would typically use a state to manage it.
-      // For demonstration, we are just updating the local copy here.
+      const product = updatedProducts[index];
+      const newIsFavorite = !product.isFavorite;
+      updatedProducts[index] = { ...product, isFavorite: newIsFavorite };
       setProducts(updatedProducts);
+
+      toggleFavorite(
+        {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          oldPrice: product.oldPrice,
+          rating: product.rating,
+          image: product.image,
+        },
+        newIsFavorite,
+      );
+
+      if (newIsFavorite) {
+        showAddedToFavoritesPopUp();
+      }
     }
   };
 
@@ -268,50 +318,60 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <MarketPlaceHeader showSearchBar />
-      <BannerCarousel
-        baseStyle={styles.bannerCarousel}
-        containerHorizontalPadding={styles.container.padding as number}
-      />
-      <View style={styles.sectionHeaderRow}>
-        <Text style={[styles.categoriesText, styles.sectionHeaderTitle]}>
-          Категорії
-        </Text>
-        <View style={styles.sectionHeaderRight}>
-          <Text style={styles.sectionHeaderLinkText}>Усі</Text>
+
+    <>
+      <ScrollView style={styles.container}>
+        <MarketPlaceHeader showSearchBar />
+        <BannerCarousel
+          baseStyle={styles.bannerCarousel}
+          containerHorizontalPadding={styles.container.padding as number}
+        />
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.categoriesText, styles.sectionHeaderTitle]}>
+            Категорії
+          </Text>
+          <View style={styles.sectionHeaderRight}>
+            <Text style={styles.sectionHeaderLinkText}>Усі</Text>
+            <SvgIcons
+              name={CUSTOM_ICON_REF.Arrowright}
+              baseStyle={styles.sectionHeaderLinkIcon}
+            />
+          </View>
+        </View>
+        <ScrollView horizontal style={styles.categoriesScroll}>
+          {categoryData.map(renderCategorydata)}
+        </ScrollView>
+        <View style={styles.rowSpacer} />
+        <View style={styles.forYouHeaderRow}>
+          <Text style={styles.forYouTitle}>Для Вас</Text>
           <SvgIcons
             name={CUSTOM_ICON_REF.Arrowright}
-            baseStyle={styles.sectionHeaderLinkIcon}
+            baseStyle={[
+              styles.forYouArrowIcon,
+              { width: arrowRightIconSize, height: arrowRightIconSize },
+            ]}
           />
         </View>
-      </View>
-      <ScrollView horizontal style={styles.categoriesScroll}>
-        {categoryData.map(renderCategorydata)}
+        <View style={styles.recommendedGrid}>
+          {recommendedProducts.map(renderRecommendedProducts)}
+           {/* <ItemCard itemName='Чоботи Марсала жіночі осінні ' addedTowishlist rating={4.5} handleSetWishlist={handleSetWishlist} imageSrc={bagpic} discountedPrice={3000} mrpPrice={4199} /> */}
+        </View>
+        <ScrollView horizontal style={styles.pillsScroll}>
+          {pillsOptions.map(renderOptionPills)}
+        </ScrollView>
+        <View style={styles.productsGrid}>{products.map(renderproducts)}</View>
       </ScrollView>
-      <View style={styles.rowSpacer} />
-      <View style={styles.forYouHeaderRow}>
-        <Text style={styles.forYouTitle}>Для Вас</Text>
-        <SvgIcons
-          name={CUSTOM_ICON_REF.Arrowright}
-          baseStyle={[
-            styles.forYouArrowIcon,
-            { width: arrowRightIconSize, height: arrowRightIconSize },
-          ]}
-        />
-      </View>
-      <View style={styles.recommendedGrid}>
-        {recommendedProducts.map(renderRecommendedProducts)}
-        {/* <ItemCard itemName='Чоботи Марсала жіночі осінні ' addedTowishlist rating={4.5} handleSetWishlist={handleSetWishlist} imageSrc={bagpic} discountedPrice={3000} mrpPrice={4199} /> */}
-      </View>
-      <ScrollView horizontal style={styles.pillsScroll}>
-        {pillsOptions.map(renderOptionPills)}
-      </ScrollView>
-      <View style={styles.productsGrid}>
-        {products.map(renderproducts)}
-        {/* <ItemCard itemName='Чоботи Марсала жіночі осінні ' addedTowishlist rating={4.5} handleSetWishlist={handleSetWishlist} imageSrc={bagpic} discountedPrice={3000} mrpPrice={4199} /> */}
-      </View>
-    </ScrollView>
+
+      <PopUpFavorites
+        visible={isPopUpVisible}
+        titlePopUp={popUpTitle}
+        titleButton={popUpButtonTitle}
+        onPressButton={() => {
+          setIsPopUpVisible(false);
+          router.push('/(tabs)/favorite');
+        }}
+      />
+    </>
   );
 }
 
