@@ -45,6 +45,7 @@ import ImageIcon from './Icons/ImageIcon';
 import Trash from './Icons/Trash';
 import Minus from './Icons/Minus';
 import Plus from './Icons/Plus';
+import AddtoCollection from './Icons/AddtoCollection';
 
 export enum CUSTOM_ICON_REF {
   Google = 'Google',
@@ -91,6 +92,7 @@ export enum CUSTOM_ICON_REF {
   Trash = 'Trash',
   Minus = 'Minus',
   Plus = 'Plus',
+  AddtoCollection = 'AddtoCollection',
 }
 
 export const CustomIconRef = {
@@ -137,6 +139,7 @@ export const CustomIconRef = {
   [CUSTOM_ICON_REF.Minus]: Minus,
   [CUSTOM_ICON_REF.Plus]: Plus,
   [CUSTOM_ICON_REF.ImageIcon]: ImageIcon,
+  [CUSTOM_ICON_REF.AddtoCollection]: AddtoCollection,
 
   //Illustrations
   [CUSTOM_ICON_REF.ForgotPasswordIllustrations]: ForgotPasswordIllustration,

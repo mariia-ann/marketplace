@@ -1,10 +1,15 @@
 import React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import SvgIcons from '../../common/SvgIcons/SvgIcons';
 import { CUSTOM_ICON_REF } from '../../common/SvgIcons/IconRef';
+import CustomButton from '@/src/components/common/CustomButton';
+import Colors from '@/constants/Colors';
+import CheckBox from '@/src/components/common/customInput/Checkbox';
 
 interface Props {
   itemName?: string;
+  isToggleSelectProduct?: boolean;
+  isSelectedProduct?: boolean;
   addedTowishlist?: boolean;
   rating?: number;
   mrpPrice?: number | null;
@@ -16,6 +21,8 @@ interface Props {
 function ItemCard(props: Props) {
   const {
     imageSrc,
+    isToggleSelectProduct,
+    isSelectedProduct,
     addedTowishlist,
     itemName,
     discountedPrice,
@@ -28,6 +35,8 @@ function ItemCard(props: Props) {
     ? CUSTOM_ICON_REF.WishlistFillIcon
     : CUSTOM_ICON_REF.WishlistIcon;
 
+  const selectCheckBoxIconCoordinates: number = 5;
+
   return (
     <View
       style={{
@@ -38,9 +47,10 @@ function ItemCard(props: Props) {
       }}
     >
       <View style={{ height: 200, position: 'relative' }}>
-        <Pressable
-          style={{ position: 'absolute', top: 10, right: 10, zIndex: 99 }}
-          onPress={handleSetWishlist}
+        {isToggleSelectProduct ? 
+        <CheckBox isChecked={isSelectedProduct} onPress={typeof handleSetWishlist === 'function' ? handleSetWishlist : () => {}} containerStyle={{ position: 'absolute', top: selectCheckBoxIconCoordinates, left: selectCheckBoxIconCoordinates, zIndex: 99 }} checkboxStyle={{backgroundColor: Colors.white, borderRadius: 6}} /> : <CustomButton
+          customStyles={{ position: 'absolute', top: selectCheckBoxIconCoordinates, right: selectCheckBoxIconCoordinates, zIndex: 99, backgroundColor: 'transparent', height: 'fit-content', borderColor: 'transparent', padding: 3 }}
+          onPress={typeof handleSetWishlist === 'function' ? handleSetWishlist : () => {}}
         >
           <SvgIcons
             name={iswishListed}
@@ -53,7 +63,7 @@ function ItemCard(props: Props) {
               borderRadius: '100%',
             }}
           />
-        </Pressable>
+        </CustomButton>}
         {imageSrc && (
           <Image
             style={{

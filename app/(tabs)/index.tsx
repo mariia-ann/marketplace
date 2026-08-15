@@ -13,17 +13,7 @@ import reddress from '../../assets/images/productInCatalog/reddress.png';
 
 import { useState } from 'react';
 import BannerCarousel from '@/src/components/ui/home_page/carousel/BannerCarousel';
-
-export interface Product {
-  id: number;
-  title: string;
-  price?: number;
-  oldPrice?: number | null;
-  rating: number;
-  image: string;
-  isFavorite: boolean;
-  currency?: string;
-}
+import { Product } from '@/src/types/Product';
 
 export default function HomeScreen() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -272,7 +262,7 @@ export default function HomeScreen() {
       <MarketPlaceHeader showSearchBar />
       <BannerCarousel
         baseStyle={styles.bannerCarousel}
-        containerHorizontalPadding={styles.container.padding as number}
+        containerHorizontalPadding={20}
       />
       <View style={styles.sectionHeaderRow}>
         <Text style={[styles.categoriesText, styles.sectionHeaderTitle]}>
@@ -318,7 +308,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
-    padding: 20,
+    paddingHorizontal: 10,
     backgroundColor: Colors.white,
   },
   bannerCarousel: {
