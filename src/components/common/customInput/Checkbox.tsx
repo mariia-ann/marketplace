@@ -18,6 +18,7 @@ interface Props {
   title?: string;
   titleStyle?: StyleProp<TextStyle>;
   containerStyle?: any;
+  containerStyle?: any;
   checkboxStyle?: StyleProp<TextStyle>;
 }
 
