@@ -8,8 +8,7 @@ import {
   View,
   StyleProp,
   TextStyle,
-  // PressableProps,
-  // ViewStyle,
+  ViewStyle,
 } from 'react-native';
 
 interface Props {
@@ -17,8 +16,7 @@ interface Props {
   onPress?: () => void;
   title?: string;
   titleStyle?: StyleProp<TextStyle>;
-  containerStyle?: any;
-  containerStyle?: any;
+  containerStyle?: StyleProp<ViewStyle>;
   checkboxStyle?: StyleProp<TextStyle>;
 }
 

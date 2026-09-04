@@ -138,9 +138,6 @@ export const CustomIconRef = {
   [CUSTOM_ICON_REF.Trash]: Trash,
   [CUSTOM_ICON_REF.Minus]: Minus,
   [CUSTOM_ICON_REF.Plus]: Plus,
-  [CUSTOM_ICON_REF.Trash]: Trash,
-  [CUSTOM_ICON_REF.Minus]: Minus,
-  [CUSTOM_ICON_REF.Plus]: Plus,
   [CUSTOM_ICON_REF.ImageIcon]: ImageIcon,
   [CUSTOM_ICON_REF.AddtoCollection]: AddtoCollection,
 

@@ -18,6 +18,8 @@ eas.json
 *.p12
 *.key
 *.mobileprovision
+.antigravity/skills
+.antigravity/rules
 
 # Metro
 .metro-health-check*
