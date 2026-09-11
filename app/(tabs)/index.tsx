@@ -16,17 +16,7 @@ import BannerCarousel from '@/src/components/ui/home_page/carousel/BannerCarouse
 import { useFavoritesStore } from '@/src/state/useFavoritesStore';
 import PopUpFavorites from '@/src/components/ui/favorites_page/PopUpFavorites';
 import { router } from 'expo-router';
-
-export interface Product {
-  id: number;
-  title: string;
-  price?: number;
-  oldPrice?: number | null;
-  rating: number;
-  image: string;
-  isFavorite: boolean;
-  currency?: string;
-}
+import { Product } from '@/src/types/Product';
 
 export default function HomeScreen() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -378,7 +368,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
-    padding: 20,
+    paddingHorizontal: 10,
     backgroundColor: Colors.white,
   },
   bannerCarousel: {

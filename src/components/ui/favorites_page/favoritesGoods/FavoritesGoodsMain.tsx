@@ -23,7 +23,6 @@ import {
 import { useFavoritesStore } from '@/src/state/useFavoritesStore';
 import FavoritesEmptyPage from '../FavoritesEmptyPage';
 import { useMe } from '@/src/features/auth/hooks';
-import { api } from '@/src/lib/api';
 
 const { width } = Dimensions.get('window');
 const HORIZONTAL_PADDING = 20;
