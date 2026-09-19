@@ -38,7 +38,10 @@ export default function FavoriteStackLayout() {
         headerShown: true,
         header: (props) => (
           <NavigationHeader
-            customStyles={{ backgroundColor: Colors.white }}
+            customStyles={{
+              paddingHorizontal: 16,
+              backgroundColor: Colors.white,
+            }}
             {...props}
           />
         ),
@@ -47,14 +50,12 @@ export default function FavoriteStackLayout() {
       <Stack.Screen
         name='index'
         options={{
-          headerShown: false,
           title: 'Обрані',
         }}
       />
       <Stack.Screen
         name='chosen-collections'
         options={{
-          headerShown: false,
           title: 'Обрані',
         }}
       />

@@ -1,4 +1,4 @@
-import { CaretLeft } from "phosphor-react-native";
+import { CaretLeft } from 'phosphor-react-native';
 import {
   GestureResponderEvent,
   Pressable,
@@ -6,9 +6,9 @@ import {
   StyleSheet,
   View,
   ViewStyle,
-} from "react-native";
-import { useRouter } from "expo-router";
-import Colors from "@/constants/Colors";
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import Colors from '@/constants/Colors';
 
 interface BackButtonProps {
   style?: StyleProp<ViewStyle>;
@@ -34,11 +34,15 @@ export default function BackButton(props: BackButtonProps) {
           style={[
             styles.backIconCircle,
             {
-              backgroundColor: pressed ? Colors.activePurple : Colors.purple400,
-            },
+              backgroundColor: pressed ? Colors.activePurple : undefined,
+              experimental_backgroundImage: pressed
+                ? undefined
+                : Colors.purpleGradient,
+              backgroundImage: pressed ? undefined : Colors.purpleGradient,
+            } as any,
           ]}
         >
-          <CaretLeft size={18} color={Colors.white} weight="bold" />
+          <CaretLeft size={18} color={Colors.white} weight='bold' />
         </View>
       )}
     </Pressable>
@@ -48,11 +52,11 @@ export default function BackButton(props: BackButtonProps) {
 const styles = StyleSheet.create({
   backButtonWrapper: {},
   backIconCircle: {
-    backgroundColor: Colors.purple400,
     borderRadius: 20,
     width: 40,
     height: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
 });
