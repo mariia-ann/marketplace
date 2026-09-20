@@ -17,6 +17,7 @@ type StandaloneExtras = {
   showBack?: boolean;
   onBack?: () => void;
   customStyles?: object;
+  rightComponent?: React.ReactNode;
 };
 
 // This element should be used as a header in stack navigator and in standalone pages
@@ -31,6 +32,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   onBack,
   customStyles,
   showBack = true,
+  rightComponent,
 }) => {
   const router = useRouter();
   const basketStore = useBasketStore();
@@ -56,8 +58,8 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
   };
 
   const resolvedTitle = title ?? options?.title ?? route?.name ?? '';
-  console.log(route?.name  + 'route name');
-  
+  console.log(route?.name + 'route name');
+
   const isBasketPage = route?.name === 'basket';
   const handleShareButton = () => {
     basketStore.handleBasketShare();
@@ -81,7 +83,14 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
         )}
       </View>
       {/* Right - spacer */}
-      {isBasketPage ? (
+      {rightComponent || options?.headerRight ? (
+        <View style={styles.sideRight}>
+          {rightComponent ??
+            (typeof options?.headerRight === 'function'
+              ? options.headerRight({ canGoBack: canGoBackFromStack })
+              : options?.headerRight)}
+        </View>
+      ) : isBasketPage ? (
         <CustomButton
           onPress={handleShareButton}
           customStyles={{

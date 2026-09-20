@@ -1,19 +1,10 @@
 import React, { useState } from 'react';
-import {
-  Alert,
-  ScrollView,
-  Share,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 import Colors from '@/constants/Colors';
-import { NavigationHeader } from '@/src/components/common/NavigationHeader';
+import CustomButton from '@/src/components/common/CustomButton';
 import {
   CollectionsSegmentedSwitch,
   CollectionsTabType,
@@ -101,21 +92,10 @@ export default function ChosenCollectionsScreen() {
   };
 
   return (
-    <SafeAreaView edges={['top', 'bottom']} style={styles.safeArea}>
-      {/* Header with back button and "Обрані" title */}
-      <NavigationHeader
-        title='Обрані'
-        showBack={true}
-        onBack={() => {
-          if (router.canGoBack()) {
-            router.back();
-          } else {
-            router.push('/(tabs)');
-          }
-        }}
-        customStyles={styles.header}
-      />
-
+    <ScrollView
+      contentContainerStyle={{ minHeight: '75%', paddingTop: 30 }}
+      style={styles.container}
+    >
       {/* Segmented Control: "Товари (13)" / "Колекції" */}
       <View style={styles.segmentedContainer}>
         <CollectionsSegmentedSwitch
@@ -143,15 +123,14 @@ export default function ChosenCollectionsScreen() {
 
           {/* Bottom Action Button: "Створити нову колекцію" */}
           <View style={styles.bottomBar}>
-            <TouchableOpacity
-              style={styles.createButton}
-              activeOpacity={0.85}
+            <CustomButton
+              title='Створити нову колекцію'
               onPress={() => setIsCreateModalOpen(true)}
-            >
-              <Text style={styles.createButtonText}>
-                Створити нову колекцію
-              </Text>
-            </TouchableOpacity>
+              customStyles={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
           </View>
         </View>
       ) : (
@@ -175,19 +154,13 @@ export default function ChosenCollectionsScreen() {
         onShare={handleShareCollection}
         onDelete={handleDeleteCollection}
       />
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
+  container: {
     backgroundColor: Colors.white,
-  },
-  header: {
-    backgroundColor: Colors.white,
-    paddingHorizontal: 16,
-    paddingBottom: 8,
   },
   segmentedContainer: {
     paddingHorizontal: 16,
@@ -212,22 +185,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopWidth: 1,
     borderTopColor: '#F4F4F8',
-  },
-  createButton: {
-    height: 52,
-    backgroundColor: Colors.softPurple,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: Colors.softPurple,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  createButtonText: {
-    color: Colors.white,
-    fontSize: 16,
-    fontFamily: 'ManropeBold',
   },
 });

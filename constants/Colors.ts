@@ -1,6 +1,8 @@
 const Colors = {
   blackMain: '#170F2B', // headers, body text, main icons
   softPurple: '#8E6CEF', // button
+  purpleGradient:
+    'linear-gradient(336.25deg, rgba(172, 148, 232, 0.8) 12.36%, rgba(172, 148, 232, 0.3) 90.07%)',
   activePurple: '#6831D0', // active button
   grey500: '#666666', // inactive buttons, some elements
   grey400: '#999999', // border
