@@ -101,55 +101,22 @@ export default function TabLayout() {
     <RequireAuth to='/auth/login'>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#8E6CEF',
-          tabBarInactiveTintColor: '#170F2B',
+          tabBarActiveTintColor: '#AC94E8',
           headerShown: false,
           headerShadowVisible: false,
           tabBarLabelStyle: {
-            fontSize: 11,
+            fontSize: 12,
             fontFamily: 'Manrope',
           },
-          tabBarBackground: () => (
-            <BlurView
-              tint='light'
-              intensity={Platform.OS === 'android' ? 60 : 80}
-              experimentalBlurMethod='dimezisBlurView'
-              style={[
-                StyleSheet.absoluteFill,
-                {
-                  overflow: 'hidden',
-                  backgroundColor:
-                    Platform.OS === 'web'
-                      ? 'rgba(255, 255, 255, 0.65)'
-                      : 'rgba(255, 255, 255, 0)',
-                  borderWidth: 1,
-                  borderColor: 'rgba(255, 255, 255, 0)',
-                },
-                Platform.OS === 'web'
-                  ? ({
-                      backdropFilter: 'blur(20px)',
-                      WebkitBackdropFilter: 'blur(20px)',
-                    } as any)
-                  : {},
-              ]}
-            />
-          ),
           tabBarStyle: {
-            position: 'absolute',
-            bottom: Platform.OS === 'ios' ? 24 : 50,
-            height: 72,
             borderTopWidth: 0,
-            backgroundColor: 'transparent',
-            elevation: 8,
-            shadowColor: '#48238F',
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.14,
-            shadowRadius: 16,
-            boxShadow:
-              '0px 1px 2px 0px rgba(255, 255, 255, 0.4) inset, 0px 4px 20px 0px rgba(72, 35, 143, 0.14)',
-            paddingBottom: Platform.OS === 'ios' ? 8 : 10,
-            paddingTop: 10,
-          } as any,
+            shadowColor: '#00000040',
+            shadowOpacity: 0.6,
+            shadowRadius: 15,
+            elevation: 10,
+            borderTopLeftRadius: 5,
+            borderTopRightRadius: 5,
+          },
         }}
       >
         <Tabs.Screen
@@ -160,7 +127,7 @@ export default function TabLayout() {
             tabBarIcon: ({ focused }) => (
               <House
                 color={focused ? '#8E6CEF' : '#170F2B'}
-                size={28}
+                size={32}
                 weight={focused ? 'regular' : 'thin'}
               />
             ),
@@ -169,12 +136,12 @@ export default function TabLayout() {
         <Tabs.Screen
           name='search'
           options={{
-            title: 'Каталог',
-            tabBarLabel: ({ focused }) => renderLabel('Каталог', focused),
+            title: 'Пошук',
+            tabBarLabel: ({ focused }) => renderLabel('Пошук', focused),
             tabBarIcon: ({ focused }) => (
               <MagnifyingGlass
                 color={focused ? '#8E6CEF' : '#170F2B'}
-                size={28}
+                size={32}
                 weight={focused ? 'regular' : 'thin'}
               />
             ),
@@ -184,44 +151,157 @@ export default function TabLayout() {
           name='basket'
           options={{
             tabBarLabel: () => null,
-            tabBarIcon: ({ focused }) => <BasketTabIcon focused={focused} />,
+            tabBarIcon: ({ focused }) => (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: -30,
+                  backgroundColor: '#fff',
+                  borderRadius: 35,
+                  width: 60,
+                  height: 60,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  shadowColor: '#000000',
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 4.65,
+                  elevation: 4,
+                }}
+              >
+                <Handbag
+                  size={32}
+                  color={focused ? '#8E6CEF' : '#170F2B'}
+                  weight={focused ? 'regular' : 'thin'}
+                />
+              </View>
+            ),
           }}
         />
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: '#8E6CEF',
+            tabBarInactiveTintColor: '#170F2B',
+            headerShown: false,
+            headerShadowVisible: false,
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontFamily: 'Manrope',
+            },
+            tabBarBackground: () => (
+              <BlurView
+                tint='light'
+                intensity={Platform.OS === 'android' ? 60 : 80}
+                experimentalBlurMethod='dimezisBlurView'
+                style={[
+                  StyleSheet.absoluteFill,
+                  {
+                    overflow: 'hidden',
+                    backgroundColor:
+                      Platform.OS === 'web'
+                        ? 'rgba(255, 255, 255, 0.65)'
+                        : 'rgba(255, 255, 255, 0)',
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0)',
+                  },
+                  Platform.OS === 'web'
+                    ? ({
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                      } as any)
+                    : {},
+                ]}
+              />
+            ),
+            tabBarStyle: {
+              position: 'absolute',
+              bottom: Platform.OS === 'ios' ? 24 : 50,
+              height: 72,
+              borderTopWidth: 0,
+              backgroundColor: 'transparent',
+              elevation: 8,
+              shadowColor: '#48238F',
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.14,
+              shadowRadius: 16,
+              boxShadow:
+                '0px 1px 2px 0px rgba(255, 255, 255, 0.4) inset, 0px 4px 20px 0px rgba(72, 35, 143, 0.14)',
+              paddingBottom: Platform.OS === 'ios' ? 8 : 10,
+              paddingTop: 10,
+            } as any,
+          }}
+        >
+          <Tabs.Screen
+            name='index'
+            options={{
+              title: 'Головна',
+              tabBarLabel: ({ focused }) => renderLabel('Головна', focused),
+              tabBarIcon: ({ focused }) => (
+                <House
+                  color={focused ? '#8E6CEF' : '#170F2B'}
+                  size={28}
+                  weight={focused ? 'regular' : 'thin'}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='search'
+            options={{
+              title: 'Каталог',
+              tabBarLabel: ({ focused }) => renderLabel('Каталог', focused),
+              tabBarIcon: ({ focused }) => (
+                <MagnifyingGlass
+                  color={focused ? '#8E6CEF' : '#170F2B'}
+                  size={28}
+                  weight={focused ? 'regular' : 'thin'}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='basket'
+            options={{
+              tabBarLabel: () => null,
+              tabBarIcon: ({ focused }) => <BasketTabIcon focused={focused} />,
+            }}
+          />
 
-        <Tabs.Screen
-          name='favorite'
-          options={{
-            title: 'Обрані',
-            tabBarLabel: ({ focused }) => renderLabel('Обрані', focused),
-            tabBarIcon: ({ focused }) => (
-              <Heart
-                color={focused ? '#8E6CEF' : '#170F2B'}
-                size={28}
-                weight={focused ? 'regular' : 'thin'}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name='profile'
-          options={{
-            title: 'Профіль',
-            tabBarLabel: ({ focused }) => renderLabel('Профіль', focused),
-            tabBarIcon: ({ focused }) => (
-              <User
-                color={focused ? '#8E6CEF' : '#170F2B'}
-                size={28}
-                weight={focused ? 'regular' : 'thin'}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name='category'
-          options={{
-            href: null,
-          }}
-        />
+          <Tabs.Screen
+            name='favorite'
+            options={{
+              title: 'Обрані',
+              tabBarLabel: ({ focused }) => renderLabel('Обрані', focused),
+              tabBarIcon: ({ focused }) => (
+                <Heart
+                  color={focused ? '#8E6CEF' : '#170F2B'}
+                  size={32}
+                  weight={focused ? 'regular' : 'thin'}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='profile'
+            options={{
+              title: 'Профіль',
+              tabBarLabel: ({ focused }) => renderLabel('Профіль', focused),
+              tabBarIcon: ({ focused }) => (
+                <User
+                  color={focused ? '#8E6CEF' : '#170F2B'}
+                  size={32}
+                  weight={focused ? 'regular' : 'thin'}
+                />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name='category'
+            options={{
+              href: null,
+            }}
+          />
+        </Tabs>
       </Tabs>
     </RequireAuth>
   );
