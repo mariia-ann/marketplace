@@ -4,7 +4,7 @@ import CustomButton from '@/src/components/common/CustomButton';
 import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
 import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef';
 import BackArrow from '@/src/components/ui/BackArrow';
-import { Product } from '@/app/(tabs)';
+import { Product } from '@/src/types/Product';
 import ItemCard from '@/src/components/ui/home_page/ItemCard';
 import { suggesstionProducts } from '@/src/utils/suggesstionProducts';
 

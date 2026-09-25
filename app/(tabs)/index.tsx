@@ -312,7 +312,9 @@ export default function HomeScreen() {
         <MarketPlaceHeader showSearchBar />
         <BannerCarousel
           baseStyle={styles.bannerCarousel}
-          containerHorizontalPadding={styles.container.padding as number}
+          containerHorizontalPadding={
+            styles.container.paddingHorizontal as number
+          }
         />
         <View style={styles.sectionHeaderRow}>
           <Text style={[styles.categoriesText, styles.sectionHeaderTitle]}>
