@@ -1,10 +1,10 @@
-import CustomButton from "@/src/components/common/CustomButton";
-import BackArrow from "@/src/components/common/buttons/BackButton";
-import OptionToggle from "@/src/components/common/OptionToggle/OptionToggle";
-import { CUSTOM_ICON_REF } from "@/src/components/common/SvgIcons/IconRef";
-import SvgIcons from "@/src/components/common/SvgIcons/SvgIcons";
-import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import CustomButton from '@/src/components/common/CustomButton';
+import BackArrow from '@/src/components/common/buttons/BackButton';
+import OptionToggle from '@/src/components/common/OptionToggle/OptionToggle';
+import { CUSTOM_ICON_REF } from '@/src/components/common/SvgIcons/IconRef';
+import SvgIcons from '@/src/components/common/SvgIcons/SvgIcons';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 function ForgotPassword() {
   const [toggleSMS, setToggleSMS] = useState<boolean>(false);
@@ -17,16 +17,11 @@ function ForgotPassword() {
     setToggleSMS((prev) => !prev);
   };
 
-  const backarrowStyles = {
-    backArrowWrapper: styles.backArrowWrapper,
-    backIconCircle: styles.backIconCircle,
-  };
-
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={[styles.row, styles.header]}>
-        <BackArrow style={backarrowStyles} />
+        <BackArrow />
         <Text style={styles.headerTitle}>Забули пароль?</Text>
         <Text />
       </View>
@@ -43,27 +38,13 @@ function ForgotPassword() {
       {/* Options */}
       <View style={[styles.row, styles.optionWrapper]}>
         <OptionToggle
-          toggled={toggleSMS}
-          title="SMS"
-          baseStyle={{
-            ...styles.optionBox,
-            ...styles.shadow,
-            marginRight: 15,
-            maxWidth: 300,
-          }}
-          textStyle={styles.optionToggleText}
+          pressed={toggleSMS}
+          title='SMS'
           handleClick={handleToggleSMS}
         />
         <OptionToggle
-          toggled={!toggleSMS}
-          title="Email"
-          baseStyle={{
-            ...styles.optionBox,
-            ...styles.shadow,
-            marginLeft: 15,
-            maxWidth: 300,
-          }}
-          textStyle={styles.optionToggleText}
+          pressed={!toggleSMS}
+          title='Email'
           handleClick={handleToggleEmail}
         />
       </View>
@@ -79,16 +60,16 @@ function ForgotPassword() {
         <CustomButton
           customStyles={{
             marginBottom: 10,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             maxWidth: 400,
             minWidth: 350,
           }}
-          title="Відправити код"
+          title='Відправити код'
           onPress={() => {}}
         />
         <CustomButton
-          title="Відміна"
+          title='Відміна'
           customStyles={styles.cancelButton}
           customTextStyles={styles.cancelButtonText}
           onPress={() => {}}
@@ -103,20 +84,20 @@ export default ForgotPassword;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
+    flexDirection: 'column',
     paddingTop: 20,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
 
   row: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   centeredColumn: {
-    flexDirection: "column",
-    alignItems: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   header: {
@@ -124,24 +105,8 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    fontFamily: "Manrope",
+    fontFamily: 'Manrope',
     fontSize: 22,
-  },
-
-  backArrowWrapper: {
-    // Uncomment if needed:
-    // position: 'absolute',
-    // left: 20,
-    // top: 70,
-    // zIndex: 1,
-  },
-
-  backIconCircle: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "100%",
   },
 
   illustration: {
@@ -150,34 +115,34 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    fontFamily: "Manrope",
-    textAlign: "center",
+    fontFamily: 'Manrope',
+    textAlign: 'center',
     fontSize: 18,
   },
 
   optionWrapper: {
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: 30,
   },
 
   optionBox: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderRadius: 8,
-    width: "50%",
+    width: '50%',
     padding: 20,
   },
 
   optionToggleText: {
-    fontFamily: "Manrope",
-    color: "#8E6CEF",
-    fontWeight: "bold",
+    fontFamily: 'Manrope',
+    color: '#8E6CEF',
+    fontWeight: 'bold',
   },
 
   shadow: {
-    boxShadow: "0 0 10px #00000020",
+    boxShadow: '0 0 10px #00000020',
   },
 
   infoWrapper: {
@@ -186,37 +151,37 @@ const styles = StyleSheet.create({
   },
 
   infoText: {
-    fontFamily: "Manrope",
-    textAlign: "center",
+    fontFamily: 'Manrope',
+    textAlign: 'center',
     fontSize: 16,
   },
 
   infoEmail: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 16,
-    fontWeight: "bold",
-    fontFamily: "Manrope",
+    fontWeight: 'bold',
+    fontFamily: 'Manrope',
   },
 
   buttonWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     padding: 12,
     paddingTop: 20,
   },
 
   cancelButton: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderWidth: 1,
     maxWidth: 400,
     minWidth: 350,
-    borderColor: "#8E6CEF",
-    justifyContent: "center",
-    alignItems: "center",
+    borderColor: '#8E6CEF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   cancelButtonText: {
-    color: "#170F2B",
+    color: '#170F2B',
   },
 });
