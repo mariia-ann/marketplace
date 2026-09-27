@@ -1,7 +1,7 @@
-import Colors from "@/constants/Colors";
-import CardOrderSupport from "@/src/components/ui/profile/support/supportScreenThree/CardOrderSupport";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import Colors from '@/constants/Colors';
+import CardOrderSupport from '@/src/components/ui/profile/support/supportScreenThree/CardOrderSupport';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,8 +9,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import orders from "./supportScreenThree/ordersExample";
+} from 'react-native';
+import orders from './supportScreenThree/ordersExample';
 
 const SelectOrder = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -19,15 +19,15 @@ const SelectOrder = () => {
   const handleConfirmOrder = () => {
     if (selectedIndex !== null) {
       const selectedOrder = orders[selectedIndex];
-      if ((global as any).addOrderMessage) {
-        (global as any).addOrderMessage(selectedOrder.orderNumber);
+      if ((globalThis as any).addOrderMessage) {
+        (globalThis as any).addOrderMessage(selectedOrder.orderNumber);
       }
       router.back();
     }
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <ScrollView contentContainerStyle={styles.container}>
         {orders.map((order, index) => (
           <View key={index} style={styles.orderRow}>
@@ -40,7 +40,7 @@ const SelectOrder = () => {
                 selectedIndex === index
                   ? { backgroundColor: Colors.softPurple }
                   : {
-                      backgroundColor: "white",
+                      backgroundColor: 'white',
                       borderWidth: 1,
                       borderColor: Colors.grey400,
                     },
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     marginBottom: 37,
   },
   orderRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   circle: {
     width: 20,
@@ -93,12 +93,12 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 10,
     backgroundColor: Colors.softPurple,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 36,
   },
   filledButtonText: {
-    fontFamily: "ManropeBold",
+    fontFamily: 'ManropeBold',
     fontSize: 16,
     color: Colors.white,
   },

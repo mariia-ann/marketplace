@@ -33,6 +33,10 @@ export default defineConfig([
       /* React Hooks — which are VERY important for RN */
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      // SDK 57's preset enables React Compiler rules that flag established
+      // React Native Animated/ref patterns throughout this codebase.
+      'react-hooks/refs': 'off',
+      'react-hooks/set-state-in-effect': 'off',
 
       /* React Native plugin */
       'react-native/no-unused-styles': 'warn',
