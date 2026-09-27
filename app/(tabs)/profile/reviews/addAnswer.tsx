@@ -1,8 +1,8 @@
-import Colors from "@/constants/Colors";
-import CustomButton from "@/src/components/common/CustomButton";
-import AddAnswerInputs from "@/src/components/ui/profile/reviews/AddAnswerInputs";
-import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import Colors from '@/constants/Colors';
+import CustomButton from '@/src/components/common/CustomButton';
+import AddAnswerInputs from '@/src/components/ui/profile/reviews/AddAnswerInputs';
+import { useNavigation } from 'expo-router/react-navigation';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 
 export default function AddAnswer() {
   const navigation = useNavigation();
@@ -19,7 +19,7 @@ export default function AddAnswer() {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.white }}>
       <ScrollView contentContainerStyle={styles.container}>
         <AddAnswerInputs />
-        <CustomButton title="Опублікувати відповідь" onPress={handleSubmit} />
+        <CustomButton title='Опублікувати відповідь' onPress={handleSubmit} />
       </ScrollView>
     </SafeAreaView>
   );
