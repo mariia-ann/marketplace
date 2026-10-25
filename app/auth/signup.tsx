@@ -1,6 +1,4 @@
-// this is a signup screen for the app which uses formik for form handling and yup for validation
-// it uses a custom hook useSignup to handle the signup process
-// upon successful signup, it redirects the user to the main tabs screen
+// Buyer/seller form validation creates a pending session and opens contact verification.
 // it also provides options for social media signup (Google, Apple, Facebook) though the functionality is not implemented here
 // TODO: /by Demidas/ implement social media signup functionality
 import { router } from 'expo-router';
@@ -17,7 +15,7 @@ import { RequireGuest } from '@/src/features/auth/guards';
 import { useSignup } from '@/src/features/auth/hooks';
 import {
   SignupFormValues,
-  signUpSchema,
+  createSignUpSchema,
 } from '@/src/features/auth/schemas/signup.schema';
 import { Formik } from 'formik';
 import React, { useState } from 'react';
@@ -27,10 +25,20 @@ import { SignupDto } from '@/src/features/auth/api';
 import { isAxiosError } from 'axios';
 import PasswordInput from '@/src/components/common/customInput/PasswordInput';
 import { normalizePhoneToE164 } from '@/src/utils/phone';
+import { useAuthStore } from '@/src/state/useAuthStore';
+import { useContactAvailability } from '@/src/features/auth/hooks/useContactAvailability';
+import {
+  canSubmitRegistration,
+  contactAvailabilityError,
+  normalizeRegistrationContact,
+  type ContactChannel,
+} from '@/src/features/auth/contactAvailability';
 
 const Signup = () => {
   const [accountType, setAccountType] = useState<'buyer' | 'seller'>('buyer');
   const { mutate: doSignUp, isPending, error, reset } = useSignup();
+  const registrationState = useAuthStore((s) => s.registrationState);
+  const availability = useContactAvailability();
 
   const initialValues: SignupFormValues = {
     firstName: '',
@@ -42,21 +50,37 @@ const Signup = () => {
   };
 
   const handleSignup = (values: SignupFormValues) => {
+    if (availability.hasConflict(values) || isPending) return;
+    // Submission never waits for advisory requests; its API response is authoritative.
+    availability.cancelPending();
     const { acceptTerms, repeatPassword, ...rest } = values;
     // below is just to silent the unused variable warnings
     void acceptTerms;
     void repeatPassword;
     const dto: SignupDto = {
       ...rest,
-      email: rest.email.trim().toLowerCase(),
-      phone: normalizePhoneToE164(rest.phone),
+      email: rest.email?.trim() ? rest.email.trim().toLowerCase() : undefined,
+      phone: rest.phone?.trim() ? normalizePhoneToE164(rest.phone) : undefined,
       isSeller: accountType === 'seller',
     };
     doSignUp(dto, {
+      onError: (submitError) => {
+        if (
+          !isAxiosError<{
+            fieldErrors?: Partial<Record<ContactChannel, string[]>>;
+          }>(submitError)
+        )
+          return;
+        const fieldErrors = submitError.response?.data?.fieldErrors;
+        const channels = (['email', 'phone'] as const).filter(
+          (channel) => fieldErrors?.[channel]?.length,
+        );
+        if (channels.length) availability.reportConflicts(values, channels);
+      },
       onSuccess: () => {
         router.replace({
           pathname: '/auth/signup-otp',
-          params: { email: dto.email, phone: dto.phone },
+          params: { email: dto.email ?? '', phone: dto.phone ?? '' },
         });
       },
     });
@@ -67,7 +91,7 @@ const Signup = () => {
     if (isAxiosError(error)) {
       const status = error.response?.status;
       if (status === 409) {
-        return 'Користувач з таким email або телефоном вже існує';
+        return 'Не вдалося створити акаунт із цими даними. Перевірте введені контакти та спробуйте ще раз.';
       }
       if (status === 400) {
         return 'Перевірте email, телефон і пароль';
@@ -105,9 +129,16 @@ const Signup = () => {
             Заповніть вашу інформацію нижче або зареєструйтесь за допомогою
             свого облікового запису в соціальних мережах
           </Text>
+          {registrationState?.accountStatus === 'EXPIRED' && (
+            <Text
+              style={{ color: 'red', textAlign: 'center', marginBottom: 12 }}
+            >
+              Термін незавершеної реєстрації минув. Зареєструйтесь ще раз.
+            </Text>
+          )}
           <Formik
             initialValues={initialValues}
-            validationSchema={signUpSchema}
+            validationSchema={createSignUpSchema(accountType)}
             validateOnMount
             onSubmit={handleSignup}
           >
@@ -122,6 +153,22 @@ const Signup = () => {
               setFieldValue,
             }) => {
               const isFormValid = isValid && dirty;
+              const submitEnabled = canSubmitRegistration(
+                isFormValid,
+                isPending,
+                values,
+                availability.checks,
+              );
+              const emailConflict = contactAvailabilityError(
+                'email',
+                values.email,
+                availability.checks,
+              );
+              const phoneConflict = contactAvailabilityError(
+                'phone',
+                values.phone,
+                availability.checks,
+              );
               const buttonTitle = isPending
                 ? 'Реєструємось...'
                 : accountType === 'buyer'
@@ -158,15 +205,31 @@ const Signup = () => {
                     importantForAutofill='no'
                     value={values.email}
                     onChangeText={(text) => {
+                      availability.clear('email');
                       clearSignupError();
                       if (error) reset();
                       setFieldValue('email', text);
                     }}
-                    onBlur={handleBlur('email')}
+                    onBlur={(event) => {
+                      handleBlur('email')(event);
+                      void availability.check('email', values.email);
+                    }}
                     errorMessage={
-                      touched.email && errors.email ? errors.email : undefined
+                      (touched.email && errors.email) ||
+                      emailConflict ||
+                      undefined
                     }
                   />
+                  {availability.checks.email?.status === 'checking' &&
+                    availability.checks.email.value ===
+                      normalizeRegistrationContact('email', values.email) && (
+                      <Text
+                        accessibilityLiveRegion='polite'
+                        style={styles.availabilityNote}
+                      >
+                        Перевіряємо email…
+                      </Text>
+                    )}
                   <BasicFormInput
                     label='Телефон'
                     placeholder='+38(0XX)-XXX-XXXX'
@@ -176,15 +239,31 @@ const Signup = () => {
                     importantForAutofill='no'
                     value={values.phone}
                     onChangeText={(text) => {
+                      availability.clear('phone');
                       clearSignupError();
                       if (error) reset();
                       setFieldValue('phone', text);
                     }}
-                    onBlur={handleBlur('phone')}
+                    onBlur={(event) => {
+                      handleBlur('phone')(event);
+                      void availability.check('phone', values.phone);
+                    }}
                     errorMessage={
-                      touched.phone && errors.phone ? errors.phone : undefined
+                      (touched.phone && errors.phone) ||
+                      phoneConflict ||
+                      undefined
                     }
                   />
+                  {availability.checks.phone?.status === 'checking' &&
+                    availability.checks.phone.value ===
+                      normalizeRegistrationContact('phone', values.phone) && (
+                      <Text
+                        accessibilityLiveRegion='polite'
+                        style={styles.availabilityNote}
+                      >
+                        Перевіряємо телефон…
+                      </Text>
+                    )}
                   <PasswordInput
                     label='Введіть пароль'
                     placeholder='Пароль'
@@ -257,8 +336,8 @@ const Signup = () => {
                     title={buttonTitle}
                     onPress={handleSubmit}
                     size='L'
-                    active={!isPending && isFormValid}
-                    disabled={isPending || !isFormValid}
+                    active={submitEnabled}
+                    disabled={!submitEnabled}
                     style={{ marginTop: 14 }}
                   />
                 </View>
@@ -320,6 +399,7 @@ const Signup = () => {
 export default Signup;
 
 const styles = StyleSheet.create({
+  availabilityNote: { color: Colors.grey400, fontSize: 12, marginBottom: 8 },
   safeArea: { flex: 1, backgroundColor: Colors.white },
   scroll: { flex: 1 },
   container: {

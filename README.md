@@ -3,6 +3,20 @@
 A cross-platform (iOS / Android ) marketplace application built with **Expo**, **React Native**, and **Expo Router**.  
 The project uses **TypeScript**, **TanStack React Query**, **Zustand**, **Formik + Yup**, and modern Expo SDK 54 modules.
 
+## Mobile registration sessions
+
+Registration follows the backend's contact state and 48-hour inactivity deadline.
+`expo-secure-store` stores the refresh token for app restart; access tokens and verification
+state stay in memory. Passwords and OTPs are not saved to the persisted query cache.
+The package lock includes the SecureStore dependency used by this flow.
+
+Contact availability is checked when a valid contact field loses focus. Unknown,
+pending, failed, and available checks do not block an otherwise valid form; only a
+confirmed conflict for its current value does. Registration submission rechecks both
+contacts and returns field errors without creating an account when either is occupied.
+
+Run the focused unit tests with `npx jest RegistrationRules SecureTokens AuthStore ContactAvailability --runInBand --watchman=false`.
+
 ---
 
 ## 🚀 Features
