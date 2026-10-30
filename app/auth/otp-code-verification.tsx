@@ -17,12 +17,6 @@ import PrimaryButton from '@/src/components/common/buttons/PrimaryButton';
 import SecondaryButton from '@/src/components/common/buttons/SecondaryButton';
 import LinkButton from '@/src/components/common/buttons/LinkButton';
 import {
-  hasPendingVerification,
-  hydrateVerificationContext,
-  markVerificationMethodComplete,
-  type VerificationMethod,
-} from '@/src/features/auth/verification';
-import {
   useSendEmailOtp,
   useSendPhoneOtp,
   useVerifyEmailOtp,
@@ -31,7 +25,9 @@ import {
 import { Loader } from '@/src/components/common/Loader';
 import { ShieldCheck } from 'phosphor-react-native';
 import { useAuthStore } from '@/src/state/useAuthStore';
+import { saveRefreshToken } from '@/src/features/auth/secureTokens';
 
+/** Applies the backend's OTP result before routing to another contact or full account access. */
 export default function OtpCodeVerification() {
   const { method, phone, email } = useLocalSearchParams<{
     method?: 'sms' | 'email';
@@ -73,25 +69,25 @@ export default function OtpCodeVerification() {
   }, []);
 
   const updateVerificationState = React.useCallback(
-    async (verifiedMethod: VerificationMethod) => {
+    async (response: {
+      accessToken?: string;
+      refreshToken?: string;
+      registrationState?: import('@/src/features/auth/registration').RegistrationState;
+    }) => {
       const auth = useAuthStore.getState();
-      const currentContext =
-        auth.verification ??
-        ({
-          email: resolvedEmail,
-          phone: resolvedPhone,
-          isEmailValidated: false,
-          isPhoneValidated: false,
-          source: auth.access_token ? 'login' : 'signup',
-        } as const);
+      if (response.accessToken) auth.applyAccessToken(response.accessToken);
+      if (response.refreshToken) await saveRefreshToken(response.refreshToken);
+      const state = response.registrationState;
+      if (state) auth.setRegistrationState(state);
 
-      const nextContext = await hydrateVerificationContext(
-        markVerificationMethodComplete(currentContext, verifiedMethod),
-        auth.userId,
-      );
-
-      if (hasPendingVerification(nextContext)) {
-        auth.setVerification(nextContext);
+      if (state?.accountStatus === 'PENDING_VERIFICATION') {
+        auth.setVerification({
+          email: state.contactHints.email,
+          phone: state.contactHints.phone,
+          isEmailValidated: state.contacts.email === 'VERIFIED',
+          isPhoneValidated: state.contacts.phone === 'VERIFIED',
+          source: 'signup',
+        });
         nextRouteRef.current = '/auth/signup-otp';
         return;
       }
@@ -99,23 +95,27 @@ export default function OtpCodeVerification() {
       auth.clearVerification();
       nextRouteRef.current = auth.access_token ? '/(tabs)' : '/auth/login';
     },
-    [resolvedEmail, resolvedPhone],
+    [],
   );
 
   const handleVerifyResponse = React.useCallback(
-    async (
-      verifiedMethod: VerificationMethod,
-      ok: boolean,
-      reason?: string,
-    ) => {
-      if (!ok) {
-        setVerificationError(reason ?? 'Невірний код. Спробуйте ще раз.');
+    async (response: {
+      ok: boolean;
+      message?: string;
+      accessToken?: string;
+      refreshToken?: string;
+      registrationState?: import('@/src/features/auth/registration').RegistrationState;
+    }) => {
+      if (!response.ok) {
+        setVerificationError(
+          response.message ?? 'Невірний код. Спробуйте ще раз.',
+        );
         return;
       }
 
       setVerificationError(null);
       didNavigateAfterSuccessRef.current = false;
-      await updateVerificationState(verifiedMethod);
+      await updateVerificationState(response);
       setModalVisible(true);
     },
     [updateVerificationState],
@@ -130,7 +130,7 @@ export default function OtpCodeVerification() {
         { email: resolvedEmail, code },
         {
           onSuccess: async (response) => {
-            await handleVerifyResponse('email', response.ok, response.reason);
+            await handleVerifyResponse(response);
           },
         },
       );
@@ -143,7 +143,7 @@ export default function OtpCodeVerification() {
       { phone: resolvedPhone, code },
       {
         onSuccess: async (response) => {
-          await handleVerifyResponse('sms', response.ok, response.reason);
+          await handleVerifyResponse(response);
         },
       },
     );

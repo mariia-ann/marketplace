@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import parseJwt from '@/src/utils/jwtParse';
 import type { VerificationContext } from '@/src/features/auth/verification';
+import type { RegistrationState } from '@/src/features/auth/registration';
 
 type AuthState = {
   access_token: string | null;
@@ -8,6 +9,7 @@ type AuthState = {
   userId: string | null;
   isRestoring: boolean;
   verification: VerificationContext | null;
+  registrationState: RegistrationState | null;
   setToken: (t: string | null) => void;
   setUserId: (id: string | null) => void;
   setAccessTokenExpireAt: (expireAt: Date | null) => void;
@@ -19,14 +21,17 @@ type AuthState = {
   setRestoring: (v: boolean) => void;
   setVerification: (verification: VerificationContext | null) => void;
   clearVerification: () => void;
+  setRegistrationState: (state: RegistrationState | null) => void;
 };
 
+/** Access tokens and registration state live only in memory; refresh tokens use SecureStore. */
 export const useAuthStore = create<AuthState>()((set, get) => ({
   access_token: null,
   access_token_expireAt: null,
   userId: null,
   isRestoring: true,
   verification: null,
+  registrationState: null,
   setToken: (t) => set({ access_token: t }),
   setUserId: (id) => set({ userId: id }),
   setAccessTokenExpireAt: (expireAt: Date | null) =>
@@ -59,10 +64,12 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       userId: null,
       access_token_expireAt: null,
       verification: null,
+      registrationState: null,
     }),
   getToken: () => get().access_token,
   getUserId: () => get().userId,
   setRestoring: (v) => set({ isRestoring: v }),
   setVerification: (verification) => set({ verification }),
   clearVerification: () => set({ verification: null }),
+  setRegistrationState: (registrationState) => set({ registrationState }),
 }));

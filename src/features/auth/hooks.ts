@@ -1,4 +1,4 @@
-// src/features/auth/queries.ts
+/** Auth hooks keep session state in memory and refresh tokens in device secure storage. */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/src/state/useAuthStore';
 import {
@@ -10,11 +10,8 @@ import {
   LoginDto,
 } from '@/src/features/auth/api';
 import { router } from 'expo-router';
-import {
-  buildLoginVerificationContext,
-  buildSignupVerificationContext,
-  hasPendingVerification,
-} from '@/src/features/auth/verification';
+import { buildSignupVerificationContext } from '@/src/features/auth/verification';
+import { clearRefreshToken, saveRefreshToken } from './secureTokens';
 
 // TODO: /by Demidas/ Move this hook to user hooks once we'll make this feature
 /* this hook is used to fetch the current user's data
@@ -47,14 +44,19 @@ export function useLogin() {
     onSuccess: async (data, dto) => {
       const auth = useAuthStore.getState();
       auth.applyAccessToken(data.accessToken);
+      await saveRefreshToken(data.refreshToken);
+      auth.setRegistrationState(data.registrationState);
 
-      const verification = await buildLoginVerificationContext(
-        data,
-        dto,
-        auth.userId,
-      );
-
-      if (hasPendingVerification(verification)) {
+      if (data.registrationState.accountStatus === 'PENDING_VERIFICATION') {
+        const isEmail = dto.identifier.includes('@');
+        const verification = buildSignupVerificationContext({
+          email: isEmail ? dto.identifier : null,
+          phone: isEmail ? null : dto.identifier,
+          isEmailValidated:
+            data.registrationState.contacts.email === 'VERIFIED',
+          isPhoneValidated:
+            data.registrationState.contacts.phone === 'VERIFIED',
+        });
         auth.setVerification(verification);
         qc.removeQueries({ queryKey: ['me'] });
         router.replace('/auth/signup-otp');
@@ -66,6 +68,7 @@ export function useLogin() {
       router.replace('/(tabs)');
     },
     onError: (e) => {
+      void clearRefreshToken();
       console.warn(
         'Login failed: ',
         e instanceof Error ? e.message : String(e),
@@ -78,8 +81,7 @@ export function useLogin() {
   });
 }
 
-/* This hook is used to perform sign up of user. Signup does not return a token; 
-after success we log the user in to obtain it. */
+/** Signup returns a scoped pending session, so automatic password login is unnecessary. */
 export function useSignup() {
   const qc = useQueryClient();
   const signOut = useAuthStore((s) => s.onSignOut);
@@ -90,15 +92,23 @@ export function useSignup() {
       return signupRes;
     },
 
-    onSuccess: (signupRes, dto) => {
-      console.warn('signupRes', signupRes);
-      useAuthStore.getState().setVerification(
+    onSuccess: async (signupRes, dto) => {
+      const auth = useAuthStore.getState();
+      auth.applyAccessToken(signupRes.accessToken);
+      auth.setRegistrationState(signupRes.registrationState);
+      await saveRefreshToken(signupRes.refreshToken);
+      auth.setVerification(
         buildSignupVerificationContext({
-          email: dto.email,
-          phone: dto.phone,
+          email: dto.email ?? null,
+          phone: dto.phone ?? null,
+          isEmailValidated:
+            signupRes.registrationState.contacts.email === 'VERIFIED',
+          isPhoneValidated:
+            signupRes.registrationState.contacts.phone === 'VERIFIED',
         }),
       );
-      qc.setQueryData(['signupDto'], dto);
+      // Never persist the signup DTO; it contains the plaintext password.
+      void dto;
     },
     onError: () => {
       const token = useAuthStore.getState().access_token;
@@ -117,11 +127,13 @@ export function useLogout() {
   return useMutation({
     mutationFn: async () => logoutApi(),
     onSuccess: () => {
+      void clearRefreshToken();
       signOut();
       qc.clear();
       router.replace('/(main)');
     },
     onError: (e) => {
+      void clearRefreshToken();
       signOut();
       qc.clear();
       router.replace('/(main)');

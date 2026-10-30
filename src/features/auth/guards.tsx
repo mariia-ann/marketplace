@@ -5,12 +5,12 @@ import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuthStore } from '@/src/state/useAuthStore';
 import { useMe } from '@/src/features/auth/hooks';
-import { getUserById } from '@/src/features/auth/api';
 import { refreshApi } from '@/assets/lib/api';
 import {
-  buildUserVerificationContext,
-  hasPendingVerification,
-} from '@/src/features/auth/verification';
+  clearRefreshToken,
+  getRefreshToken,
+  saveRefreshToken,
+} from './secureTokens';
 
 function BlockingSplash() {
   return (
@@ -31,24 +31,36 @@ type GuardProps = {
   children?: React.ReactNode;
 };
 
+/** Restores active or pending sessions from secure storage and the latest backend state. */
 export async function bootstrapAuth() {
-  console.warn('bootstrapAuth started');
   const s = useAuthStore.getState();
   s.setRestoring(true);
   try {
-    const { data } = await refreshApi.post('auth/refresh', null); // cookie-based
-    s.applyAccessToken(data?.accessToken ?? null);
-    if (s.userId) {
-      const me = await getUserById(s.userId);
-      const verification = buildUserVerificationContext(me, 'login');
-      if (hasPendingVerification(verification)) {
-        s.setVerification(verification);
-      } else {
-        s.clearVerification();
-      }
+    const refreshToken = await getRefreshToken();
+    if (!refreshToken) {
+      s.onSignOut();
+      return;
     }
-  } catch (e) {
-    console.warn('bootstrapAuth failed:', e);
+    const { data } = await refreshApi.post('auth/refresh', { refreshToken });
+    s.applyAccessToken(data?.accessToken ?? null);
+    if (typeof data?.refreshToken === 'string')
+      await saveRefreshToken(data.refreshToken);
+    const state = data?.registrationState;
+    s.setRegistrationState(state ?? null);
+    if (state?.accountStatus === 'EXPIRED') await clearRefreshToken();
+    if (state?.accountStatus === 'PENDING_VERIFICATION') {
+      s.setVerification({
+        email: state.contactHints.email,
+        phone: state.contactHints.phone,
+        isEmailValidated: state.contacts.email === 'VERIFIED',
+        isPhoneValidated: state.contacts.phone === 'VERIFIED',
+        source: 'signup',
+      });
+    } else {
+      s.clearVerification();
+    }
+  } catch {
+    await clearRefreshToken();
     s.onSignOut();
   } finally {
     s.setRestoring(false);
@@ -58,8 +70,12 @@ export async function bootstrapAuth() {
 /** Allow only authenticated users; otherwise redirect to login */
 export function RequireAuth({ to = '/auth/login', children }: GuardProps) {
   const token = useAuthStore((s) => s.access_token);
+  const registrationState = useAuthStore((s) => s.registrationState);
   // if (token) console.warn('>>> RequireAuth: token is present, allowing access');
   if (!token) return <Redirect href={to} />;
+  if (registrationState?.accountStatus === 'PENDING_VERIFICATION') {
+    return <Redirect href='/auth/signup-otp' />;
+  }
 
   // If used as a layout, render nested routes via Slot; if wrapped, render children.
   return children ? <>{children}</> : <Slot />;
@@ -87,8 +103,8 @@ export function RequireSeller({
 /** Allow only guests; otherwise redirect to tabs/home */
 export function RequireGuest({ to = '/(tabs)', children }: GuardProps) {
   const token = useAuthStore((s) => s.access_token);
-  const verification = useAuthStore((s) => s.verification);
-  if (token && hasPendingVerification(verification)) {
+  const registrationState = useAuthStore((s) => s.registrationState);
+  if (token && registrationState?.accountStatus === 'PENDING_VERIFICATION') {
     return <Redirect href='/auth/signup-otp' />;
   }
   if (token) return <Redirect href={to} />;
@@ -101,8 +117,8 @@ export function RequireVerificationAccess({
   children,
 }: GuardProps) {
   const token = useAuthStore((s) => s.access_token);
-  const verification = useAuthStore((s) => s.verification);
-  if (token && !hasPendingVerification(verification)) {
+  const registrationState = useAuthStore((s) => s.registrationState);
+  if (token && registrationState?.accountStatus !== 'PENDING_VERIFICATION') {
     return <Redirect href={to} />;
   }
 

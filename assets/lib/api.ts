@@ -6,6 +6,11 @@ import axios, {
 import { useAuthStore } from '@/src/state/useAuthStore';
 import { router } from 'expo-router';
 import { env } from '@/src/config/env';
+import {
+  clearRefreshToken,
+  getRefreshToken,
+  saveRefreshToken,
+} from '@/src/features/auth/secureTokens';
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
@@ -23,7 +28,6 @@ export const api = axios.create({
 export const refreshApi = axios.create({
   baseURL: env.apiBaseUrl,
   timeout: 15_000,
-  withCredentials: true,
 });
 
 // access token life span left before we attempt refresh.
@@ -31,25 +35,18 @@ export const TOKEN_REFRESH_THRESHOLD = 60_000; // 1 minute
 
 // REQUEST INTERCEPTOR
 api.interceptors.request.use(async (config) => {
-  const token = useAuthStore.getState().access_token;
+  // Public form checks and signup must not depend on refreshing an older session.
+  if (config.skipAuth) return config;
+  let token = useAuthStore.getState().access_token;
   const expireAtMs = useAuthStore.getState().access_token_expireAt
     ? new Date(useAuthStore.getState().access_token_expireAt as Date).getTime()
     : null;
   // Check if token is expiring soon and proactively refresh it before making the API call
   const expiringSoon =
     !!expireAtMs && Date.now() >= expireAtMs - TOKEN_REFRESH_THRESHOLD;
-  console.warn(
-    'Token expiring soon:',
-    expiringSoon,
-    ' expireAtMs:',
-    expireAtMs,
-    ' now:',
-    Date.now(),
-  );
-
   if (token && expiringSoon) {
-    console.warn('access token will expire soon, refreshing it');
     await refreshAccessTokenOnce(); // single-flight function you already have
+    token = useAuthStore.getState().access_token;
   }
 
   if (__DEV__) {
@@ -64,9 +61,6 @@ api.interceptors.request.use(async (config) => {
               : '(guest)'),
     );
   }
-  // 1) Hard opt-out (e.g., login/register)
-  if (config.skipAuth) return config;
-
   // 2) Optional auth: attach if we have it
   if (token) {
     config.headers = config.headers || {};
@@ -76,19 +70,6 @@ api.interceptors.request.use(async (config) => {
     const err = new CanceledError('AUTH_REQUIRED');
     // You can also throw a custom error object if you prefer
     throw err;
-  }
-  // TODO /by Demidas/ Delete before deploy below is for log purpose only
-  if (__DEV__) {
-    console.warn(
-      `[${config.method?.toUpperCase()}] ${config.baseURL}${config.url} ` +
-        (config.skipAuth
-          ? '(skipAuth)'
-          : config.requireAuth
-            ? '(requireAuth)'
-            : token
-              ? '(with token)'
-              : '(guest)'),
-    );
   }
   return config;
 });
@@ -111,15 +92,12 @@ api.interceptors.response.use(
 
     try {
       const newToken = await refreshAccessTokenOnce();
-      console.warn(
-        'Access token was expired, refreshed and set to: ',
-        newToken,
-      );
       original._retry = true;
       original.headers = original.headers || {};
       original.headers.Authorization = `Bearer ${newToken}`;
       return api(original);
     } catch {
+      await clearRefreshToken();
       useAuthStore.getState().onSignOut();
       router.replace('/auth/login');
       return Promise.reject(error);
@@ -127,17 +105,54 @@ api.interceptors.response.use(
   },
 );
 
-// This function ensures that only one refresh request is in-flight at a time, and that all callers receive the new token when it's ready.
+// Share one refresh request so concurrent API calls cannot reuse a rotated refresh token.
 let refreshPromise: Promise<string> | null = null;
 
+/** Exchanges JSON tokens and saves the replacement refresh token in device secure storage. */
 function refreshAccessTokenOnce(): Promise<string> {
   if (!refreshPromise) {
-    refreshPromise = refreshApi
-      .post('auth/refresh', null)
-      .then((res) => {
+    refreshPromise = getRefreshToken()
+      .then((refreshToken) => {
+        if (!refreshToken) throw new Error('No refresh token is stored');
+        return refreshApi.post('auth/refresh', { refreshToken });
+      })
+      .then(async (res) => {
         const token = res.data.accessToken;
         useAuthStore.getState().applyAccessToken(token);
+        if (res.data.registrationState) {
+          useAuthStore
+            .getState()
+            .setRegistrationState(res.data.registrationState);
+          if (res.data.registrationState.accountStatus === 'EXPIRED')
+            await clearRefreshToken();
+        }
+        if (typeof res.data.refreshToken === 'string')
+          await saveRefreshToken(res.data.refreshToken);
+        if (res.data.registrationState?.accountStatus === 'EXPIRED') {
+          throw new Error('Registration session expired');
+        }
         return token;
+      })
+      .catch(async (error) => {
+        const registrationExpired =
+          useAuthStore.getState().registrationState?.accountStatus ===
+          'EXPIRED';
+        await clearRefreshToken();
+        useAuthStore.getState().onSignOut();
+        if (registrationExpired) {
+          useAuthStore.getState().setRegistrationState({
+            accountStatus: 'EXPIRED',
+            accountType: 'buyer',
+            contacts: { email: 'MISSING', phone: 'MISSING' },
+            contactHints: { email: null, phone: null },
+            requiredContactChannels: [],
+            removedContactChannels: [],
+            nextAction: 'ADD_CONTACT',
+            expiresAt: null,
+          });
+        }
+        router.replace(registrationExpired ? '/auth/signup' : '/auth/login');
+        throw error;
       })
       .finally(() => {
         refreshPromise = null;

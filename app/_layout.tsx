@@ -31,7 +31,7 @@ export default function RootLayout() {
     );
   }, [isRestoring, token]);
   const isLoggedIn = !!token;
-  // Below useEffect should run only once on app start to bootstrap auth state from http cookie with refresh token.
+  // Restore once from the refresh token in device secure storage before showing auth routes.
   const didBootstrap = useRef(false);
   useEffect(() => {
     if (didBootstrap.current) return;
@@ -64,7 +64,11 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <PersistQueryClientProvider
         client={queryClient}
-        persistOptions={{ persister: asyncStoragePersister }}
+        // Bump the cache version to discard older snapshots that may contain a signup DTO/password.
+        persistOptions={{
+          persister: asyncStoragePersister,
+          buster: 'resumable-registration-v1',
+        }}
       >
         <RestoreGate>
           <View style={styles.appShell}>

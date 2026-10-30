@@ -38,15 +38,18 @@ export function getDefaultVerificationMethod(
   return getAvailableVerificationMethods(context)[0] ?? null;
 }
 
+/** Builds temporary display context for one or two contacts without persisting credentials. */
 export function buildSignupVerificationContext(args: {
-  email: string;
-  phone: string;
+  email: string | null;
+  phone: string | null;
+  isEmailValidated?: boolean;
+  isPhoneValidated?: boolean;
 }): VerificationContext {
   return {
-    email: args.email.trim().toLowerCase(),
-    phone: normalizePhoneToE164(args.phone),
-    isEmailValidated: false,
-    isPhoneValidated: false,
+    email: args.email?.trim().toLowerCase() || null,
+    phone: args.phone ? normalizePhoneToE164(args.phone) : null,
+    isEmailValidated: args.isEmailValidated ?? false,
+    isPhoneValidated: args.isPhoneValidated ?? false,
     source: 'signup',
   };
 }
@@ -60,7 +63,7 @@ export function buildUserVerificationContext(
 ): VerificationContext {
   return {
     email: user.email,
-    phone: normalizePhoneToE164(user.phone),
+    phone: user.phone ? normalizePhoneToE164(user.phone) : null,
     isEmailValidated: !!user.isEmailValidated,
     isPhoneValidated: user.isPhoneValidated,
     source,
